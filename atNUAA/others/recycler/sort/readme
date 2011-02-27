@@ -1,0 +1,95 @@
+此程序改自算法课的一个作业，用四种不同的算法，对随机生成的n个数排序(n取值500至5000），并重复n遍，最后统计平均比较次数。本在xp下用vc6编写，现在修改为Ubuntu下gcc编译。
+
+./sort 运行，程序会询问n的值；或者./sort 后面直接接n的值，可以多个，如./sort 500 1000 。
+
+Update at Mar.20 2009
+Add main_function 's arguments
+have a test of gcc -O3 and it runs faster
+
+
+/*************实例****************************/
+roc@roc-laptop:~/proj/sort$ make
+gcc -c -O3 prepair.c
+gcc -c -O3 sort.c
+sort.c: In function ‘main’:
+sort.c:61: warning: ignoring return value of ‘scanf’, declared with attribute warn_unused_result
+gcc -c -O3 sortAchieve.c
+gcc -o sort prepair.o sort.o sortAchieve.o
+rm *.o
+roc@roc-laptop:~/proj/sort$ ./sort 1000 5000
+
+*******Now No.1 section(1000 random numbers):
+10% 
+20% 
+30% 
+40% 
+50% 
+60% 
+70% 
+80% 
+90% 
+100% 
+Now print the average times of comparison 
+each sort_algorithm take to deal with 1000 random numbers
+SELECTIONSORT,INSERTIONSORT, BOTTOMUPSORT,    MERGESORT,    QUICKSORT
+    499500.00,    244281.41,      8728.69,      8704.53,     11012.40,
+	////Totall cost of time:0 minutes ,3 seconds//////
+
+
+*******Now No.2 section(5000 random numbers):
+2% 
+4% 
+6% 
+8% 
+10% 
+12% 
+14% 
+16% 
+18% 
+20% 
+22% 
+24% 
+26% 
+28% 
+30% 
+32% 
+34% 
+36% 
+38% 
+40% 
+42% 
+44% 
+46% 
+48% 
+50% 
+52% 
+54% 
+56% 
+58% 
+60% 
+62% 
+64% 
+66% 
+68% 
+70% 
+72% 
+74% 
+76% 
+78% 
+80% 
+82% 
+84% 
+86% 
+88% 
+90% 
+92% 
+94% 
+96% 
+98% 
+100% 
+Now print the average times of comparison 
+each sort_algorithm take to deal with 5000 random numbers
+SELECTIONSORT,INSERTIONSORT, BOTTOMUPSORT,    MERGESORT,    QUICKSORT
+  12497500.00,   6261454.41,     56826.94,     55233.00,     71107.11,
+	////Totall cost of time:3 minutes ,58 seconds//////
+
