@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+<title>Flonum Operations - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fixnum-and-Flonum-Operations.html#Fixnum-and-Flonum-Operations" title="Fixnum and Flonum Operations">
+<link rel="prev" href="Fixnum-Operations.html#Fixnum-Operations" title="Fixnum Operations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Flonum-Operations"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fixnum-Operations.html#Fixnum-Operations">Fixnum Operations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fixnum-and-Flonum-Operations.html#Fixnum-and-Flonum-Operations">Fixnum and Flonum Operations</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.7.2 Flonum Operations</h4>
+
+<p><a name="index-flonum-_0028defn_0029-631"></a>A <dfn>flonum</dfn> is an inexact real number that is implemented as a
+floating-point number.  In MIT/GNU Scheme, all inexact real numbers are
+flonums.  For this reason, constants such as <code>0.</code> and <code>2.3</code>
+are guaranteed to be flonums.
+
+<div class="defun">
+&mdash; procedure: <b>flo:flonum?</b><var> object<a name="index-flo_003aflonum_003f-632"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-flonum-633"></a>Returns <code>#t</code> if <var>object</var> is a flonum; otherwise returns <code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>flo:=</b><var> flonum1 flonum2<a name="index-flo_003a_003d-634"></a></var><br>
+&mdash; procedure: <b>flo:&lt;</b><var> flonum1 flonum2<a name="index-flo_003a_003c-635"></a></var><br>
+&mdash; procedure: <b>flo:&gt;</b><var> flonum1 flonum2<a name="index-flo_003a_003e-636"></a></var><br>
+<blockquote><p><a name="index-equivalence-predicate_002c-for-flonums-637"></a>These procedures are the standard order and equality predicates on
+flonums.  When compiled, they do not check the types of their arguments. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>flo:zero?</b><var> flonum<a name="index-flo_003azero_003f-638"></a></var><br>
+&mdash; procedure: <b>flo:positive?</b><var> flonum<a name="index-flo_003apositive_003f-639"></a></var><br>
+&mdash; procedure: <b>flo:negative?</b><var> flonum<a name="index-flo_003anegative_003f-640"></a></var><br>
+<blockquote><p>Each of these procedures compares its argument to zero.  When compiled,
+they do not check the type of their argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>flo:+</b><var> flonum1 flonum2<a name="index-flo_003a_002b-641"></a></var><br>
+&mdash; procedure: <b>flo:-</b><var> flonum1 flonum2<a name="index-flo_003a_002d-642"></a></var><br>
+&mdash; procedure: <b>flo:*</b><var> flonum1 flonum2<a name="index-flo_003a_002a-643"></a></var><br>
+&mdash; procedure: <b>flo:/</b><var> flonum1 flonum2<a name="index-flo_003a_002f-644"></a></var><br>
+<blockquote><p>These procedures are the standard arithmetic operations on flonums. 
+When compiled, they do not check the types of their arguments. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>flo:finite?</b><var> flonum<a name="index-flo_003afinite_003f-645"></a></var><br>
+<blockquote><p><a name="index-g_t_002binf-646"></a><a name="index-g_t_002dinf-647"></a><a name="index-NaN-648"></a><a name="index-positive-infinity-_0028_0040code_007b_002binf_007d_0029-649"></a><a name="index-negative-infinity-_0028_0040code_007b_002dinf_007d_0029-650"></a><a name="index-not-a-number-_0028_0040code_007bNaN_007d_0029-651"></a>The <acronym>IEEE</acronym> floating-point number specification supports three
+special &ldquo;numbers&rdquo;: positive infinity (<code>+inf</code>), negative infinity
+(<code>-inf</code>), and not-a-number (<code>NaN</code>).  This predicate returns
+<code>#f</code> if <var>flonum</var> is one of these objects, and <code>#t</code> if it
+is any other floating-point number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>flo:negate</b><var> flonum<a name="index-flo_003anegate-652"></a></var><br>
+<blockquote><p>This procedure returns the negation of its argument.  When compiled, it
+does not check the type of its argument.  Equivalent to <code>(flo:- 0. 
+</code><var>flonum</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>flo:abs</b><var> flonum<a name="index-flo_003aabs-653"></a></var><br>
+&mdash; procedure: <b>flo:exp</b><var> flonum<a name="index-flo_003aexp-654"></a></var><br>
+&mdash; procedure: <b>flo:log</b><var> flonum<a name="index-flo_003alog-655"></a></var><br>
+&mdash; procedure: <b>flo:sin</b><var> flonum<a name="index-flo_003asin-656"></a></var><br>
+&mdash; procedure: <b>flo:cos</b><var> flonum<a name="index-flo_003acos-657"></a></var><br>
+&mdash; procedure: <b>flo:tan</b><var> flonum<a name="index-flo_003atan-658"></a></var><br>
+&mdash; procedure: <b>flo:asin</b><var> flonum<a name="index-flo_003aasin-659"></a></var><br>
+&mdash; procedure: <b>flo:acos</b><var> flonum<a name="index-flo_003aacos-660"></a></var><br>
+&mdash; procedure: <b>flo:atan</b><var> flonum<a name="index-flo_003aatan-661"></a></var><br>
+&mdash; procedure: <b>flo:sqrt</b><var> flonum<a name="index-flo_003asqrt-662"></a></var><br>
+&mdash; procedure: <b>flo:expt</b><var> flonum1 flonum2<a name="index-flo_003aexpt-663"></a></var><br>
+&mdash; procedure: <b>flo:floor</b><var> flonum<a name="index-flo_003afloor-664"></a></var><br>
+&mdash; procedure: <b>flo:ceiling</b><var> flonum<a name="index-flo_003aceiling-665"></a></var><br>
+&mdash; procedure: <b>flo:truncate</b><var> flonum<a name="index-flo_003atruncate-666"></a></var><br>
+&mdash; procedure: <b>flo:round</b><var> flonum<a name="index-flo_003around-667"></a></var><br>
+&mdash; procedure: <b>flo:floor-&gt;exact</b><var> flonum<a name="index-flo_003afloor_002d_003eexact-668"></a></var><br>
+&mdash; procedure: <b>flo:ceiling-&gt;exact</b><var> flonum<a name="index-flo_003aceiling_002d_003eexact-669"></a></var><br>
+&mdash; procedure: <b>flo:truncate-&gt;exact</b><var> flonum<a name="index-flo_003atruncate_002d_003eexact-670"></a></var><br>
+&mdash; procedure: <b>flo:round-&gt;exact</b><var> flonum<a name="index-flo_003around_002d_003eexact-671"></a></var><br>
+<blockquote><p>These procedures are flonum versions of the corresponding procedures. 
+When compiled, they do not check the types of their arguments. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>flo:atan2</b><var> flonum1 flonum2<a name="index-flo_003aatan2-672"></a></var><br>
+<blockquote><p><a name="index-atan-673"></a>This is the flonum version of <code>atan</code> with two arguments.  When
+compiled, it does not check the types of its arguments. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Memory Usage - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Running-Scheme.html#Running-Scheme" title="Running Scheme">
+<link rel="prev" href="Customizing-Scheme.html#Customizing-Scheme" title="Customizing Scheme">
+<link rel="next" href="Command_002dLine-Options.html#Command_002dLine-Options" title="Command-Line Options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Memory-Usage"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Command_002dLine-Options.html#Command_002dLine-Options">Command-Line Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customizing-Scheme.html#Customizing-Scheme">Customizing Scheme</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Running-Scheme.html#Running-Scheme">Running Scheme</a>
+<hr>
+</div>
+
+<h3 class="section">2.3 Memory Usage</h3>
+
+<p>Some of the parameters that can be customized determine how much memory
+Scheme uses and how that memory is used.  This section describes how
+Scheme's memory is organized and used; subsequent sections describe
+command-line options and environment variables that you can use to
+customize this usage for your needs.
+
+   <p>Scheme uses four kinds of memory:
+<a name="index-memory-22"></a>
+     <ul>
+<li><a name="index-stack-space-23"></a>A <dfn>stack</dfn> that is used for recursive procedure calls.
+
+     <li><a name="index-heap-space-24"></a>A <dfn>heap</dfn> that is used for dynamically allocated objects, like
+<code>cons</code> cells and strings.  Storage used for objects in the heap
+that become unreferenced is eventually reclaimed by <dfn>garbage
+collection</dfn>.
+
+     <li><a name="index-constant-space-25"></a>A <dfn>constant space</dfn> that is used for allocated objects, like the
+heap.  Unlike the heap, storage used for objects in constant space is
+not reclaimed by garbage collection.  Constant space is used for
+objects that are essentially permanent, like procedures in the runtime
+system.
+
+     <li>Some extra storage that is used by the microcode (the part of the system
+that is implemented in C). 
+</ul>
+
+<p class="noindent">All kinds of memory except the last may be controlled either by
+command-line options or by environment variables.
+
+   <p>MIT/GNU Scheme uses a two-space copying garbage collector for
+reclaiming storage in the heap.  The second space, used only during
+garbage collection, is dynamically allocated as needed.
+
+   <p>Once the storage is allocated for the constant space and the heap,
+Scheme will dynamically adjust the proportion of the total that is used
+for constant space; the stack and extra microcode storage is not
+included in this adjustment.  Previous versions of MIT/GNU Scheme
+needed to be told the amount of constant space that was required when
+loading bands with the <samp><span class="option">--band</span></samp> option.  Dynamic adjustment of
+the heap and constant space avoids this problem.
+
+   <p>If the size of the constant space is not specified, it is
+automatically set to the correct size for the band being loaded; it is
+rarely necessary to explicitly set the size of the constant space. 
+Additionally, each band requires a small amount of heap space; this
+amount is added to any specified heap size, so that the specified heap
+size is the amount of free space available.
+
+   <p>The Scheme expression &lsquo;<samp><span class="samp">(print-gc-statistics)</span></samp>&rsquo; shows how much heap
+and constant space is available (see <a href="Garbage-Collection.html#Garbage-Collection">Garbage Collection</a>).
+
+   </body></html>
+

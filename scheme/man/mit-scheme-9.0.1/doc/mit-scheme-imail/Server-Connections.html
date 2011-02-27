@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Server Connections - IMAIL 1.19</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IMAIL 1.19">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Concepts.html#Concepts" title="Concepts">
+<link rel="prev" href="URLs.html#URLs" title="URLs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents IMAIL 1.19.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Server-Connections"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="URLs.html#URLs">URLs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Concepts.html#Concepts">Concepts</a>
+<hr>
+</div>
+
+<h3 class="section">3.5 Server Connections</h3>
+
+<p><a name="index-connection-state-43"></a>Unlike a file folder, in which the folder's contents are always
+available, access to an <acronym>IMAP</acronym> folder requires an active network
+connection to the <acronym>IMAP</acronym> server.  This adds an additional layer
+of complexity to the mail-reading process, which is reflected in the
+<dfn>connection state</dfn> of an <acronym>IMAP</acronym> folder.
+
+   <p><a name="index-online-state-44"></a><a name="index-offline-state-45"></a><a name="index-online-mode-46"></a><a name="index-offline-mode-47"></a><a name="index-disconnected-mode-48"></a>An <acronym>IMAP</acronym> folder can be in one of two states: <dfn>online</dfn>,
+meaning that there is an established network connection between
+<acronym>IMAIL</acronym> and the <acronym>IMAP</acronym> server, and <dfn>offline</dfn> when
+there is not.  <acronym>IMAIL</acronym> is, at present, a very simple
+<acronym>IMAP</acronym> mail reader: it must be online to read and manipulate
+mail messages.  Mail readers that have this property are said to operate
+in <dfn>online mode</dfn>.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> Do not confuse the online <em>state</em> with online <em>mode</em>. 
+When we refer to online or offline in this document, it always means the
+corresponding <em>state</em>.
+
+   <p>When an <acronym>IMAP</acronym> folder is selected in an <acronym>IMAIL</acronym> buffer,
+the modeline for that buffer shows either &lsquo;<samp><span class="samp">online</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">offline</span></samp>&rsquo; to indicate the folder's connection state.  Normally, an
+<acronym>IMAP</acronym> folder goes online when it is first selected, and stays
+online indefinitely until it is explicitly
+disconnected.<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> Commands that break the connection
+are explicitly pointed out in their descriptions below; most other
+commands will force an <acronym>IMAP</acronym> folder into the online state if it
+is offline.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> <acronym>IMAP</acronym> also supports two other
+modes of operation, called <dfn>offline mode</dfn> and <dfn>disconnected
+mode</dfn>; at present <acronym>IMAIL</acronym> can not operate in these alternate
+modes.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Although <acronym>IMAP</acronym> servers are allowed to
+disconnect mail readers that are inactive for long periods of time,
+<acronym>IMAIL</acronym> silently keeps the connection open by periodically
+transmitting commands to the server.</p>
+
+   <hr></div>
+
+   </body></html>
+

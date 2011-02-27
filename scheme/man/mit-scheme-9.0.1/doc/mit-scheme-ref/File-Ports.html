@@ -1,0 +1,188 @@
+<html lang="en">
+<head>
+<title>File Ports - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Input_002fOutput.html#Input_002fOutput" title="Input/Output">
+<link rel="prev" href="Ports.html#Ports" title="Ports">
+<link rel="next" href="String-Ports.html#String-Ports" title="String Ports">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="File-Ports"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="String-Ports.html#String-Ports">String Ports</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Ports.html#Ports">Ports</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Input_002fOutput.html#Input_002fOutput">Input/Output</a>
+<hr>
+</div>
+
+<h3 class="section">14.2 File Ports</h3>
+
+<p><a name="index-file_002c-input-and-output-ports-1999"></a><a name="index-port_002c-file-2000"></a><a name="index-input-port_002c-file-2001"></a><a name="index-output-port_002c-file-2002"></a><a name="index-I_002fO_002c-to-files-2003"></a>Before Scheme can access a file for reading or writing, it is necessary
+to open a port to the file.  This section describes procedures used to
+open ports to files.  Such ports are closed (like any other port) by
+<code>close-port</code>.  File ports are automatically closed if and when they
+are reclaimed by the garbage collector.
+
+   <p><a name="index-merge_002dpathnames-2004"></a>Before opening a file for input or output, by whatever method, the
+<var>filename</var> argument is converted to canonical form by calling the
+procedure <code>merge-pathnames</code> with <var>filename</var> as its sole
+argument.  Thus, <var>filename</var> can be either a string or a pathname,
+and it is merged with the current pathname defaults to produce the
+pathname that is then opened.
+
+   <p><a name="index-binary-file-ports-2005"></a><a name="index-newline-translation-2006"></a>Any file can be opened in one of two modes, <dfn>normal</dfn> or
+<dfn>binary</dfn>.  Normal mode is for accessing text files, and binary
+mode is for accessing other files.  Unix does not distinguish these
+modes, but Windows do: in normal mode, their file ports perform
+<dfn>newline translation</dfn>, mapping between the
+carriage-return/linefeed sequence that terminates text lines in files,
+and the <code>#\newline</code> that terminates lines in Scheme.  In binary
+mode, such ports do not perform newline translation.  Unless otherwise
+mentioned, the procedures in this section open files in normal mode.
+
+<div class="defun">
+&mdash; procedure: <b>open-input-file</b><var> filename<a name="index-open_002dinput_002dfile-2007"></a></var><br>
+<blockquote><p><a name="index-construction_002c-of-file-input-port-2008"></a>Takes a filename referring to an existing file and returns an input port
+capable of delivering characters from the file.  If the file cannot be
+opened, an error of type <code>condition-type:file-operation-error</code> is
+signalled. 
+<a name="index-condition_002dtype_003afile_002doperation_002derror-2009"></a></p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>open-output-file</b><var> filename </var>[<var>append?</var>]<var><a name="index-open_002doutput_002dfile-2010"></a></var><br>
+<blockquote><p><a name="index-construction_002c-of-file-output-port-2011"></a>Takes a filename referring to an output file to be created and returns
+an output port capable of writing characters to a new file by that name. 
+If the file cannot be opened, an error of type
+<code>condition-type:file-operation-error</code> is signalled. 
+<a name="index-condition_002dtype_003afile_002doperation_002derror-2012"></a>
+<a name="index-appending_002c-to-output-file-2013"></a>The optional argument <var>append?</var> is an MIT/GNU Scheme extension.  If
+<var>append?</var> is given and not <code>#f</code>, the file is opened in
+<dfn>append</dfn> mode.  In this mode, the contents of the file are not
+overwritten; instead any characters written to the file are appended to
+the end of the existing contents.  If the file does not exist, append
+mode creates the file and writes to it in the normal way. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>open-i/o-file</b><var> filename<a name="index-open_002di_002fo_002dfile-2014"></a></var><br>
+<blockquote><p><a name="index-construction_002c-of-file-input-port-2015"></a>Takes a filename referring to an existing file and returns an
+<acronym>I/O</acronym> port capable of both reading and writing the file.  If
+the file cannot be opened, an error of type
+<code>condition-type:file-operation-error</code> is signalled. 
+<a name="index-condition_002dtype_003afile_002doperation_002derror-2016"></a>
+This procedure is often used to open special files.  For example, under
+unix this procedure can be used to open terminal device files, <span class="sc">pty</span>
+device files, and named pipes. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>open-binary-input-file</b><var> filename<a name="index-open_002dbinary_002dinput_002dfile-2017"></a></var><br>
+&mdash; procedure: <b>open-binary-output-file</b><var> filename </var>[<var>append?</var>]<var><a name="index-open_002dbinary_002doutput_002dfile-2018"></a></var><br>
+&mdash; procedure: <b>open-binary-i/o-file</b><var> filename<a name="index-open_002dbinary_002di_002fo_002dfile-2019"></a></var><br>
+<blockquote><p>These procedures open files in binary mode.  In all other respects they
+are identical to <code>open-input-file</code>, <code>open-output-file</code>, and
+<code>open-i/o-file</code>, respectively. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>close-all-open-files</b><var><a name="index-close_002dall_002dopen_002dfiles-2020"></a></var><br>
+<blockquote><p><a name="index-closing_002c-of-file-port-2021"></a>This procedure closes all file ports that are open at the time that it
+is called, and returns an unspecified value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>call-with-input-file</b><var> filename procedure<a name="index-call_002dwith_002dinput_002dfile-2022"></a></var><br>
+&mdash; procedure: <b>call-with-output-file</b><var> filename procedure<a name="index-call_002dwith_002doutput_002dfile-2023"></a></var><br>
+<blockquote><p>These procedures call <var>procedure</var> with one argument: the port
+obtained by opening the named file for input or output, respectively. 
+If the file cannot be opened, an error of type
+<code>condition-type:file-operation-error</code> is signalled.  If
+<var>procedure</var> returns, then the port is closed automatically and the
+value yielded by <var>procedure</var> is returned.  If <var>procedure</var> does
+not return, then the port will not be closed automatically unless it is
+reclaimed by the garbage collector.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>call-with-binary-input-file</b><var> filename procedure<a name="index-call_002dwith_002dbinary_002dinput_002dfile-2024"></a></var><br>
+&mdash; procedure: <b>call-with-binary-output-file</b><var> filename procedure<a name="index-call_002dwith_002dbinary_002doutput_002dfile-2025"></a></var><br>
+<blockquote><p>These procedures open files in binary mode.  In all other respects they
+are identical to <code>call-with-input-file</code> and
+<code>call-with-output-file</code>, respectively. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>with-input-from-file</b><var> filename thunk<a name="index-with_002dinput_002dfrom_002dfile-2026"></a></var><br>
+&mdash; procedure: <b>with-output-to-file</b><var> filename thunk<a name="index-with_002doutput_002dto_002dfile-2027"></a></var><br>
+<blockquote><p><a name="index-current-input-port_002c-rebinding-2028"></a><a name="index-current-output-port_002c-rebinding-2029"></a><a name="index-current_002dinput_002dport-2030"></a><a name="index-current_002doutput_002dport-2031"></a><var>Thunk</var> must be a procedure of no arguments. 
+The file is opened for input or output, an input or output port
+connected to it is made the default value returned by
+<code>current-input-port</code> or <code>current-output-port</code>, and the
+<var>thunk</var> is called with no arguments.  When the <var>thunk</var> returns,
+the port is closed and the previous default is restored. 
+<code>with-input-from-file</code> and <code>with-output-to-file</code> return the
+value yielded by <var>thunk</var>.  If an escape procedure is used to escape
+from the continuation of these procedures, their behavior is
+implementation-dependent; in that situation MIT/GNU Scheme leaves the files
+open. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>with-input-from-binary-file</b><var> filename thunk<a name="index-with_002dinput_002dfrom_002dbinary_002dfile-2032"></a></var><br>
+&mdash; procedure: <b>with-output-to-binary-file</b><var> filename thunk<a name="index-with_002doutput_002dto_002dbinary_002dfile-2033"></a></var><br>
+<blockquote><p>These procedures open files in binary mode.  In all other respects they
+are identical to <code>with-input-from-file</code> and
+<code>with-output-to-file</code>, respectively. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Because Scheme's escape
+procedures have unlimited extent, it is possible to escape from the
+current continuation but later to escape back in.  If implementations
+were permitted to close the port on any escape from the current
+continuation, then it would be impossible to write portable code using
+both <code>call-with-current-continuation</code> and
+<code>call-with-input-file</code> or <code>call-with-output-file</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

@@ -1,0 +1,299 @@
+<html lang="en">
+<head>
+<title>*Matcher - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Parser-Language.html#Parser-Language" title="Parser Language">
+<link rel="prev" href="Parser-Language.html#Parser-Language" title="Parser Language">
+<link rel="next" href="_002aParser.html#g_t_002aParser" title="*Parser">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="*Matcher"></a>
+<a name="g_t_002aMatcher"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="_002aParser.html#g_t_002aParser">*Parser</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Parser-Language.html#Parser-Language">Parser Language</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Parser-Language.html#Parser-Language">Parser Language</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.11.1 *Matcher</h4>
+
+<p><a name="index-Matcher-language-2269"></a><a name="index-Matcher-procedure-2270"></a>The <dfn>matcher language</dfn> is a declarative language for specifying a
+<dfn>matcher procedure</dfn>.  A matcher procedure is a procedure that
+accepts a single parser-buffer argument and returns a boolean value
+indicating whether the match it performs was successful.  If the match
+succeeds, the internal pointer of the parser buffer is moved forward
+over the matched text.  If the match fails, the internal pointer is
+unchanged.
+
+   <p>For example, here is a matcher procedure that matches the character
+&lsquo;<samp><span class="samp">a</span></samp>&rsquo;:
+
+<pre class="example">     (lambda (b) (match-parser-buffer-char b #\a))
+</pre>
+   <p class="noindent">Here is another example that matches two given characters, <var>c1</var>
+and <var>c2</var>, in sequence:
+
+<pre class="example">     (lambda (b)
+       (let ((p (get-parser-buffer-pointer b)))
+         (if (match-parser-buffer-char b <var>c1</var>)
+             (if (match-parser-buffer-char b <var>c2</var>)
+                 #t
+                 (begin
+                   (set-parser-buffer-pointer! b p)
+                   #f))
+             #f)))
+</pre>
+   <p class="noindent">This is code is clear, but has lots of details that get in the way of
+understanding what it is doing.  Here is the same example in the
+matcher language:
+
+<pre class="example">     (*matcher (seq (char <var>c1</var>) (char <var>c2</var>)))
+</pre>
+   <p class="noindent">This is much simpler and more intuitive.  And it generates virtually
+the same code:
+
+<pre class="example">     (pp (*matcher (seq (char c1) (char c2))))
+     -| (lambda (#[b1])
+     -|   (let ((#[p1] (get-parser-buffer-pointer #[b1])))
+     -|     (and (match-parser-buffer-char #[b1] c1)
+     -|          (if (match-parser-buffer-char #[b1] c2)
+     -|              #t
+     -|              (begin
+     -|                (set-parser-buffer-pointer! #[b1] #[p1])
+     -|                #f)))))
+</pre>
+   <p>Now that we have seen an example of the language, it's time to look at
+the detail.  The <code>*matcher</code> special form is the interface between
+the matcher language and Scheme.
+
+<div class="defun">
+&mdash; special form: <b>*matcher</b><var> mexp<a name="index-g_t_002amatcher-2271"></a></var><br>
+<blockquote><p>The operand <var>mexp</var> is an expression in the matcher language.  The
+<code>*matcher</code> expression expands into Scheme code that implements a
+matcher procedure. 
+</p></blockquote></div>
+
+   <p>Here are the predefined matcher expressions.  New matcher expressions
+can be defined using the macro facility (see <a href="Parser_002dlanguage-Macros.html#Parser_002dlanguage-Macros">Parser-language Macros</a>).  We will start with the primitive expressions.
+
+<div class="defun">
+&mdash; matcher expression: <b>char</b><var> expression<a name="index-char-2272"></a></var><br>
+&mdash; matcher expression: <b>char-ci</b><var> expression<a name="index-char_002dci-2273"></a></var><br>
+&mdash; matcher expression: <b>not-char</b><var> expression<a name="index-not_002dchar-2274"></a></var><br>
+&mdash; matcher expression: <b>not-char-ci</b><var> expression<a name="index-not_002dchar_002dci-2275"></a></var><br>
+<blockquote><p>These expressions match a given character.  In each case, the
+<var>expression</var> operand is a Scheme expression that must evaluate to
+a character at run time.  The &lsquo;<samp><span class="samp">-ci</span></samp>&rsquo; expressions do
+case-insensitive matching.  The &lsquo;<samp><span class="samp">not-</span></samp>&rsquo; expressions match any
+character other than the given one. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; matcher expression: <b>string</b><var> expression<a name="index-string-2276"></a></var><br>
+&mdash; matcher expression: <b>string-ci</b><var> expression<a name="index-string_002dci-2277"></a></var><br>
+<blockquote><p>These expressions match a given string.  The <var>expression</var> operand
+is a Scheme expression that must evaluate to a string at run time. 
+The <code>string-ci</code> expression does case-insensitive matching. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; matcher expression: <b>char-set</b><var> expression<a name="index-char_002dset-2278"></a></var><br>
+<blockquote><p>These expressions match a single character that is a member of a given
+character set.  The <var>expression</var> operand is a Scheme expression
+that must evaluate to a character set at run time. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; matcher expression: <b>alphabet</b><var> expression<a name="index-alphabet-2279"></a></var><br>
+<blockquote><p>These expressions match a single character that is a member of a given
+Unicode alphabet (see <a href="Unicode.html#Unicode">Unicode</a>).  The <var>expression</var> operand is a
+Scheme expression that must evaluate to an alphabet at run time. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; matcher expression: <b>end-of-input</b><var><a name="index-end_002dof_002dinput-2280"></a></var><br>
+<blockquote><p>The <code>end-of-input</code> expression is successful only when there are
+no more characters available to be matched. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; matcher expression: <b>discard-matched</b><var><a name="index-discard_002dmatched-2281"></a></var><br>
+<blockquote><p>The <code>discard-matched</code> expression always successfully matches the
+null string.  However, it isn't meant to be used as a matching
+expression; it is used for its effect.  <code>discard-matched</code> causes
+all of the buffered text prior to this point to be discarded (i.e. 
+it calls <code>discard-parser-buffer-head!</code> on the parser buffer).
+
+        <p>Note that <code>discard-matched</code> may not be used in certain places in
+a matcher expression.  The reason for this is that it deliberately
+discards information needed for backtracking, so it may not be used in
+a place where subsequent backtracking will need to back over it.  As a
+rule of thumb, use <code>discard-matched</code> only in the last operand of
+a <code>seq</code> or <code>alt</code> expression (including any <code>seq</code> or
+<code>alt</code> expressions in which it is indirectly contained). 
+</p></blockquote></div>
+
+   <p>In addition to the above primitive expressions, there are two
+convenient abbreviations.  A character literal (e.g. &lsquo;<samp><span class="samp">#\A</span></samp>&rsquo;) is
+a legal primitive expression, and is equivalent to a <code>char</code>
+expression with that literal as its operand (e.g. &lsquo;<samp><span class="samp">(char
+#\A)</span></samp>&rsquo;).  Likewise, a string literal is equivalent to a <code>string</code>
+expression (e.g. &lsquo;<samp><span class="samp">(string "abc")</span></samp>&rsquo;).
+
+   <p>Next there are several combinator expressions.  These closely
+correspond to similar combinators in regular expressions.  Parameters
+named <var>mexp</var> are arbitrary expressions in the matcher language.
+
+<div class="defun">
+&mdash; matcher expression: <b>seq</b><var> mexp <small class="dots">...</small><a name="index-seq-2282"></a></var><br>
+<blockquote><p>This matches each <var>mexp</var> operand in sequence.  For example,
+
+     <pre class="example">          (seq (char-set char-set:alphabetic)
+               (char-set char-set:numeric))
+</pre>
+        <p class="noindent">matches an alphabetic character followed by a numeric character, such
+as &lsquo;<samp><span class="samp">H4</span></samp>&rsquo;.
+
+        <p>Note that if there are no <var>mexp</var> operands, the <code>seq</code>
+expression successfully matches the null string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; matcher expression: <b>alt</b><var> mexp <small class="dots">...</small><a name="index-alt-2283"></a></var><br>
+<blockquote><p>This attempts to match each <var>mexp</var> operand in order from left to
+right.  The first one that successfully matches becomes the match for
+the entire <code>alt</code> expression.
+
+        <p>The <code>alt</code> expression participates in backtracking.  If one of the
+<var>mexp</var> operands matches, but the overall match in which this
+expression is embedded fails, the backtracking mechanism will cause
+the <code>alt</code> expression to try the remaining <var>mexp</var> operands. 
+For example, if the expression
+
+     <pre class="example">          (seq (alt "ab" "a") "b")
+</pre>
+        <p class="noindent">is matched against the text &lsquo;<samp><span class="samp">abc</span></samp>&rsquo;, the <code>alt</code> expression will
+initially match its first operand.  But it will then fail to match the
+second operand of the <code>seq</code> expression.  This will cause the
+<code>alt</code> to be restarted, at which time it will match &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, and
+the overall match will succeed.
+
+        <p>Note that if there are no <var>mexp</var> operands, the <code>alt</code> match
+will always fail. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; matcher expression: <b>*</b><var> mexp<a name="index-g_t_002a-2284"></a></var><br>
+<blockquote><p>This matches zero or more occurrences of the <var>mexp</var> operand. 
+(Consequently this match always succeeds.)
+
+        <p>The <code>*</code> expression participates in backtracking; if it matches
+<var>N</var> occurrences of <var>mexp</var>, but the overall match fails, it
+will backtrack to <var>N-1</var> occurrences and continue.  If the overall
+match continues to fail, the <code>*</code> expression will continue to
+backtrack until there are no occurrences left. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; matcher expression: <b>+</b><var> mexp<a name="index-g_t_002b-2285"></a></var><br>
+<blockquote><p>This matches one or more occurrences of the <var>mexp</var> operand.  It is
+equivalent to
+
+     <pre class="example">          (seq <var>mexp</var> (* <var>mexp</var>))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; matcher expression: <b>?</b><var> mexp<a name="index-g_t_003f-2286"></a></var><br>
+<blockquote><p>This matches zero or one occurrences of the <var>mexp</var> operand.  It is
+equivalent to
+
+     <pre class="example">          (alt <var>mexp</var> (seq))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; matcher expression: <b>sexp</b><var> expression<a name="index-sexp-2287"></a></var><br>
+<blockquote><p>The <code>sexp</code> expression allows arbitrary Scheme code to be embedded
+inside a matcher.  The <var>expression</var> operand must evaluate to a
+matcher procedure at run time; the procedure is called to match the
+parser buffer.  For example,
+
+     <pre class="example">          (*matcher
+           (seq "a"
+                (sexp parse-foo)
+                "b"))
+</pre>
+        <p class="noindent">expands to
+
+     <pre class="example">          (lambda (#[b1])
+            (let ((#[p1] (get-parser-buffer-pointer #[b1])))
+              (and (match-parser-buffer-char #[b1] #\a)
+                   (if (parse-foo #[b1])
+                       (if (match-parser-buffer-char #[b1] #\b)
+                           #t
+                           (begin
+                             (set-parser-buffer-pointer! #[b1] #[p1])
+                             #f))
+                       (begin
+                         (set-parser-buffer-pointer! #[b1] #[p1])
+                         #f)))))
+</pre>
+        <p>The case in which <var>expression</var> is a symbol is so common that it
+has an abbreviation: &lsquo;<samp><span class="samp">(sexp </span><var>symbol</var><span class="samp">)</span></samp>&rsquo; may be abbreviated as
+just <var>symbol</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; matcher expression: <b>with-pointer</b><var> identifier mexp<a name="index-with_002dpointer-2288"></a></var><br>
+<blockquote><p>The <code>with-pointer</code> expression fetches the parser buffer's
+internal pointer (using <code>get-parser-buffer-pointer</code>), binds it to
+<var>identifier</var>, and then matches the pattern specified by
+<var>mexp</var>.  <var>Identifier</var> must be a symbol.
+
+        <p>This is meant to be used on conjunction with <code>sexp</code>, as a way to
+capture a pointer to a part of the input stream that is outside the
+<code>sexp</code> expression.  An example of the use of <code>with-pointer</code>
+appears above (see <a href="with_002dpointer-example.html#with_002dpointer-example">with-pointer example</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

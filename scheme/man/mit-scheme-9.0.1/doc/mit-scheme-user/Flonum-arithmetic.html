@@ -1,0 +1,192 @@
+<html lang="en">
+<head>
+<title>Flonum arithmetic - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Efficiency-Tips.html#Efficiency-Tips" title="Efficiency Tips">
+<link rel="prev" href="Fixnum-arithmetic.html#Fixnum-arithmetic" title="Fixnum arithmetic">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Flonum-arithmetic"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fixnum-arithmetic.html#Fixnum-arithmetic">Fixnum arithmetic</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Efficiency-Tips.html#Efficiency-Tips">Efficiency Tips</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.3.4 Flonum arithmetic</h4>
+
+<!-- !INCOMPLETE -->
+<p>Getting efficient flonum arithmetic is much more complicated and harder
+than getting efficient fixnum arithmetic.
+
+<h5 class="subsubheading">Flonum consing</h5>
+
+<p><a name="index-flonum-consing-167"></a>One of the main disadvantages of generic arithmetic is that not all
+kinds of number fit in a machine register.  Flonums have to be
+<dfn>boxed</dfn> because a 64-bit <acronym>IEEE</acronym> floating-point number (the
+representation that MIT/GNU Scheme uses) does not fit in a regular
+machine word.  This is true even on 64-bit architectures because some
+extra bits are needed to distinguish floating-point numbers from other
+objects like pairs and strings.  Values are boxed by storing them in a
+small record in the heap.  Every floating-point value that you see at
+the <acronym>REPL</acronym> is boxed.  Floating-point values are unboxed only for
+short periods of time when they are in the machine's floating-point unit
+and actual floating-point operations are being performed.
+
+   <p>Numerical calculations that happen to be using floating-point numbers
+cause many temporary floating-point numbers to be allocated.  It is not
+uncommon for numerical programs to spend over half of their time
+creating and garbage collecting the boxed flonums.
+
+   <p>Consider the following procedure for computing the distance of a point
+(<var>x</var>,<var>y</var>) from the origin.
+
+<pre class="example">     (define (distance x y)
+       (sqrt (+ (* x x) (* y y))))
+</pre>
+   <p>The call &lsquo;<samp><span class="samp">(distance 0.3 0.4)</span></samp>&rsquo; returns a new, boxed flonum, 0.5. 
+The calculation also generates three intermediate boxed flonums.  This
+next version works only for flonum inputs, generates only one boxed
+flonum (the result) and runs eight times faster:
+
+<pre class="example">     (define (flo:distance x y)
+       (flo:sqrt (flo:+ (flo:* x x) (flo:* y y))))
+</pre>
+   <p>Note that <code>flo:</code> operations are usually effective only within a
+single arithmetic expression.  If the expression contains conditionals
+or calls to procedures then the values tend to get boxed anyway. 
+<!-- @subsubheading A safer alternative -->
+<!-- An alternative to putting in @code{flo:} operations yourself is to let -->
+<!-- the compiler try. -->
+<!-- In the next definition of @code{distance}, the programmer explicitly -->
+<!-- tests for flonum arguments and duplicates the expression. -->
+<!-- The compiler compiles the expressions differently: for the first -->
+<!-- expression it knows from the conditional that @var{x} and @var{y} are -->
+<!-- flonums and will replace both @code{*} and the @code{+} operators with -->
+<!-- flonum operators. -->
+<!-- It doesn't replace the @code{sqrt} operator, though, as it doesn't know -->
+<!-- that sums of squares of reals are non-negative. -->
+<!-- This approach has the advantage of being completely safe, and -->
+<!-- @code{distance} will still work for other kinds of number. -->
+<!-- @example -->
+<!-- @group -->
+<!-- (define (distance x y) -->
+<!-- (if (and (flo:flonum? x) (flo:flonum? y)) -->
+<!-- (sqrt (+ (* x x) (* y y))) -->
+<!-- (sqrt (+ (* x x) (* y y))))) -->
+<!-- @end group -->
+<!-- @end example -->
+<!-- This approach is effective only for MIT/GNU Scheme version 8.0 -->
+<!-- and later.  Earlier versions do not do this kind of type analysis. -->
+
+<h5 class="subsubheading">Flonum vectors</h5>
+
+<p>Flonum vectors are vectors that contain only floating-point values, in
+much the same way as a string is a `vector' containing only character
+values.
+
+   <p>Flonum vectors have the advantages of compact storage (about half
+that of a conventional vector of flonums) and judicious use of flonum
+vectors can decrease flonum consing.
+
+   <p>The disadvantages are that flonum vectors are incompatible with ordinary
+vectors, and if not used carefully, can increase flonum consing.  Flonum
+vectors are a pain to use because they require you to make a decision
+about the representation and stick with it, and it might not be easy to
+ascertain whether the advantages in one part of the program outweigh the
+disadvantages in another.
+
+   <p>The flonum vector operations are:
+
+<div class="defun">
+&mdash; procedure: <b>flo:vector-cons</b><var> n<a name="index-flo_003avector_002dcons-168"></a></var><br>
+<blockquote><p>Create a flonum vector of length <var>n</var>.  The contents of the vector
+are arbitrary and might not be valid floating-point numbers.  The
+contents should not be used until initialized. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>flo:vector-ref</b><var> flonum-vector index<a name="index-flo_003avector_002dref-169"></a></var><br>
+&mdash; procedure: <b>flo:vector-set!</b><var> flonum-vector index value<a name="index-flo_003avector_002dset_0021-170"></a></var><br>
+&mdash; procedure: <b>flo:vector-length</b><var> flonum-vector<a name="index-flo_003avector_002dlength-171"></a></var><br>
+<blockquote><p>These operations are analogous to the ordinary vector operations. 
+</p></blockquote></div>
+
+<h5 class="subsubheading">Examples</h5>
+
+<p>The following operation causes no flonum consing because the flonum is
+loaded directly from the flonum vector into a floating-point machine
+register, added, and stored again.  There is no need for a temporary
+boxed flonum.
+
+<pre class="example">     (flo:vector-set! v 0 (flo:+ (flo:vector-ref v 0) 1.2))
+</pre>
+   <p>In this next example, every time <code>g</code> is called, a new boxed flonum
+has to be created so that a valid Scheme object can be returned.  If
+<code>g</code> is called more often than the elements of <var>v</var> are changed
+then an ordinary vector might be more efficient.
+
+<pre class="example">     (define (g i)
+       (flo:vector-ref v i))
+</pre>
+   <h5 class="subsubheading">Common pitfalls</h5>
+
+<p>Pitfall 1:
+Make sure that your literals are floating-point constants:
+
+<pre class="example">     (define (f1 a) (flo:+ a 1))
+     (define (f2 a) (flo:+ a 1.))
+</pre>
+   <p><code>f1</code> will most likely cause a hardware error, and certainly give
+the wrong answer.  <code>f2</code> is correct.
+
+   <p>Pitfall 2:
+It is tempting to insert calls to <code>exact-&gt;inexact</code> to coerce values
+into flonums.  This does not always work because complex numbers may be
+exact or inexact too.  Also, the current implementation of
+<code>exact-&gt;inexact</code> is slow.
+
+   <p>Pitfall 3:
+A great deal of care has to be taken with the standard math procedures. 
+For example, when called with a flonum, both <code>sqrt</code> and <code>asin</code>
+can return a complex number (e.g with argument <code>-1.5</code>).
+
+   </body></html>
+

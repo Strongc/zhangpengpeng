@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+<title>Navigation - IMAIL 1.19</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IMAIL 1.19">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Commands.html#Commands" title="Commands">
+<link rel="next" href="Deleting-Messages.html#Deleting-Messages" title="Deleting Messages">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents IMAIL 1.19.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Navigation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Deleting-Messages.html#Deleting-Messages">Deleting Messages</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Commands.html#Commands">Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">4.1 Navigation</h3>
+
+<p>The most basic thing to do with a message is to read it.  The way to do
+this in <acronym>IMAIL</acronym> is to <dfn>select</dfn> the message.  The usual
+practice is to move sequentially through the folder, since this is the
+order of receipt of messages.  When you enter <acronym>IMAIL</acronym>, you are
+positioned at the first message that you have not yet seen (that is, the
+first one that has the &lsquo;<samp><span class="samp">unseen</span></samp>&rsquo; flag; see <a href="Flags.html#Flags">Flags</a>).  Move forward
+to see the other new messages; move backward to reexamine old messages.
+
+     <dl>
+<dt><kbd>n</kbd><dd>Move to the next nondeleted message, skipping any intervening deleted
+messages (<code>imail-next-undeleted-message</code>). 
+<br><dt><kbd>p</kbd><dd>Move to the previous nondeleted message
+(<code>imail-previous-undeleted-message</code>). 
+<br><dt><kbd>M-n</kbd><dd>Move to the next message, including deleted messages
+(<code>imail-next-message</code>). 
+<br><dt><kbd>M-p</kbd><dd>Move to the previous message, including deleted messages
+(<code>imail-previous-message</code>). 
+<br><dt><kbd>j</kbd><dd>Move to the first message.  With argument <var>n</var>, move to
+message number <var>n</var> (<code>imail-select-message</code>). 
+<br><dt><kbd>&gt;</kbd><dd>Move to the last message (<code>imail-last-message</code>). 
+<br><dt><kbd>&lt;</kbd><dd>Move to the first message (<code>imail-first-message</code>). 
+<br><dt><kbd>M-u</kbd><dd>Move to the first unseen message (<code>imail-first-unseen-message</code>). 
+<br><dt><kbd>M-s </kbd><var>string</var><kbd> &lt;RET&gt;</kbd><dd>Move to the next message containing a match for <var>string</var>
+(<code>imail-search</code>). 
+<br><dt><kbd>M-- M-s </kbd><var>string</var><kbd> &lt;RET&gt;</kbd><dd>Move to the previous message containing a match for <var>string</var>. 
+<br><dt><kbd>C-c C-n</kbd><dd>Move to the next message with the same subject
+(<code>imail-next-same-subject</code>). 
+<br><dt><kbd>C-c C-p</kbd><dd>Move to the previous message with the same subject
+(<code>imail-previous-same-subject</code>). 
+</dl>
+
+   <p><a name="index-n-50"></a><a name="index-imail_002dnext_002dundeleted_002dmessage-51"></a><a name="index-p-52"></a><a name="index-imail_002dprevious_002dundeleted_002dmessage-53"></a><a name="index-M_002dn-54"></a><a name="index-imail_002dnext_002dmessage-55"></a><a name="index-M_002dp-56"></a><a name="index-imail_002dprevious_002dmessage-57"></a><kbd>n</kbd> and <kbd>p</kbd> are the usual way of moving among messages in
+<acronym>IMAIL</acronym>.  They move through the messages sequentially, but skip
+over deleted messages, which is usually what you want to do.  Their
+command definitions are named <code>imail-next-undeleted-message</code> and
+<code>imail-previous-undeleted-message</code>.  If you do not want to skip
+deleted messages&mdash;for example, if you want to move to a message to
+undelete it&mdash;use the variants <kbd>M-n</kbd> and <kbd>M-p</kbd>
+(<code>imail-next-message</code> and <code>imail-previous-message</code>).  A
+numeric argument to any of these commands serves as a repeat count.
+
+   <p>In <acronym>IMAIL</acronym>, you can specify a numeric argument by typing just
+the digits.  You don't need to type <kbd>C-u</kbd> first.
+
+   <p><a name="index-M_002ds-58"></a><a name="index-imail_002dsearch-59"></a><a name="index-searching-in-IMAIL-60"></a>The <kbd>M-s</kbd> (<code>imail-search</code>) command is <acronym>IMAIL</acronym>'s version
+of search.  The usual incremental search command <kbd>C-s</kbd> works in
+<acronym>IMAIL</acronym>, but it searches only within the current message.  The
+purpose of <kbd>M-s</kbd> is to search for another message.  It reads a
+string nonincrementally, then searches starting at the beginning of the
+following message for a match.  It then selects that message.  If
+<var>string</var> is empty, <kbd>M-s</kbd> reuses the string used the previous
+time.
+
+   <p>To search backward in the folder for another message, give <kbd>M-s</kbd> a
+negative argument.  In <acronym>IMAIL</acronym> you can do this with <kbd>- M-s</kbd>.
+
+   <p>It is also possible to search for a message based on flags. 
+See <a href="Flags.html#Flags">Flags</a>.
+
+   <p><a name="index-C_002dc-C_002dn-61"></a><a name="index-imail_002dnext_002dsame_002dsubject-62"></a><a name="index-C_002dc-C_002dp-63"></a><a name="index-imail_002dprevious_002dsame_002dsubject-64"></a>To find the next message with the same subject as the current message,
+use <kbd>C-c C-n</kbd> (<code>imail-next-same-subject</code>).  This is useful for
+following the thread of an email conversation.  <kbd>C-c C-p</kbd>
+(<code>imail-previous-same-subject</code>) finds the previous message with the
+same subject.
+
+   <p><a name="index-j-65"></a><a name="index-imail_002dselect_002dmessage-66"></a><a name="index-g_t_003e-67"></a><a name="index-imail_002dlast_002dmessage-68"></a><a name="index-g_t_003c-69"></a><a name="index-imail_002dfirst_002dmessage-70"></a><a name="index-M_002du-71"></a><a name="index-imail_002dfirst_002dunseen_002dmessage-72"></a>To move to a message specified by absolute message number, use <kbd>j</kbd>
+(<code>imail-select-message</code>) with the message number as argument.  With
+no argument, <kbd>j</kbd> selects the first message.  <kbd>&lt;</kbd>
+(<code>imail-first-message</code>) also selects the first message.  <kbd>&gt;</kbd>
+(<code>imail-last-message</code>) selects the last message.  <kbd>M-u</kbd> selects
+the first unseen message (<code>imail-first-unseen-message</code>).
+
+   </body></html>
+

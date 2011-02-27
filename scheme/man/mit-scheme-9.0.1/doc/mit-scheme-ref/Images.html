@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Images - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Graphics.html#Graphics" title="Graphics">
+<link rel="prev" href="Custom-Graphics-Operations.html#Custom-Graphics-Operations" title="Custom Graphics Operations">
+<link rel="next" href="X-Graphics.html#X-Graphics" title="X Graphics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Images"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="X-Graphics.html#X-Graphics">X Graphics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Custom-Graphics-Operations.html#Custom-Graphics-Operations">Custom Graphics Operations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Graphics.html#Graphics">Graphics</a>
+<hr>
+</div>
+
+<h3 class="section">17.8 Images</h3>
+
+<p><a name="index-graphics_002c-images-3022"></a><a name="index-images_002c-graphics-3023"></a><a name="index-graphics_002c-bitmaps-3024"></a><a name="index-bitmaps_002c-graphics-3025"></a>
+Some graphics device types support images, which are rectangular pieces
+of picture that may be drawn into a graphics device.  Images are often
+called something else in the host graphics system, such as bitmaps or
+pixmaps.  The operations supported vary between devices, so look under
+the different device types to see what operations are available.  All
+devices that support images support the following operations.
+
+<div class="defun">
+&mdash; operation on graphics-device: <b>create-image</b><var> width height<a name="index-create_002dimage-on-graphics_002ddevice-3026"></a></var><br>
+<blockquote><p>Images are created using the <code>create-image</code> graphics operation,
+specifying the <var>width</var> and <var>height</var> of the image in device
+coordinates (pixels).
+
+     <pre class="example">          (graphics-operation device 'create-image 200 100)
+</pre>
+        <p class="noindent">The initial contents of an image are unspecified.
+
+        <p><code>create-image</code> is a graphics operation rather than a procedure
+because the kind of image returned depends on the kind of graphics
+device used and the options specified in its creation.  The image may be
+used freely with other graphics devices created with the same
+attributes, but the effects of using an image with a graphics device
+with different attributes (for example, different colors) is undefined. 
+Under X, the image is display dependent. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; operation on graphics-device: <b>draw-image</b><var> x y image<a name="index-draw_002dimage-on-graphics_002ddevice-3027"></a></var><br>
+<blockquote><p>The image is copied into the graphics device at the specified position. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; operation on graphics-device: <b>draw-subimage</b><var> x y image im-x im-y w h<a name="index-draw_002dsubimage-on-graphics_002ddevice-3028"></a></var><br>
+<blockquote><p>Part of the image is copied into the graphics device at the specified
+(<var>x</var>, <var>y</var>) position.  The part of the image that is copied is the
+rectangular region at <var>im-x</var> and <var>im-y</var> and of width <var>w</var> and
+height <var>h</var>.  These four numbers are given in device coordinates
+(pixels). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>image?</b><var> object<a name="index-image_003f-3029"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is an image, otherwise returns
+<code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>image/destroy</b><var> image<a name="index-image_002fdestroy-3030"></a></var><br>
+<blockquote><p>This procedure destroys <var>image</var>, returning storage to the system. 
+Programs should destroy images after they have been used because even
+modest images may use large amounts of memory.  Images are reclaimed by
+the garbage collector, but they may be implemented using memory outside
+of Scheme's heap.  If an image is reclaimed before being destroyed, the
+implementation might not deallocate that non-heap memory, which can
+cause a subsequent call to <code>create-image</code> to fail because it is
+unable to allocate enough memory. 
+</p></blockquote></div>
+
+<!-- @deffn procedure image/descriptor image -->
+<!-- The procedure returns the implementation dependent image.  Its use is -->
+<!-- discouraged as it is non-portable. -->
+<!-- @end deffn -->
+<div class="defun">
+&mdash; procedure: <b>image/height</b><var> image<a name="index-image_002fheight-3031"></a></var><br>
+<blockquote><p>Returns the height of the image in device coordinates. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>image/width</b><var> image<a name="index-image_002fwidth-3032"></a></var><br>
+<blockquote><p>Returns the width of the image in device coordinates. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>image/fill-from-byte-vector</b><var> image bytes<a name="index-image_002ffill_002dfrom_002dbyte_002dvector-3033"></a></var><br>
+<blockquote><p>The contents of <var>image</var> are set in a device-dependent way, using one
+byte per pixel from <var>bytes</var> (a string).  Pixels are filled row by
+row from the top of the image to the bottom, with each row being filled
+from left to right.  There must be at least <code>(* (image/height
+</code><var>image</var><code>) (image/width </code><var>image</var><code>))</code> bytes in <var>bytes</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

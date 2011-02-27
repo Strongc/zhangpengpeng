@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Random Numbers - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Numbers.html#Numbers" title="Numbers">
+<link rel="prev" href="Fixnum-and-Flonum-Operations.html#Fixnum-and-Flonum-Operations" title="Fixnum and Flonum Operations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Random-Numbers"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fixnum-and-Flonum-Operations.html#Fixnum-and-Flonum-Operations">Fixnum and Flonum Operations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
+<hr>
+</div>
+
+<h3 class="section">4.8 Random Numbers</h3>
+
+<p><a name="index-random-number-674"></a><a name="index-pseudo_002drandom-number-675"></a><a name="index-number_002c-pseudo_002drandom-676"></a>
+MIT/GNU Scheme provides a facility for generating pseudo-random numbers. 
+The current implementation is a &ldquo;subtract-with-carry&rdquo; random-number
+generator, based on the algorithm from <cite>A New Class of Random
+Number Generators</cite>, George Marsaglia and Arif Zaman, <cite>The Annals of
+Applied Probability</cite>, Vol. 1, No. 3, 1991.  At the time it was
+implemented, this was a good algorithm for general purposes, but the
+state of the art in random-number generation is constantly changing.  If
+necessary, the implementation will be updated to use a new algorithm
+while retaining the same interface.
+
+   <p>The interface described here is very similar to that of Common Lisp.
+
+<div class="defun">
+&mdash; procedure: <b>random</b><var> modulus </var>[<var>state</var>]<var><a name="index-random-677"></a></var><br>
+<blockquote><p><var>Modulus</var> must be a positive real number.  <code>random</code> returns a
+pseudo-random number between zero (inclusive) and <var>modulus</var>
+(exclusive).  The exactness of the returned number is the same as the
+exactness of <var>modulus</var>.  Additionally, if <var>modulus</var> is an exact
+integer, the returned number will be also.  Usually, <var>modulus</var> is
+either an exact integer or an inexact real; the current implementation
+has been tuned to make these two cases fast.
+
+        <p>If <var>state</var> is given and not <code>#f</code>, it must be a random-state
+object; otherwise, it defaults to the value of the variable
+<code>*random-state*</code>.  This object is used to maintain the state of the
+pseudo-random-number generator and is altered as a side effect of the
+<code>random</code> procedure.
+
+     <pre class="example">          (random 1.0)    &rArr; .32744744667719056
+          (random 1.0)    &rArr; .01668326768172354
+          (random 10)     &rArr; 3
+          (random 10)     &rArr; 8
+          (random 100)    &rArr; 38
+          (random 100)    &rArr; 63
+          (random 100/3)  &rArr; 130501475769920525/6755399441055744
+          (random 100/3)  &rArr; 170571694016427575/13510798882111488
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>flo:random-unit</b><var> state<a name="index-flo_003arandom_002dunit-678"></a></var><br>
+<blockquote><p><var>State</var> must be a random-state object.  <code>flo:random-unit</code>
+returns a pseudo-random number between zero inclusive and one exclusive;
+the returned number is always a flonum and therefore an inexact real
+number.  <code>flo:random-unit</code> is equivalent to <code>random</code> with a
+<var>modulus</var> of <code>1.0</code>, except that it is faster. 
+</p></blockquote></div>
+
+   <p>The next three definitions concern random-state objects.  In addition to
+these definitions, it is important to know that random-state objects are
+specifically designed so that they can be saved to disk using the
+<code>fasdump</code> procedure, and later restored using the <code>fasload</code>
+procedure.  This allows a particular random-state object to be saved in
+order to replay a particular pseudo-random sequence.
+
+<div class="defun">
+&mdash; variable: <b>*random-state*</b><var><a name="index-g_t_002arandom_002dstate_002a-679"></a></var><br>
+<blockquote><p>This variable holds a data structure, a random-state object, that
+encodes the internal state of the random-number generator that
+<code>random</code> uses by default.  A call to <code>random</code> will perform a
+side effect on this data structure.  This variable may be changed, using
+<code>set!</code> or <code>fluid-let</code>, to hold a new random-state object. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-random-state</b> [<var>state</var>]<var><a name="index-make_002drandom_002dstate-680"></a></var><br>
+<blockquote><p>This procedure returns a new random-state object, suitable for use as
+the value of the variable <code>*random-state*</code>, or as the <var>state</var>
+argument to <code>random</code>.  If <var>state</var> is not given or <code>#f</code>,
+<code>make-random-state</code> returns a <em>copy</em> of the current
+random-number state object (the value of the variable
+<code>*random-state*</code>).  If <var>state</var> is a random-state object, a copy
+of that object is returned.  If <var>state</var> is <code>#t</code>, then a new
+random-state object is returned that has been &ldquo;randomly&rdquo; initialized
+by some means (such as by a time-of-day clock). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>random-state?</b><var> object<a name="index-random_002dstate_003f-681"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is a random-state object, otherwise
+returns <code>#f</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

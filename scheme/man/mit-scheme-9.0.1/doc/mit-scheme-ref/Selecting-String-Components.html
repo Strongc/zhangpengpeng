@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Selecting String Components - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Strings.html#Strings" title="Strings">
+<link rel="prev" href="Construction-of-Strings.html#Construction-of-Strings" title="Construction of Strings">
+<link rel="next" href="Comparison-of-Strings.html#Comparison-of-Strings" title="Comparison of Strings">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Selecting-String-Components"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Comparison-of-Strings.html#Comparison-of-Strings">Comparison of Strings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Construction-of-Strings.html#Construction-of-Strings">Construction of Strings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Strings.html#Strings">Strings</a>
+<hr>
+</div>
+
+<h3 class="section">6.2 Selecting String Components</h3>
+
+<p><a name="index-selection_002c-of-string-component-912"></a><a name="index-component-selection_002c-of-string-913"></a>
+
+<div class="defun">
+&mdash; procedure: <b>string?</b><var> object<a name="index-string_003f-914"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-string-915"></a>Returns <code>#t</code> if <var>object</var> is a string; otherwise returns
+<code>#f</code>.
+
+     <pre class="example">          (string? "Hi")                  &rArr;  #t
+          (string? 'Hi)                   &rArr;  #f
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>string-length</b><var> string<a name="index-string_002dlength-916"></a></var><br>
+<blockquote><p>Returns the length of <var>string</var> as an exact non-negative integer.
+
+     <pre class="example">          (string-length "")              &rArr;  0
+          (string-length "The length")    &rArr;  10
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>string-null?</b><var> string<a name="index-string_002dnull_003f-917"></a></var><br>
+<blockquote><p><a name="index-empty-string_002c-predicate-for-918"></a><a name="index-null-string_002c-predicate-for-919"></a>Returns <code>#t</code> if <var>string</var> has zero length; otherwise returns
+<code>#f</code>.
+
+     <pre class="example">          (string-null? "")               &rArr;  #t
+          (string-null? "Hi")             &rArr;  #f
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>string-ref</b><var> string k<a name="index-string_002dref-920"></a></var><br>
+<blockquote><p>Returns character <var>k</var> of <var>string</var>.  <var>K</var> must be a valid index
+of <var>string</var>.
+
+     <pre class="example">          (string-ref "Hello" 1)          &rArr;  #\e
+          (string-ref "Hello" 5)          error--&gt; 5 not in correct range
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>string-set!</b><var> string k char<a name="index-string_002dset_0021-921"></a></var><br>
+<blockquote><p>Stores <var>char</var> in element <var>k</var> of <var>string</var> and returns an
+unspecified value.  <var>K</var> must be a valid index of <var>string</var>, and
+<var>char</var> must satisfy the predicate <code>char-ascii?</code>.
+
+     <pre class="example">          (define str "Dog")              &rArr;  <span class="roman">unspecified</span>
+          (string-set! str 0 #\L)         &rArr;  <span class="roman">unspecified</span>
+          str                             &rArr;  "Log"
+          (string-set! str 3 #\t)         error--&gt; 3 not in correct range
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

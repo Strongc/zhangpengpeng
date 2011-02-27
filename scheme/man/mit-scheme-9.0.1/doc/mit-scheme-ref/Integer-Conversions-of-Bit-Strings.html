@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Integer Conversions of Bit Strings - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Bit-Strings.html#Bit-Strings" title="Bit Strings">
+<link rel="prev" href="Modification-of-Bit-Strings.html#Modification-of-Bit-Strings" title="Modification of Bit Strings">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Integer-Conversions-of-Bit-Strings"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Modification-of-Bit-Strings.html#Modification-of-Bit-Strings">Modification of Bit Strings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Bit-Strings.html#Bit-Strings">Bit Strings</a>
+<hr>
+</div>
+
+<h3 class="section">9.6 Integer Conversions of Bit Strings</h3>
+
+<p><a name="index-integer_002c-converting-to-bit-string-1424"></a>
+
+<div class="defun">
+&mdash; procedure: <b>unsigned-integer-&gt;bit-string</b><var> length integer<a name="index-unsigned_002dinteger_002d_003ebit_002dstring-1425"></a></var><br>
+<blockquote><p>Both <var>length</var> and <var>integer</var> must be exact non-negative integers. 
+Converts <var>integer</var> into a newly allocated bit string of <var>length</var>
+bits.  Signals an error of type <code>condition-type:bad-range-argument</code>
+if <var>integer</var> is too large to be represented in <var>length</var> bits. 
+<a name="index-condition_002dtype_003abad_002drange_002dargument-1426"></a></p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>signed-integer-&gt;bit-string</b><var> length integer<a name="index-signed_002dinteger_002d_003ebit_002dstring-1427"></a></var><br>
+<blockquote><p><var>Length</var> must be an exact non-negative integer, and <var>integer</var>
+may be any exact integer.  Converts <var>integer</var> into a newly allocated
+bit string of <var>length</var> bits, using two's complement encoding for
+negative numbers.  Signals an error of type
+<code>condition-type:bad-range-argument</code> if <var>integer</var> is too large
+to be represented in <var>length</var> bits. 
+<a name="index-condition_002dtype_003abad_002drange_002dargument-1428"></a></p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>bit-string-&gt;unsigned-integer</b><var> bit-string<a name="index-bit_002dstring_002d_003eunsigned_002dinteger-1429"></a></var><br>
+&mdash; procedure: <b>bit-string-&gt;signed-integer</b><var> bit-string<a name="index-bit_002dstring_002d_003esigned_002dinteger-1430"></a></var><br>
+<blockquote><p>Converts <var>bit-string</var> into an exact integer. 
+<code>bit-string-&gt;signed-integer</code> regards <var>bit-string</var> as a two's
+complement representation of a signed integer, and produces an integer
+of like sign and absolute value.  <code>bit-string-&gt;unsigned-integer</code>
+regards <var>bit-string</var> as an unsigned quantity and converts to an
+integer accordingly. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Generic Procedure Datatype - SOS 1.9</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="SOS 1.9">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Generic-Procedures.html#Generic-Procedures" title="Generic Procedures">
+<link rel="prev" href="Generic-Procedures.html#Generic-Procedures" title="Generic Procedures">
+<link rel="next" href="Method-Storage.html#Method-Storage" title="Method Storage">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents SOS 1.9.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Generic-Procedure-Datatype"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Method-Storage.html#Method-Storage">Method Storage</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Generic-Procedures.html#Generic-Procedures">Generic Procedures</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Generic-Procedures.html#Generic-Procedures">Generic Procedures</a>
+<hr>
+</div>
+
+<h3 class="section">4.1 Generic Procedure Datatype</h3>
+
+<p>The following definitions are used to construct and inspect generic
+procedures.
+
+<div class="defun">
+&mdash; Procedure: <b>make-generic-procedure</b><var> arity </var>[<var>name</var>]<var><a name="index-make_002dgeneric_002dprocedure-113"></a></var><br>
+<blockquote><p>Creates and returns a new generic procedure.  The generic procedure
+requires <var>arity</var> arguments.
+
+        <p><var>Arity</var> may take one of the following forms.  An exact positive
+integer specifies that the procedure will accept exactly that number of
+arguments.  A pair of two exact positive integers specifies inclusive
+lower and upper bounds, respectively, on the number of arguments
+accepted; the <span class="sc">cdr</span> may be <code>#f</code> indicating no upper bound.
+
+        <p><var>Name</var> is used for debugging: it is a symbol that has no role in the
+semantics of the generic procedure.  <var>Name</var> may be <code>#f</code> to
+indicate that the generic procedure is anonymous.  If <var>name</var> is not
+specified, it defaults to <code>#f</code>.
+
+        <p>Examples:
+
+     <pre class="lisp">          (define foo-bar (make-generic-procedure 2))
+          
+          (define foo-baz (make-generic-procedure '(1 . 2) 'foo-baz))
+          
+          (define foo-mum (make-generic-procedure '(1 . #f)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Syntax: <b>define-generic</b><var> name lambda-list<a name="index-define_002dgeneric-114"></a></var><br>
+<blockquote><p>Defines <var>name</var> to be a generic procedure.  <var>Lambda-list</var> is an
+ordinary parameter list, which is exactly like the parameter list in a
+<code>lambda</code> special form.  This expands into
+
+     <pre class="lisp">          (define <var>name</var>
+            (make-generic-procedure <var>arity</var>
+                                    (quote <var>name</var>)))
+</pre>
+        <p class="noindent">where <var>arity</var> is determined from <var>lambda-list</var>.
+
+        <p>Examples (compare to examples of <code>make-generic-procedure</code>):
+
+     <pre class="lisp">          (define-generic foo-bar (x y))
+          
+          (define-generic foo-baz (x #!optional y))
+          
+          (define-generic foo-mum (x . y))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>generic-procedure?</b><var> object<a name="index-generic_002dprocedure_003f-115"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is a generic procedure, otherwise
+returns <code>#f</code>.  Note that every generic procedure satisfies the
+predicate <code>procedure?</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>generic-procedure-arity</b><var> generic-procedure<a name="index-generic_002dprocedure_002darity-116"></a></var><br>
+<blockquote><p>Returns the arity of <var>generic-procedure</var>, as specified in the call
+to <code>make-generic-procedure</code>.  The returned arity must not be
+modified. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>generic-procedure-name</b><var> generic-procedure<a name="index-generic_002dprocedure_002dname-117"></a></var><br>
+<blockquote><p>Returns the name of <var>generic-procedure</var>, as specified in the call to
+<code>make-generic-procedure</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

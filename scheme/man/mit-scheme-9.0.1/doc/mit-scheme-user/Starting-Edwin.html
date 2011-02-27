@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Starting Edwin - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edwin.html#Edwin" title="Edwin">
+<link rel="prev" href="Edwin.html#Edwin" title="Edwin">
+<link rel="next" href="Leaving-Edwin.html#Leaving-Edwin" title="Leaving Edwin">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Starting-Edwin"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Leaving-Edwin.html#Leaving-Edwin">Leaving Edwin</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Edwin.html#Edwin">Edwin</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edwin.html#Edwin">Edwin</a>
+<hr>
+</div>
+
+<h3 class="section">7.1 Starting Edwin</h3>
+
+<p>To use Edwin, start Scheme with the following command-line options:
+
+<pre class="example">     mit-scheme --edit
+</pre>
+   <p class="noindent">Alternatively, you can load Edwin by giving the <samp><span class="option">--edwin</span></samp>
+command-line option and then calling the procedure <code>edit</code>:
+
+<div class="defun">
+&mdash; procedure: <b>edit</b><var><a name="index-edit-272"></a></var><br>
+&mdash; procedure: <b>edwin</b><var><a name="index-edwin-273"></a></var><br>
+<blockquote><p>Enter the Edwin text editor.  If entering for the first time, the editor
+is initialized (by calling <code>create-editor</code> with no arguments). 
+Otherwise, the previously-initialized editor is reentered.
+
+        <p>The procedure <code>edwin</code> is an alias for <code>edit</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>inhibit-editor-init-file?</b><var><a name="index-inhibit_002deditor_002dinit_002dfile_003f-274"></a></var><br>
+<blockquote><p>When Edwin is first initialized, it loads your init file (called
+<samp><span class="file">~/.edwin</span></samp> under unix, <samp><span class="file">edwin.ini</span></samp> on PCs) if you have one. 
+If the Scheme variable <code>inhibit-editor-init-file?</code> is true,
+however, your init file will not be loaded even if it exists.  By
+default, this variable is false.
+
+        <p>Note that you can set this variable in your Scheme init file
+(see <a href="Customizing-Scheme.html#Customizing-Scheme">Customizing Scheme</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>create-editor</b><var> arg <small class="dots">...</small><a name="index-create_002deditor-275"></a></var><br>
+<blockquote><p>Initializes Edwin, or reinitializes it if already initialized. 
+<code>create-editor</code> is normally invoked automatically by <code>edit</code>.
+
+        <p>If no <var>arg</var>s are given, the value of <code>create-editor-args</code> is
+used instead.  In other words, the following are equivalent:
+
+     <pre class="example">          (create-editor)
+          (apply create-editor create-editor-args)
+</pre>
+        <p class="noindent">On the other hand, if <var>arg</var>s are given, they are used to update
+<code>create-editor-args</code>, making the following equivalent:
+
+     <pre class="example">          (apply create-editor <var>args</var>)
+          (begin (set! create-editor-args <var>args</var>) (create-editor))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>create-editor-args</b><var><a name="index-create_002deditor_002dargs-276"></a></var><br>
+<blockquote><p>This variable controls the initialization of Edwin.  The following
+values are defined:
+
+          <dl>
+<dt><code>(#f)</code><dd>This is the default.  Creates a window of some default size, and uses
+that window as Edwin's main window.  Under unix, if X11 is not available
+or if the <samp><span class="env">DISPLAY</span></samp> environment variable is undefined, Edwin will
+run on Scheme's console.
+
+          <br><dt><code>(x)</code><dd>Unix only.  Creates an X window and uses it as Edwin's main window. 
+This requires the <samp><span class="env">DISPLAY</span></samp> environment variable to have been set
+to the appropriate value before Scheme was started.
+
+          <br><dt><code>(x </code><var>geometry</var><code>)</code><dd>Unix only.  Like &lsquo;<samp><span class="samp">(x)</span></samp>&rsquo; except that <var>geometry</var> specifies the
+window's geometry in the usual way.  <var>Geometry</var> must be a character
+string whose contents is an X geometry specification.
+
+          <br><dt><code>(console)</code><dd>Unix only.  Causes Edwin to run on Scheme's console, or in unix
+terminology, the standard input and output.  If the console is not a
+terminal device, or is not powerful enough to run Edwin, an error will
+be signalled at initialization time.
+
+          <br><dt><code>(win32)</code><dd>Windows only.  Creates a window and uses it as Edwin's main window. 
+</dl>
+        </p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Device Independent Bitmap Utilities - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Win32-Package-Reference.html#Win32-Package-Reference" title="Win32 Package Reference">
+<link rel="prev" href="Foreign-function-interface.html#Foreign-function-interface" title="Foreign function interface">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Device-Independent-Bitmap-Utilities"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Foreign-function-interface.html#Foreign-function-interface">Foreign function interface</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Win32-Package-Reference.html#Win32-Package-Reference">Win32 Package Reference</a>
+<hr>
+</div>
+
+<h3 class="section">18.3 Device Independent Bitmap Utilities</h3>
+
+<p>The Device Independent Bitmap (DIB) utilities library <samp><span class="file">DIBUTILS.DLL</span></samp>
+and the associated procedures in <samp><span class="file">dib.scm</span></samp> in the Win32 system
+source is an example of how to use the foreign function interface to
+access and manipulate non-Scheme objects. 
+<a name="index-DLL_002c-DIBUTILS_002eDLL-3165"></a>
+
+<div class="defun">
+&mdash; windows type: <b>dib</b><var><a name="index-dib-3166"></a></var><br>
+<blockquote><p>In the C world a DIB is a <dfn>handle</dfn> to a piece of memory containing
+the bits that represent information about the image and the pixels of
+the image.  The handle is a machine-word sized piece of data which may
+be thought of as a 32 bit integer.  The handle may be null (i.e. zero),
+indicating that there is no block of memory describing the DIB.  The
+null value is usually returned by C functions that are supposed to
+create a DIB but failed, for some reason like the memory could not be
+allocated or a file could not be opened.
+
+        <p>In the Scheme world a DIB is a structure containing information
+about the bitmap (specifically the integer that represents the handle). 
+We also include <code>#f</code> in the <code>dib</code> windows type to mirror the
+null handle error value.
+
+     <pre class="example">          (define dib-result
+            (lambda (handle)
+              (if (= handle 0)
+                  #f
+                  (make-dib handle))))
+          
+          (define dib-arg
+            (lambda (dib)
+              (if dib
+                  (cell-contents (dib-handle dib))
+                  0)))
+          
+          (define-windows-type dib
+            (lambda (thing) (or (dib? thing) (eq? thing #f)))
+            dib-arg
+            dib-result)
+</pre>
+        </blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="DIB-procedures.html#DIB-procedures">DIB procedures</a>
+<li><a accesskey="2" href="Other-parts-of-the-DIB-Utilities-implementation.html#Other-parts-of-the-DIB-Utilities-implementation">Other parts of the DIB Utilities implementation</a>
+</ul>
+
+   </body></html>
+

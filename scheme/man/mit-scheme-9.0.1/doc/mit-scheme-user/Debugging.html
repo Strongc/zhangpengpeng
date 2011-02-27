@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+<title>Debugging - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Compiling-Programs.html#Compiling-Programs" title="Compiling Programs">
+<link rel="next" href="GNU-Emacs-Interface.html#GNU-Emacs-Interface" title="GNU Emacs Interface">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Debugging"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GNU-Emacs-Interface.html#GNU-Emacs-Interface">GNU Emacs Interface</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Compiling-Programs.html#Compiling-Programs">Compiling Programs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">5 Debugging</h2>
+
+<p>Parts of this chapter are adapted from <cite>Don't Panic: A 6.001 User's
+Guide to the Chipmunk System</cite>, by Arthur A. Gleckler.
+
+   <p><a name="index-bugs-172"></a><a name="index-debugging-173"></a>Even computer software that has been carefully planned and well written
+may not always work correctly.  Mysterious creatures called <dfn>bugs</dfn>
+may creep in and wreak havoc, leaving the programmer to clean up the
+mess.  Some have theorized that a program fails only because its author
+made a mistake, but experienced computer programmers know that bugs are
+always to blame.  This is why the task of fixing broken computer
+software is called <dfn>debugging</dfn>.
+
+   <p>It is impossible to prove the correctness of any non-trivial program;
+hence the Cynic's First Law of Debugging:
+
+   <blockquote>
+Programs don't become more reliable as they are debugged; the bugs just
+get harder to find. 
+</blockquote>
+
+   <p><a name="index-breakpoints-174"></a>Scheme is equipped with a variety of special software for finding and
+removing bugs.  The debugging tools include facilities for tracing a
+program's use of specified procedures, for examining Scheme
+environments, and for setting <dfn>breakpoints</dfn>, places where the
+program will pause for inspection.
+
+   <p><a name="index-error-175"></a>Many bugs are detected when programs try to do something that is
+impossible, like adding a number to a symbol, or using a variable that
+does not exist; this type of mistake is called an <dfn>error</dfn>.  Whenever
+an error occurs, Scheme prints an error message and starts a new
+<acronym>REPL</acronym>.  For example, using a nonexistent variable <code>foo</code>
+will cause Scheme to respond
+
+<pre class="example">     1 ]=&gt; foo
+     
+     ;Unbound variable: foo
+     ;To continue, call RESTART with an option number:
+     ; (RESTART 3) =&gt; Specify a value to use instead of foo.
+     ; (RESTART 2) =&gt; Define foo to a given value.
+     ; (RESTART 1) =&gt; Return to read-eval-print level 1.
+     
+     2 error&gt;
+</pre>
+   <p>Sometimes, a bug will never cause an error, but will still cause the
+program to operate incorrectly.  For instance,
+
+<pre class="example">     (prime? 7)   &rArr;   #f
+</pre>
+   <p>In this situation, Scheme does not know that the program is misbehaving. 
+The programmer must notice the problem and, if necessary, start the
+debugging tools manually.
+
+   <p>There are several approaches to finding bugs in a Scheme program:
+
+     <ul>
+<li>Inspect the original Scheme program.
+
+     <li>Use the debugging tools to follow your program's progress.
+
+     <li>Edit the program to insert checks and breakpoints. 
+</ul>
+
+<p class="noindent">Only experience can teach how to debug programs, so be sure to
+experiment with all these approaches while doing your own debugging. 
+Planning ahead is the best way to ward off bugs, but when bugs do
+appear, be prepared to attack them with all the tools available.
+
+<ul class="menu">
+<li><a accesskey="1" href="Subproblems-and-Reductions.html#Subproblems-and-Reductions">Subproblems and Reductions</a>
+<li><a accesskey="2" href="Command_002dLine-Debugger.html#Command_002dLine-Debugger">Command-Line Debugger</a>
+<li><a accesskey="3" href="Debugging-Aids.html#Debugging-Aids">Debugging Aids</a>
+<li><a accesskey="4" href="Advising-Procedures.html#Advising-Procedures">Advising Procedures</a>
+</ul>
+
+   </body></html>
+

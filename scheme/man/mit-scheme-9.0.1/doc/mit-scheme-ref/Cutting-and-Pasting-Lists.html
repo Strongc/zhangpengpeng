@@ -1,0 +1,154 @@
+<html lang="en">
+<head>
+<title>Cutting and Pasting Lists - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lists.html#Lists" title="Lists">
+<link rel="prev" href="Selecting-List-Components.html#Selecting-List-Components" title="Selecting List Components">
+<link rel="next" href="Filtering-Lists.html#Filtering-Lists" title="Filtering Lists">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Cutting-and-Pasting-Lists"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Filtering-Lists.html#Filtering-Lists">Filtering Lists</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Selecting-List-Components.html#Selecting-List-Components">Selecting List Components</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
+<hr>
+</div>
+
+<h3 class="section">7.4 Cutting and Pasting Lists</h3>
+
+<p><a name="index-cutting_002c-of-list-1220"></a><a name="index-pasting_002c-of-lists-1221"></a>
+
+<div class="defun">
+&mdash; procedure: <b>sublist</b><var> list start end<a name="index-sublist-1222"></a></var><br>
+<blockquote><p><var>Start</var> and <var>end</var> must be exact integers satisfying
+
+     <pre class="example">          0 &lt;= <var>start</var> &lt;= <var>end</var> &lt;= (length <var>list</var>)
+</pre>
+        <p><code>sublist</code> returns a newly allocated list formed from the elements
+of <var>list</var> beginning at index <var>start</var> (inclusive) and ending at
+<var>end</var> (exclusive). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>list-head</b><var> list k<a name="index-list_002dhead-1223"></a></var><br>
+<blockquote><p>Returns a newly allocated list consisting of the first <var>k</var> elements of
+<var>list</var>.  <var>K</var> must not be greater than the length of
+<var>list</var>.
+
+        <p>We could have defined <code>list-head</code> this way:
+
+     <pre class="example">          (define (list-head list k)
+            (sublist list 0 k))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>list-tail</b><var> list k<a name="index-list_002dtail-1224"></a></var><br>
+<blockquote><p>Returns the sublist of <var>list</var> obtained by omitting the first <var>k</var>
+elements.  The result, if it is not the empty list, shares structure
+with <var>list</var>.  <var>K</var> must not be greater than the length of
+<var>list</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>append</b><var> list <small class="dots">...</small><a name="index-append-1225"></a></var><br>
+<blockquote><p><a name="index-appending_002c-of-lists-1226"></a>Returns a list consisting of the elements of the first <var>list</var>
+followed by the elements of the other <var>list</var>s.
+
+     <pre class="example">          (append '(x) '(y))                      &rArr; (x y)
+          (append '(a) '(b c d))                  &rArr; (a b c d)
+          (append '(a (b)) '((c)))                &rArr; (a (b) (c))
+          (append)                                &rArr; ()
+</pre>
+        <p>The resulting list is always newly allocated, except that it shares
+structure with the last <var>list</var> argument.  The last argument may
+actually be any object; an improper list results if the last argument is
+not a proper list.
+
+     <pre class="example">          (append '(a b) '(c . d))                &rArr; (a b c . d)
+          (append '() 'a)                         &rArr; a
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>append!</b><var> list <small class="dots">...</small><a name="index-append_0021-1227"></a></var><br>
+<blockquote><p>Returns a list that is the argument <var>list</var>s concatenated together. 
+The arguments are changed rather than copied.  (Compare this with
+<code>append</code>, which copies arguments rather than destroying them.)  For
+example:
+
+     <pre class="example">          (define x '(a b c))
+          (define y '(d e f))
+          (define z '(g h))
+          (append! x y z)                         &rArr; (a b c d e f g h)
+          x                                       &rArr; (a b c d e f g h)
+          y                                       &rArr; (d e f g h)
+          z                                       &rArr; (g h)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>last-pair</b><var> list<a name="index-last_002dpair-1228"></a></var><br>
+<blockquote><p>Returns the last pair in <var>list</var>, which may be an improper list. 
+<code>last-pair</code> could have been defined this way:
+
+     <pre class="example">          (define last-pair
+            (lambda (x)
+              (if (pair? (cdr x))
+                  (last-pair (cdr x))
+                  x)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>except-last-pair</b><var> list<a name="index-except_002dlast_002dpair-1229"></a></var><br>
+&mdash; procedure: <b>except-last-pair!</b><var> list<a name="index-except_002dlast_002dpair_0021-1230"></a></var><br>
+<blockquote><p>These procedures remove the last pair from <var>list</var>.  <var>List</var> may
+be an improper list, except that it must consist of at least one pair. 
+<code>except-last-pair</code> returns a newly allocated copy of <var>list</var>
+that omits the last pair.  <code>except-last-pair!</code> destructively
+removes the last pair from <var>list</var> and returns <var>list</var>.  If the
+cdr of <var>list</var> is not a pair, the empty list is returned by either
+procedure. 
+</p></blockquote></div>
+
+   </body></html>
+

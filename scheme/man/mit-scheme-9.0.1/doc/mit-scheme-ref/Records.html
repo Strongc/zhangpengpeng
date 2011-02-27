@@ -1,0 +1,191 @@
+<html lang="en">
+<head>
+<title>Records - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Miscellaneous-Datatypes.html#Miscellaneous-Datatypes" title="Miscellaneous Datatypes">
+<link rel="prev" href="Cells.html#Cells" title="Cells">
+<link rel="next" href="Promises.html#Promises" title="Promises">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Records"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Promises.html#Promises">Promises</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Cells.html#Cells">Cells</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Miscellaneous-Datatypes.html#Miscellaneous-Datatypes">Miscellaneous Datatypes</a>
+<hr>
+</div>
+
+<h3 class="section">10.4 Records</h3>
+
+<p>MIT/GNU Scheme provides a <dfn>record</dfn> abstraction, which is a simple and
+flexible mechanism for building structures with named components. 
+Records can be defined and accessed using the procedures defined in this
+section.  A less flexible but more concise way to manipulate records is
+to use the <code>define-structure</code> special form (see <a href="Structure-Definitions.html#Structure-Definitions">Structure Definitions</a>). 
+<a name="index-define_002dstructure-1508"></a>
+
+<div class="defun">
+&mdash; procedure: <b>make-record-type</b><var> type-name field-names<a name="index-make_002drecord_002dtype-1509"></a></var><br>
+<blockquote><p><a name="index-record_002dtype-descriptor-_0028defn_0029-1510"></a>Returns a <dfn>record-type descriptor</dfn>, a value representing a new data
+type, disjoint from all others.  The <var>type-name</var> argument must be a
+string, but is only used for debugging purposes (such as the printed
+representation of a record of the new type).  The <var>field-names</var>
+argument is a list of symbols naming the <dfn>fields</dfn> of a record of the
+new type.  It is an error if the list contains any duplicates.  It is
+unspecified how record-type descriptors are represented. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>record-constructor</b><var> record-type </var>[<var>field-names</var>]<var><a name="index-record_002dconstructor-1511"></a></var><br>
+<blockquote><p>Returns a procedure for constructing new members of the type represented
+by <var>record-type</var>.  The returned procedure accepts exactly as many
+arguments as there are symbols in the given list, <var>field-names</var>;
+these are used, in order, as the initial values of those fields in a new
+record, which is returned by the constructor procedure.  The values of
+any fields not named in the list of <var>field-names</var> are unspecified. 
+The <var>field-names</var> argument defaults to the list of field-names in
+the call to <code>make-record-type</code> that created the type represented by
+<var>record-type</var>; if the <var>field-names</var> argument is provided, it is
+an error if it contains any duplicates or any symbols not in the default
+list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>record-keyword-constructor</b><var> record-type<a name="index-record_002dkeyword_002dconstructor-1512"></a></var><br>
+<blockquote><p>Returns a procedure for constructing new members of the type represented
+by <var>record-type</var>.  The returned procedure accepts arguments in a
+<dfn>keyword list</dfn>, which is an alternating sequence of names and
+values.  In other words, the number of arguments must be a multiple of
+two, and every other argument, starting with the first argument, must be
+a symbol that is one of the field names for <var>record-type</var>.
+
+        <p>The returned procedure may be called with a keyword list that contains
+multiple instances of the same keyword.  In this case, the leftmost
+instance is used and the other instances are ignored.  This allows
+keyword lists to be accumulated using <code>cons</code> or <code>cons*</code>, and
+new bindings added to the front of the list override old bindings at the
+end. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>record-predicate</b><var> record-type<a name="index-record_002dpredicate-1513"></a></var><br>
+<blockquote><p>Returns a procedure for testing membership in the type represented by
+<var>record-type</var>.  The returned procedure accepts exactly one argument
+and returns <code>#t</code> if the argument is a member of the indicated
+record type; it returns <code>#f</code> otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>record-accessor</b><var> record-type field-name<a name="index-record_002daccessor-1514"></a></var><br>
+<blockquote><p>Returns a procedure for reading the value of a particular field of a
+member of the type represented by <var>record-type</var>.  The returned
+procedure accepts exactly one argument which must be a record of the
+appropriate type; it returns the current value of the field named by the
+symbol <var>field-name</var> in that record.  The symbol <var>field-name</var>
+must be a member of the list of field names in the call to
+<code>make-record-type</code> that created the type represented by
+<var>record-type</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>record-modifier</b><var> record-type field-name<a name="index-record_002dmodifier-1515"></a></var><br>
+<blockquote><p>Returns a procedure for writing the value of a particular field of a
+member of the type represented by <var>record-type</var>.  The returned
+procedure accepts exactly two arguments: first, a record of the
+appropriate type, and second, an arbitrary Scheme value; it modifies the
+field named by the symbol <var>field-name</var> in that record to contain the
+given value.  The returned value of the modifier procedure is
+unspecified.  The symbol <var>field-name</var> must be a member of the list
+of field names in the call to <code>make-record-type</code> that created the
+type represented by <var>record-type</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>record?</b><var> object<a name="index-record_003f-1516"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-record-1517"></a>Returns <code>#t</code> if <var>object</var> is a record of any type and <code>#f</code>
+otherwise.  Note that <code>record?</code> may be true of any Scheme value; of
+course, if it returns <code>#t</code> for some particular value, then
+<code>record-type-descriptor</code> is applicable to that value and returns an
+appropriate descriptor. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>record-type-descriptor</b><var> record<a name="index-record_002dtype_002ddescriptor-1518"></a></var><br>
+<blockquote><p>Returns the record-type descriptor representing the type of
+<var>record</var>.  That is, for example, if the returned descriptor were
+passed to <code>record-predicate</code>, the resulting predicate would return
+<code>#t</code> when passed <var>record</var>.  Note that it is not necessarily the
+case that the returned descriptor is the one that was passed to
+<code>record-constructor</code> in the call that created the constructor
+procedure that created <var>record</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>record-type?</b><var> object<a name="index-record_002dtype_003f-1519"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-record-type-1520"></a>Returns <code>#t</code> if <var>object</var> is a record-type descriptor; otherwise
+returns <code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>record-type-name</b><var> record-type<a name="index-record_002dtype_002dname-1521"></a></var><br>
+<blockquote><p>Returns the type name associated with the type represented by
+<var>record-type</var>.  The returned value is <code>eqv?</code> to the
+<var>type-name</var> argument given in the call to <code>make-record-type</code>
+that created the type represented by <var>record-type</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>record-type-field-names</b><var> record-type<a name="index-record_002dtype_002dfield_002dnames-1522"></a></var><br>
+<blockquote><p>Returns a list of the symbols naming the fields in members of the type
+represented by <var>record-type</var>.  The returned value is <code>equal?</code>
+to the <var>field-names</var> argument given in the call to
+<code>make-record-type</code> that created the type represented by
+<var>record-type</var>.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> In MIT/GNU Scheme, the returned list is always
+newly allocated.</p>
+
+   <hr></div>
+
+   </body></html>
+

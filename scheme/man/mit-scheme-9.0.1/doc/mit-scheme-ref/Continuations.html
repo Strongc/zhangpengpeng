@@ -1,0 +1,225 @@
+<html lang="en">
+<head>
+<title>Continuations - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Procedures.html#Procedures" title="Procedures">
+<link rel="prev" href="Primitive-Procedures.html#Primitive-Procedures" title="Primitive Procedures">
+<link rel="next" href="Application-Hooks.html#Application-Hooks" title="Application Hooks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Continuations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Application-Hooks.html#Application-Hooks">Application Hooks</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Primitive-Procedures.html#Primitive-Procedures">Primitive Procedures</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Procedures.html#Procedures">Procedures</a>
+<hr>
+</div>
+
+<h3 class="section">12.4 Continuations</h3>
+
+<div class="defun">
+&mdash; procedure: <b>call-with-current-continuation</b><var> procedure<a name="index-call_002dwith_002dcurrent_002dcontinuation-1837"></a></var><br>
+<blockquote><p><a name="index-continuation-1838"></a><a name="index-construction_002c-of-continuation-1839"></a><a name="index-procedure_002c-escape-_0028defn_0029-1840"></a><a name="index-escape-procedure-_0028defn_0029-1841"></a><var>Procedure</var> must be a procedure of one argument.  Packages up the
+current continuation (see below) as an <dfn>escape procedure</dfn> and passes
+it as an argument to <var>procedure</var>.  The escape procedure is a Scheme
+procedure of one argument that, if it is later passed a value, will
+ignore whatever continuation is in effect at that later time and will
+give the value instead to the continuation that was in effect when the
+escape procedure was created.  The escape procedure created by
+<code>call-with-current-continuation</code> has unlimited extent just like any
+other procedure in Scheme.  It may be stored in variables or data
+structures and may be called as many times as desired.
+
+        <p>The following examples show only the most common uses of this procedure. 
+If all real programs were as simple as these examples, there would be no
+need for a procedure with the power of
+<code>call-with-current-continuation</code>.
+
+     <pre class="example">          (call-with-current-continuation
+            (lambda (exit)
+              (for-each (lambda (x)
+                          (if (negative? x)
+                              (exit x)))
+                        '(54 0 37 -3 245 19))
+              #t))                                &rArr;  -3
+          
+          (define list-length
+            (lambda (obj)
+              (call-with-current-continuation
+                (lambda (return)
+                  (letrec ((r
+                            (lambda (obj)
+                              (cond ((null? obj) 0)
+                                    ((pair? obj) (+ (r (cdr obj)) 1))
+                                    (else (return #f))))))
+                    (r obj))))))
+          (list-length '(1 2 3 4))                &rArr;  4
+          (list-length '(a b . c))                &rArr;  #f
+</pre>
+        <p><a name="index-non_002dlocal-exit-1842"></a><a name="index-exit_002c-non_002dlocal-1843"></a>A common use of <code>call-with-current-continuation</code> is for structured,
+non-local exits from loops or procedure bodies, but in fact
+<code>call-with-current-continuation</code> is quite useful for implementing a
+wide variety of advanced control structures.
+
+        <p>Whenever a Scheme expression is evaluated a continuation exists that
+wants the result of the expression.  The continuation represents an
+entire (default) future for the computation.  If the expression is
+evaluated at top level, for example, the continuation will take the
+result, print it on the screen, prompt for the next input, evaluate it,
+and so on forever.  Most of the time the continuation includes actions
+specified by user code, as in a continuation that will take the result,
+multiply it by the value stored in a local variable, add seven, and give
+the answer to the top-level continuation to be printed.  Normally these
+ubiquitous continuations are hidden behind the scenes and programmers
+don't think much about them.  On the rare occasions that you may need to
+deal explicitly with continuations,
+<code>call-with-current-continuation</code> lets you do so by creating a
+procedure that acts just like the current continuation. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>continuation?</b><var> object<a name="index-continuation_003f-1844"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-continuation-1845"></a>Returns <code>#t</code> if <var>object</var> is a continuation; otherwise returns
+<code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>within-continuation</b><var> continuation thunk<a name="index-within_002dcontinuation-1846"></a></var><br>
+<blockquote><p><a name="index-continuation_002c-alternate-invocation-1847"></a><a name="index-escape-procedure_002c-alternate-invocation-1848"></a><var>Thunk</var> must be a procedure of no arguments.  Conceptually,<br>
+<code>within-continuation</code> invokes <var>continuation</var> on the result of
+invoking <var>thunk</var>, but <var>thunk</var> is executed in the dynamic context
+of <var>continuation</var>.  In other words, the &ldquo;current&rdquo; continuation is
+abandoned before <var>thunk</var> is invoked. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>dynamic-wind</b><var> before thunk after<a name="index-dynamic_002dwind-1849"></a></var><br>
+<blockquote><p>Calls <var>thunk</var> without arguments, returning the result(s) of this
+call.  <var>Before</var> and <var>after</var> are called, also without arguments,
+as required by the following rules (note that in the absence of calls to
+continuations captured using <code>call-with-current-continuation</code> the
+three arguments are called once each, in order).  <var>Before</var> is called
+whenever execution enters the dynamic extent of the call to <var>thunk</var>
+and <var>after</var> is called whenever it exits that dynamic extent.  The
+dynamic extent of a procedure call is the period between when the call
+is initiated and when it returns.  In Scheme, because of
+<code>call-with-current-continuation</code>, the dynamic extent of a call may
+not be a single, connected time period.  It is defined as follows:
+
+          <ul>
+<li>The dynamic extent is entered when execution of the body of the called
+procedure begins.
+
+          <li>The dynamic extent is also entered when execution is not within the
+dynamic extent and a continuation is invoked that was captured (using
+<code>call-with-current-continuation</code>) during the dynamic extent.
+
+          <li>It is exited when the called procedure returns.
+
+          <li>It is also exited when execution is within the dynamic extent and a
+continuation is invoked that was captured while not within the dynamic
+extent. 
+</ul>
+
+        <p>If a second call to <code>dynamic-wind</code> occurs within the dynamic extent
+of the call to <var>thunk</var> and then a continuation is invoked in such a
+way that the <var>after</var>s from these two invocations of
+<code>dynamic-wind</code> are both to be called, then the <var>after</var>
+associated with the second (inner) call to <code>dynamic-wind</code> is called
+first.
+
+        <p>If a second call to <code>dynamic-wind</code> occurs within the dynamic extent
+of the call to <var>thunk</var> and then a continuation is invoked in such a
+way that the <var>before</var>s from these two invocations of
+<code>dynamic-wind</code> are both to be called, then the <var>before</var>
+associated with the first (outer) call to <code>dynamic-wind</code> is called
+first.
+
+        <p>If invoking a continuation requires calling the <var>before</var> from one
+call to <code>dynamic-wind</code> and the <var>after</var> from another, then the
+<var>after</var> is called first.
+
+        <p>The effect of using a captured continuation to enter or exit the dynamic
+extent of a call to <var>before</var> or <var>after</var> is undefined.
+
+     <pre class="example">          (let ((path '())
+                (c #f))
+            (let ((add (lambda (s)
+                         (set! path (cons s path)))))
+              (dynamic-wind
+                (lambda () (add 'connect))
+                (lambda ()
+                  (add (call-with-current-continuation
+                         (lambda (c0)
+                           (set! c c0)
+                           'talk1))))
+                (lambda () (add 'disconnect)))
+              (if (&lt; (length path) 4)
+                  (c 'talk2)
+                  (reverse path))))
+          
+          &rArr; (connect talk1 disconnect connect talk2 disconnect)
+</pre>
+        </blockquote></div>
+
+   <p>The following two procedures support multiple values.
+
+<div class="defun">
+&mdash; procedure: <b>call-with-values</b><var> thunk procedure<a name="index-call_002dwith_002dvalues-1850"></a></var><br>
+<blockquote><p><a name="index-multiple-values_002c-from-procedure-1851"></a><a name="index-values_002c-multiple-1852"></a><var>Thunk</var> must be a procedure of no arguments, and <var>procedure</var>
+must be a procedure.  <var>Thunk</var> is invoked with a continuation that
+expects to receive multiple values; specifically, the continuation
+expects to receive the same number of values that <var>procedure</var>
+accepts as arguments.  <var>Thunk</var> must return multiple values using the
+<code>values</code> procedure.  Then <var>procedure</var> is called with the
+multiple values as its arguments.  The result yielded by <var>procedure</var>
+is returned as the result of <code>call-with-values</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>values</b><var> object <small class="dots">...</small><a name="index-values-1853"></a></var><br>
+<blockquote><p>Returns multiple values.  The continuation in effect when this procedure
+is called must be a multiple-value continuation that was created by
+<code>call-with-values</code>.  Furthermore it must accept as many values as
+there are <var>object</var>s. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,171 @@
+<html lang="en">
+<head>
+<title>Coding style - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Efficiency-Tips.html#Efficiency-Tips" title="Efficiency Tips">
+<link rel="prev" href="Efficiency-Tips.html#Efficiency-Tips" title="Efficiency Tips">
+<link rel="next" href="Global-variables.html#Global-variables" title="Global variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Coding-style"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Global-variables.html#Global-variables">Global variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Efficiency-Tips.html#Efficiency-Tips">Efficiency Tips</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Efficiency-Tips.html#Efficiency-Tips">Efficiency Tips</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.3.1 Coding style</h4>
+
+<p>Scheme is a rich language, in which there are usually several ways to
+say the same thing.  A <dfn>coding style</dfn> is a set of rules that a
+programmer uses for choosing an expressive form to use in a given
+situation.  Usually these rules are aesthetic, but sometimes there are
+efficiency issues involved; this section describes a few choices that
+have non-obvious efficiency consequences.
+
+<h5 class="subsubheading">Better predicates</h5>
+
+<p>Consider the following implementation of <code>map</code> as might be found in
+any introductory book on Scheme:
+
+<pre class="example">     (define (map f lst)
+       (if (null? lst)
+           '()
+           (cons (f (car lst)) (map f (cdr lst)))))
+</pre>
+   <p>The problem with this definition is that at the points where <code>car</code>
+and <code>cdr</code> are called we still do not know that <var>lst</var> is a pair. 
+The compiler must insert a type check, or if type checks are disabled,
+the program might give wrong results.  Since one of the fundamental
+properties of <code>map</code> is that it transforms lists, we should make the
+relationship between the input pairs and the result pairs more apparent
+in the code:
+
+<pre class="example">     (define (map f lst)
+       (cond ((pair? lst)
+              (cons (f (car lst)) (map f (cdr lst))))
+             ((null? lst)
+              '())
+             (else
+              (error "Not a proper list:"  lst))))
+</pre>
+   <p>Note also that the <code>pair?</code> case comes first because we expect that
+<code>map</code> will be called on lists which have, on average, length
+greater that one.
+
+<h5 class="subsubheading">Internal procedures</h5>
+
+<p>Calls to internal procedures are faster than calls to global procedures. 
+There are two things that make internal procedures faster: First, the
+procedure call is compiled to a direct jump to a known location, which
+is more efficient that jumping `via' a global binding. 
+Second, there is a knock-on effect: since the compiler can see the
+internal procedure, the compiler can analyze it and possibly produce
+better code for other expressions in the body of the loop too:
+
+<pre class="example">     (define (map f original-lst)
+       (let walk ((lst original-lst))
+         (cond ((pair? lst)
+                (cons (f (car lst)) (walk (cdr lst))))
+               ((null? lst)
+                '())
+               (else
+                (error "Not a proper list:"  original-lst)))))
+</pre>
+   <h5 class="subsubheading">Internal defines</h5>
+
+<p>Internal definitions are a useful tool for structuring larger
+procedures.  However, certain internal definitions can thwart compiler
+optimizations.  Consider the following two procedures, where
+<code>compute-100</code> is some unknown procedure that we just know returns
+&lsquo;<samp><span class="samp">100</span></samp>&rsquo;.
+
+<pre class="example">     (define (f1)
+       (define v 100)
+       (lambda () v))
+     
+     (define (f2)
+       (define v (compute-100))
+       (lambda () v))
+</pre>
+   <p>The procedure returned by <code>f1</code> will always give the same result and
+the compiler can prove this.  The procedure returned by <code>f2</code> may
+return different results, even if <code>f2</code> is only called once. 
+Because of this, the compiler has to allocate a memory cell to <code>v</code>. 
+How can the procedure return different results?
+
+   <p>The fundamental reason is that the continuation may escape during the
+evaluation of <code>(compute-100)</code>, allowing the rest of the body of
+<code>f2</code> to be executed <em>again</em>:
+
+<pre class="example">     (define keep)
+     
+     (define (compute-100)
+       (call-with-current-continuation
+        (lambda (k)
+          (set! keep k)
+          100)))
+     
+     (define p (f2))
+     
+     (p)                &rArr; 100
+     (keep -999)        &rArr; p     <em>re-define v and p</em>
+     (p)                &rArr; -999
+</pre>
+   <p>To avoid the inefficiency introduced to handle the general case, the
+compiler must prove that the continuation cannot possibly escape.  The
+compiler knows that lambda expressions and constants do not let their
+continuations escape, so order the internal definitions so that
+definitions of the following forms come first:
+
+<pre class="example">     (define x '<em>something</em>)
+     (define x (lambda (...) ...))
+     (define (f u v) ...)
+</pre>
+   <p>Note: The <acronym>IEEE</acronym> Scheme standard permits <em>only</em> lambda
+expressions and constants as the value of internal defines. 
+Furthermore, all internal definitions must appear before any other
+expressions in the body.  Following the standard simultaneously assures
+portability and avoids the implementation inefficiencies described in
+this section.
+
+   </body></html>
+

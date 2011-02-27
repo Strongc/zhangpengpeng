@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Basic Hash Table Operations - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hash-Tables.html#Hash-Tables" title="Hash Tables">
+<link rel="prev" href="Construction-of-Hash-Tables.html#Construction-of-Hash-Tables" title="Construction of Hash Tables">
+<link rel="next" href="Resizing-of-Hash-Tables.html#Resizing-of-Hash-Tables" title="Resizing of Hash Tables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basic-Hash-Table-Operations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Resizing-of-Hash-Tables.html#Resizing-of-Hash-Tables">Resizing of Hash Tables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Construction-of-Hash-Tables.html#Construction-of-Hash-Tables">Construction of Hash Tables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hash-Tables.html#Hash-Tables">Hash Tables</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.4.2 Basic Hash Table Operations</h4>
+
+<p>The procedures described in this section are the basic operations on
+hash tables.  They provide the functionality most often needed by
+programmers.  Subsequent sections describe other operations that provide
+additional functionality needed by some applications.
+
+<div class="defun">
+&mdash; procedure: <b>hash-table?</b><var> object<a name="index-hash_002dtable_003f-1672"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-hash-table-1673"></a>Returns <code>#t</code> if <var>object</var> is a hash table, otherwise returns
+<code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>hash-table/put!</b><var> hash-table key datum<a name="index-hash_002dtable_002fput_0021-1674"></a></var><br>
+<blockquote><p>Associates <var>datum</var> with <var>key</var> in <var>hash-table</var> and returns an
+unspecified result.  The average time required by this operation is
+bounded by a constant. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>hash-table/get</b><var> hash-table key default<a name="index-hash_002dtable_002fget-1675"></a></var><br>
+<blockquote><p>Returns the datum associated with <var>key</var> in <var>hash-table</var>.  If
+there is no association for <var>key</var>, <var>default</var> is returned.  The
+average time required by this operation is bounded by a constant. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>hash-table/remove!</b><var> hash-table key<a name="index-hash_002dtable_002fremove_0021-1676"></a></var><br>
+<blockquote><p>If <var>hash-table</var> has an association for <var>key</var>, removes it. 
+Returns an unspecified result.  The average time required by this
+operation is bounded by a constant. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>hash-table/clear!</b><var> hash-table<a name="index-hash_002dtable_002fclear_0021-1677"></a></var><br>
+<blockquote><p>Removes all associations in <var>hash-table</var> and returns an unspecified
+result.  The average and worst-case times required by this operation are
+bounded by a constant. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>hash-table/count</b><var> hash-table<a name="index-hash_002dtable_002fcount-1678"></a></var><br>
+<blockquote><p>Returns the number of associations in <var>hash-table</var> as an exact
+non-negative integer.  If <var>hash-table</var> holds its keys weakly, this
+is a conservative upper bound that may count some associations whose
+keys have recently been reclaimed by the garbage collector.  The average
+and worst-case times required by this operation are bounded by a
+constant. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>hash-table-&gt;alist</b><var> hash-table<a name="index-hash_002dtable_002d_003ealist-1679"></a></var><br>
+<blockquote><p>Returns the contents of <var>hash-table</var> as a newly allocated alist. 
+Each element of the alist is a pair <code>(</code><var>key</var><code> . </code><var>datum</var><code>)</code>
+where <var>key</var> is one of the keys of <var>hash-table</var>, and <var>datum</var>
+is its associated datum.  The average and worst-case times required by
+this operation are linear in the number of associations
+in the table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>hash-table/key-list</b><var> hash-table<a name="index-hash_002dtable_002fkey_002dlist-1680"></a></var><br>
+<blockquote><p>Returns a newly allocated list of the keys in <var>hash-table</var>.  The
+average and worst-case times required by this operation are linear in
+the number of associations in the table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>hash-table/datum-list</b><var> hash-table<a name="index-hash_002dtable_002fdatum_002dlist-1681"></a></var><br>
+<blockquote><p>Returns a newly allocated list of the datums in <var>hash-table</var>.  Each
+element of the list corresponds to one of the associations in
+<var>hash-table</var>; if the table contains multiple associations with the
+same datum, so will this list.  The average and worst-case times
+required by this operation are linear in the number of associations in
+the table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>hash-table/for-each</b><var> hash-table procedure<a name="index-hash_002dtable_002ffor_002deach-1682"></a></var><br>
+<blockquote><p><var>Procedure</var> must be a procedure of two arguments.  Invokes
+<var>procedure</var> once for each association in <var>hash-table</var>, passing
+the association's <var>key</var> and <var>datum</var> as arguments, in that order. 
+Returns an unspecified result.  <var>Procedure</var> must not modify
+<var>hash-table</var>, with one exception: it is permitted to call
+<code>hash-table/remove!</code> to remove the association being processed. 
+</p></blockquote></div>
+
+   <p>The following procedure is an alternate form of <code>hash-table/get</code>
+that is useful in some situations.  Usually, <code>hash-table/get</code> is
+preferable because it is faster.
+
+<div class="defun">
+&mdash; procedure: <b>hash-table/lookup</b><var> hash-table key if-found if-not-found<a name="index-hash_002dtable_002flookup-1683"></a></var><br>
+<blockquote><p><var>If-found</var> must be a procedure of one argument, and
+<var>if-not-found</var> must be a procedure of no arguments.  If
+<var>hash-table</var> contains an association for <var>key</var>, <var>if-found</var>
+is invoked on the datum of the association.  Otherwise,
+<var>if-not-found</var> is invoked with no arguments.  In either case, the
+result yielded by the invoked procedure is returned as the result of
+<code>hash-table/lookup</code> (<code>hash-table/lookup</code> <em>reduces</em> into
+the invoked procedure, i.e. calls it tail-recursively).  The average
+time required by this operation is bounded by a constant. 
+</p></blockquote></div>
+
+   </body></html>
+

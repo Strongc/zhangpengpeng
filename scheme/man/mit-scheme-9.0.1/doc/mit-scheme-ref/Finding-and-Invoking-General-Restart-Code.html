@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Finding and Invoking General Restart Code - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Restarts.html#Restarts" title="Restarts">
+<link rel="prev" href="Invoking-Standard-Restart-Code.html#Invoking-Standard-Restart-Code" title="Invoking Standard Restart Code">
+<link rel="next" href="The-Named-Restart-Abstraction.html#The-Named-Restart-Abstraction" title="The Named Restart Abstraction">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Finding-and-Invoking-General-Restart-Code"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="The-Named-Restart-Abstraction.html#The-Named-Restart-Abstraction">The Named Restart Abstraction</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Invoking-Standard-Restart-Code.html#Invoking-Standard-Restart-Code">Invoking Standard Restart Code</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Restarts.html#Restarts">Restarts</a>
+<hr>
+</div>
+
+<h4 class="subsection">16.4.3 Finding and Invoking General Restart Code</h4>
+
+<p><a name="index-with_002drestart-2868"></a><a name="index-with_002dsimple_002drestart-2869"></a><a name="index-bound_002drestart-2870"></a><a name="index-find_002drestart-2871"></a><a name="index-invoke_002drestart-2872"></a><a name="index-invoke_002drestart_002dinteractively-2873"></a>Restarts are a general mechanism for establishing a protocol between
+condition-signalling and condition-handling code.  The Scheme error
+system provides &ldquo;packaging&rdquo; for a number of common protocols.  It also
+provides lower-level hooks that are intended for implementing customized
+protocols.  The mechanism used by signalling code (<code>with-restart</code>
+and <code>with-simple-restart</code>) is used for both purposes.
+
+   <p>Four additional operations are provided for the use of
+condition-handling code.  Two operations (<code>bound-restarts</code> and
+<code>find-restart</code>) allow condition-handling code to locate active
+restarts.  The other two operations (<code>invoke-restart</code> and
+<code>invoke-restart-interactively</code>) allow restart effectors to be
+invoked once the restart object has been located.
+
+   <p>In addition, there is a data abstraction that provides access to the
+information encapsulated in restart objects.
+
+<div class="defun">
+&mdash; procedure: <b>bound-restarts</b><var><a name="index-bound_002drestarts-2874"></a></var><br>
+<blockquote><p>Returns a list of all currently active restart objects, most recently
+installed first.  <code>bound-restarts</code> should be used with caution by
+condition-handling code, since it reveals all restarts that are active
+at the time it is called, rather than at the time the condition was
+signalled.  It is useful, however, for collecting the list of restarts
+for inclusion in newly generated condition objects or for inspecting the
+current state of the system. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>find-restart</b><var> name </var>[<var>restarts</var>]<var><a name="index-find_002drestart-2875"></a></var><br>
+<blockquote><p>Returns the first restart object named <var>name</var> in the list of
+<var>restarts</var> (permissible values for <var>restarts</var> are described
+above in <a href="Restarts.html#Restarts">Restarts</a>).  When used in a condition handler,
+<code>find-restart</code> is usually passed the name of a particular restart
+<em>and</em> the condition object that has been signalled.  In this way
+the handler finds only restarts that were available when the condition
+was created (usually the same as when it was signalled).  If
+<var>restarts</var> is omitted, the currently active restarts would be used,
+and these often include restarts added after the condition ocurred. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>invoke-restart</b><var> restart argument <small class="dots">...</small><a name="index-invoke_002drestart-2876"></a></var><br>
+<blockquote><p><a name="index-invoke_002drestart_002dinteractively-2877"></a>Calls the restart effector encapsulated in <var>restart</var>, passing the
+specified <var>argument</var>s to it.  <code>invoke-restart</code> is intended for
+use by condition-handling code that understands the protocol implemented
+by <var>restart</var>, and can therefore calculate and pass an appropriate
+set of arguments.
+
+        <p>If a condition handler needs to interact with a user to gather the
+arguments for an effector (e.g. if it does not understand the protocol
+implemented by <var>restart</var>) <code>invoke-restart-interactively</code> should
+be used instead of <code>invoke-restart</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>invoke-restart-interactively</b><var> restart<a name="index-invoke_002drestart_002dinteractively-2878"></a></var><br>
+<blockquote><p>First calls the interactor encapsulated in <var>restart</var> to
+interactively gather the arguments needed for <var>restart</var>'s effector. 
+It then calls the effector, passing these arguments to it.
+
+        <p><a name="index-restart_002finteractor-2879"></a><code>invoke-restart-interactively</code> is intended for calling interactive
+restarts (those for which <code>restart/interactor</code> is not <code>#f</code>). 
+For convenience, <code>invoke-restart-interactively</code> will call the
+restart's effector with no arguments if the restart has no interactor;
+this behavior may change in the future. 
+</p></blockquote></div>
+
+   </body></html>
+

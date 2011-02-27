@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Win32 Package Overview - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Win32-Package-Reference.html#Win32-Package-Reference" title="Win32 Package Reference">
+<link rel="prev" href="Win32-Package-Reference.html#Win32-Package-Reference" title="Win32 Package Reference">
+<link rel="next" href="Foreign-function-interface.html#Foreign-function-interface" title="Foreign function interface">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Win32-Package-Overview"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Foreign-function-interface.html#Foreign-function-interface">Foreign function interface</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Win32-Package-Reference.html#Win32-Package-Reference">Win32 Package Reference</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Win32-Package-Reference.html#Win32-Package-Reference">Win32 Package Reference</a>
+<hr>
+</div>
+
+<h3 class="section">18.1 Overview</h3>
+
+<p>The Win32 implementation is still in a state of development.  It is
+expected that changes will be necessary when MIT/GNU Scheme is ported to
+Windows NT on the DEC Alpha architecture.  In particular, the
+current system is not arranged in a way that adequately distinguishes
+between issues that are a consequence of the NT operating system and
+those which are a consequence of the Intel x86 architecture. 
+<a name="index-limitations-3116"></a>
+Thus this documentation is not definitive, it merely outlines how the
+current system works.  Parts of the system will change and any project
+implemented using the win32 system must plan for a re-implementation
+stage.
+
+   <p>The Win32 implementation has several components:
+
+     <ul>
+<li>Special microcode primitives.
+
+     <li>A foreign function interface (FFI) for calling procedures in dynamically
+linked libraries (DLLs).
+
+     <li>An interface for Edwin.
+
+     <li>The Win32 package provides support for using the features of the
+Windows 3.1 and Windows NT 3.1 environments.
+
+     <li>Device Independent Bitmap utilities.  These are used by the win32 Scheme
+Graphics implementation.  (The Scheme Graphics implementation is
+described in the Reference Manual).
+
+   </ul>
+
+   <p>Note that all the names in the Win32 support are part of the
+<code>win32</code> package.  The names are bound in the <code>(win32)</code>
+environment, and do not appear as bindings in the user or root
+environments. 
+An effect of this is that it is far easier to develop Win32 software in
+the <code>(win32)</code> package environment or a child environment.
+
+   </body></html>
+

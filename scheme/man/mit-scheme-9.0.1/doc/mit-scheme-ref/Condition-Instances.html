@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>Condition Instances - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Error-System.html#Error-System" title="Error System">
+<link rel="prev" href="Restarts.html#Restarts" title="Restarts">
+<link rel="next" href="Condition-Types.html#Condition-Types" title="Condition Types">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Condition-Instances"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Condition-Types.html#Condition-Types">Condition Types</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Restarts.html#Restarts">Restarts</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Error-System.html#Error-System">Error System</a>
+<hr>
+</div>
+
+<h3 class="section">16.5 Condition Instances</h3>
+
+<p><a name="index-condition-_0028defn_0029-2889"></a><a name="index-condition-instance-_0028defn_0029-2890"></a><a name="index-instance_002c-of-condition-_0028defn_0029-2891"></a>A <dfn>condition</dfn>, in addition to the information associated with its
+type, usually contains other information that is not shared with other
+conditions of the same type.  For example, the condition type associated
+with &ldquo;unbound variable&rdquo; errors does not specify the name of the
+variable that was unbound.  The additional information is captured in a
+<dfn>condition</dfn> object, also called a <dfn>condition instance</dfn>.
+
+   <p>In addition to information that is specific to a given type of condition
+(such as the variable name for &ldquo;unbound variable&rdquo; conditions), every
+condition instance also contains a continuation that encapsulates the
+state of the computation in which the condition occurred.  This
+continuation is used for analyzing the computation to learn more about
+the context in which the condition occurred. It is <em>not</em> intended
+to provide a mechanism for continuing the computation; that mechanism is
+provided by restarts.
+
+<ul class="menu">
+<li><a accesskey="1" href="Generating-Operations-on-Conditions.html#Generating-Operations-on-Conditions">Generating Operations on Conditions</a>
+<li><a accesskey="2" href="Condition-State.html#Condition-State">Condition State</a>
+<li><a accesskey="3" href="Simple-Condition-Instance-Operations.html#Simple-Condition-Instance-Operations">Simple Condition Instance Operations</a>
+</ul>
+
+   </body></html>
+

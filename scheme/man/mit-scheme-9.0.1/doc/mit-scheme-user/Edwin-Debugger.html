@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Edwin Debugger - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edwin.html#Edwin" title="Edwin">
+<link rel="prev" href="Edwin-REPL-Mode.html#Edwin-REPL-Mode" title="Edwin REPL Mode">
+<link rel="next" href="Last-Resorts.html#Last-Resorts" title="Last Resorts">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Edwin-Debugger"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Last-Resorts.html#Last-Resorts">Last Resorts</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Edwin-REPL-Mode.html#Edwin-REPL-Mode">Edwin REPL Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edwin.html#Edwin">Edwin</a>
+<hr>
+</div>
+
+<h3 class="section">7.6 The Edwin Debugger</h3>
+
+<p>The Edwin debugger is similar to the command-line debugger, except that
+it takes advantage of multiple windows and Edwin's command structure to
+provide a more intuitive interface.  The debugger operates as a browser,
+much like Dired, presenting you with an overview of the subproblem
+structure, and allowing you to examine parts of that structure in more
+detail by selecting the parts.  When started, the debugger creates a
+buffer &lsquo;<samp><span class="samp">*debug*</span></samp>&rsquo; showing the subproblem structure, and selects the
+first line.
+
+   <p>Each line beginning with &lsquo;<samp><span class="samp">S</span></samp>&rsquo; represents either a subproblem or
+stack frame.  A subproblem line may be followed by one or more indented
+lines (beginning with the letter &lsquo;<samp><span class="samp">R</span></samp>&rsquo;) which represent reductions
+associated with that subproblem.  The subproblems are indexed with the
+natural numbers.  To obtain a more complete description of a subproblem
+or reduction, click the mouse on the desired line or move the cursor to
+the line using the arrow keys (or <kbd>C-n</kbd> and <kbd>C-p</kbd>).  The
+description buffer will display the additional information.
+
+   <p>The description buffer contains three major regions.  The first region
+contains a pretty-printed version of the current expression.  The
+current subproblem within the expression is highlighted.  The second
+region contains a representation of the frames of the environment of the
+current expression.  The bindings of each frame are listed below the
+frame header.  If there are no bindings in the frame, none will be
+listed.  The frame of the current expression is preceded with
+&lsquo;<samp><span class="samp">==&gt;</span></samp>&rsquo;.
+
+   <p>The bottom of the description buffer contains a third region for
+evaluating expressions in the environment of the selected subproblem or
+reduction.  This is the only portion of the buffer where editing is
+possible.  This region can be used to find the values of variables in
+different environments, or even to modify variable values or data
+structures (note that variables in compiled code cannot usually be
+modified).
+
+   <p>Typing <kbd>e</kbd> creates a new buffer in which you may browse through the
+current environment.  In this new buffer, you can use the mouse, the
+arrows, or <kbd>C-n</kbd> and <kbd>C-p</kbd> to select lines and view different
+environments.  The environments listed are the same as those in the
+description buffer.  If the selected environment structure is too large
+to display (i.e. if the number of bindings in the environment exceeds
+the value of the editor variable <code>environment-package-limit</code>) a
+message to that effect is displayed.  To display the environment in this
+case, use <kbd>M-x set-variable</kbd> to set <code>environment-package-limit</code>
+to <code>#f</code>.  At the bottom of the new buffer is a region for
+evaluating expressions, similar to that of the description buffer.
+
+   <p>The appearance of environment displays is controlled by the editor
+variables <code>debugger-show-inner-frame-topmost?</code> and
+<code>debugger-compact-display?</code>  which affect the ordering of
+environment frames and the line spacing respectively.
+
+   <p>Type <kbd>q</kbd> to quit the debugger, killing its primary buffer, any
+others that it has created, and the window that was popped up to show
+the debugger.
+
+   <p><strong>Note</strong>: The description buffers created by the debugger are given
+names beginning with spaces so that they do not appear in the buffer
+list; these buffers are automatically deleted when you quit the
+debugger.  If you wish to keep one of these buffers, simply rename it
+using <kbd>M-x rename-buffer</kbd>: once it has been renamed, it will not be
+automatically deleted.
+
+   </body></html>
+

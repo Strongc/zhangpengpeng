@@ -1,0 +1,238 @@
+<html lang="en">
+<head>
+<title>Pairs - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lists.html#Lists" title="Lists">
+<link rel="prev" href="Lists.html#Lists" title="Lists">
+<link rel="next" href="Construction-of-Lists.html#Construction-of-Lists" title="Construction of Lists">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Pairs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Construction-of-Lists.html#Construction-of-Lists">Construction of Lists</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lists.html#Lists">Lists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
+<hr>
+</div>
+
+<h3 class="section">7.1 Pairs</h3>
+
+<p>This section describes the simple operations that are available for
+constructing and manipulating arbitrary graphs constructed from pairs.
+
+<div class="defun">
+&mdash; procedure: <b>pair?</b><var> object<a name="index-pair_003f-1129"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-pair-1130"></a>Returns <code>#t</code> if <var>object</var> is a pair; otherwise returns
+<code>#f</code>.
+
+     <pre class="example">          (pair? '(a . b))                        &rArr; #t
+          (pair? '(a b c))                        &rArr; #t
+          (pair? '())                             &rArr; #f
+          (pair? '#(a b))                         &rArr; #f
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>cons</b><var> obj1 obj2<a name="index-cons-1131"></a></var><br>
+<blockquote><p><a name="index-construction_002c-of-pair-1132"></a><a name="index-eqv_003f-1133"></a>Returns a newly allocated pair whose car is <var>obj1</var> and whose cdr is
+<var>obj2</var>.  The pair is guaranteed to be different (in the sense of
+<code>eqv?</code>) from every previously existing object.
+
+     <pre class="example">          (cons 'a '())                           &rArr; (a)
+          (cons '(a) '(b c d))                    &rArr; ((a) b c d)
+          (cons "a" '(b c))                       &rArr; ("a" b c)
+          (cons 'a 3)                             &rArr; (a . 3)
+          (cons '(a b) 'c)                        &rArr; ((a b) . c)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>xcons</b><var> obj1 obj2<a name="index-xcons-1134"></a></var><br>
+<blockquote><p>(<acronym>SRFI</acronym> 1) Returns a newly allocated pair whose car is
+<var>obj2</var> and whose cdr is <var>obj1</var>.
+
+     <pre class="example">          (xcons '(b c) 'a)                       &rArr; (a b c)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>car</b><var> pair<a name="index-car-1135"></a></var><br>
+<blockquote><p><a name="index-selection_002c-of-pair-component-1136"></a><a name="index-component-selection_002c-of-pair-1137"></a>Returns the contents of the car field of <var>pair</var>.  Note that it is an
+error to take the <code>car</code> of the empty list.
+
+     <pre class="example">          (car '(a b c))                          &rArr; a
+          (car '((a) b c d))                      &rArr; (a)
+          (car '(1 . 2))                          &rArr; 1
+          (car '())                               error--&gt; Illegal datum
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>cdr</b><var> pair<a name="index-cdr-1138"></a></var><br>
+<blockquote><p>Returns the contents of the cdr field of <var>pair</var>.  Note that it is an
+error to take the <code>cdr</code> of the empty list.
+
+     <pre class="example">          (cdr '((a) b c d))                      &rArr; (b c d)
+          (cdr '(1 . 2))                          &rArr; 2
+          (cdr '())                               error--&gt; Illegal datum
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>car+cdr</b><var> pair<a name="index-car_002bcdr-1139"></a></var><br>
+<blockquote><p>(<acronym>SRFI</acronym> 1) The fundamental pair deconstructor:
+
+     <pre class="example">          (lambda (p) (values (car p) (cdr p)))
+</pre>
+        <pre class="example">          (receive (a b) (car+cdr (cons 1 2))
+            (write-line a)
+            (write-line b))
+          -| 1
+          -| 2
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>set-car!</b><var> pair object<a name="index-set_002dcar_0021-1140"></a></var><br>
+<blockquote><p>Stores <var>object</var> in the car field of <var>pair</var>.  The value returned
+by <code>set-car!</code> is unspecified.
+
+     <pre class="example">          (define (f) (list 'not-a-constant-list))
+          (define (g) '(constant-list))
+          (set-car! (f) 3)                        &rArr; <span class="roman">unspecified</span>
+          (set-car! (g) 3)                        error--&gt; Illegal datum
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>set-cdr!</b><var> pair object<a name="index-set_002dcdr_0021-1141"></a></var><br>
+<blockquote><p>Stores <var>object</var> in the cdr field of <var>pair</var>.  The value returned
+by <code>set-cdr!</code> is unspecified. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>caar</b><var> pair<a name="index-caar-1142"></a></var><br>
+&mdash; procedure: <b>cadr</b><var> pair<a name="index-cadr-1143"></a></var><br>
+&mdash; procedure: <b>cdar</b><var> pair<a name="index-cdar-1144"></a></var><br>
+&mdash; procedure: <b>cddr</b><var> pair<a name="index-cddr-1145"></a></var><br>
+&mdash; procedure: <b>caaar</b><var> pair<a name="index-caaar-1146"></a></var><br>
+&mdash; procedure: <b>caadr</b><var> pair<a name="index-caadr-1147"></a></var><br>
+&mdash; procedure: <b>cadar</b><var> pair<a name="index-cadar-1148"></a></var><br>
+&mdash; procedure: <b>caddr</b><var> pair<a name="index-caddr-1149"></a></var><br>
+&mdash; procedure: <b>cdaar</b><var> pair<a name="index-cdaar-1150"></a></var><br>
+&mdash; procedure: <b>cdadr</b><var> pair<a name="index-cdadr-1151"></a></var><br>
+&mdash; procedure: <b>cddar</b><var> pair<a name="index-cddar-1152"></a></var><br>
+&mdash; procedure: <b>cdddr</b><var> pair<a name="index-cdddr-1153"></a></var><br>
+&mdash; procedure: <b>caaaar</b><var> pair<a name="index-caaaar-1154"></a></var><br>
+&mdash; procedure: <b>caaadr</b><var> pair<a name="index-caaadr-1155"></a></var><br>
+&mdash; procedure: <b>caadar</b><var> pair<a name="index-caadar-1156"></a></var><br>
+&mdash; procedure: <b>caaddr</b><var> pair<a name="index-caaddr-1157"></a></var><br>
+&mdash; procedure: <b>cadaar</b><var> pair<a name="index-cadaar-1158"></a></var><br>
+&mdash; procedure: <b>cadadr</b><var> pair<a name="index-cadadr-1159"></a></var><br>
+&mdash; procedure: <b>caddar</b><var> pair<a name="index-caddar-1160"></a></var><br>
+&mdash; procedure: <b>cadddr</b><var> pair<a name="index-cadddr-1161"></a></var><br>
+&mdash; procedure: <b>cdaaar</b><var> pair<a name="index-cdaaar-1162"></a></var><br>
+&mdash; procedure: <b>cdaadr</b><var> pair<a name="index-cdaadr-1163"></a></var><br>
+&mdash; procedure: <b>cdadar</b><var> pair<a name="index-cdadar-1164"></a></var><br>
+&mdash; procedure: <b>cdaddr</b><var> pair<a name="index-cdaddr-1165"></a></var><br>
+&mdash; procedure: <b>cddaar</b><var> pair<a name="index-cddaar-1166"></a></var><br>
+&mdash; procedure: <b>cddadr</b><var> pair<a name="index-cddadr-1167"></a></var><br>
+&mdash; procedure: <b>cdddar</b><var> pair<a name="index-cdddar-1168"></a></var><br>
+&mdash; procedure: <b>cddddr</b><var> pair<a name="index-cddddr-1169"></a></var><br>
+<blockquote><p>These procedures are compositions of <code>car</code> and <code>cdr</code>; for
+example, <code>caddr</code> could be defined by
+
+     <pre class="example">          (define caddr (lambda (x) (car (cdr (cdr x)))))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>general-car-cdr</b><var> object path<a name="index-general_002dcar_002dcdr-1170"></a></var><br>
+<blockquote><p>This procedure is a generalization of <code>car</code> and <code>cdr</code>. 
+<var>Path</var> encodes a particular sequence of <code>car</code> and <code>cdr</code>
+operations, which <code>general-car-cdr</code> executes on <var>object</var>. 
+<var>Path</var> is an exact non-negative integer that encodes the operations
+in a bitwise fashion: a zero bit represents a <code>cdr</code> operation, and
+a one bit represents a <code>car</code>.  The bits are executed LSB to MSB,
+and the most significant one bit, rather than being interpreted as an
+operation, signals the end of the sequence.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+
+        <p>For example, the following are equivalent:
+     <pre class="example">          (general-car-cdr <var>object</var> #b1011)
+          (cdr (car (car <var>object</var>)))
+</pre>
+        <p>Here is a partial table of path/operation equivalents:
+
+     <pre class="example">          #b10    cdr
+          #b11    car
+          #b100   cddr
+          #b101   cdar
+          #b110   cadr
+          #b111   caar
+          #b1000  cdddr
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>tree-copy</b><var> tree<a name="index-tree_002dcopy-1171"></a></var><br>
+<blockquote><p><a name="index-copying_002c-of-tree-1172"></a><a name="index-tree_002c-copying-1173"></a>(<acronym>SRFI</acronym> 1) This copies an arbitrary <var>tree</var> constructed
+from pairs, copying both the car and cdr elements of every pair.  This
+could have been defined by
+
+     <pre class="example">          (define (tree-copy tree)
+            (let loop ((tree tree))
+              (if (pair? tree)
+                  (cons (loop (car tree)) (loop (cdr tree)))
+                  tree)))
+</pre>
+        </blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Note that
+<var>path</var> is restricted to a machine-dependent range, usually the size
+of a machine word.  On many machines, this means that the maximum length
+of <var>path</var> will be 30 operations (32 bits, less the sign bit and the
+&ldquo;end-of-sequence&rdquo; bit).</p>
+
+   <hr></div>
+
+   </body></html>
+

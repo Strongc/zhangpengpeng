@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+<title>Construction of Weight-Balanced Trees - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Weight_002dBalanced-Trees.html#Weight_002dBalanced-Trees" title="Weight-Balanced Trees">
+<link rel="prev" href="Weight_002dBalanced-Trees.html#Weight_002dBalanced-Trees" title="Weight-Balanced Trees">
+<link rel="next" href="Basic-Operations-on-Weight_002dBalanced-Trees.html#Basic-Operations-on-Weight_002dBalanced-Trees" title="Basic Operations on Weight-Balanced Trees">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Construction-of-Weight-Balanced-Trees"></a>
+<a name="Construction-of-Weight_002dBalanced-Trees"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Basic-Operations-on-Weight_002dBalanced-Trees.html#Basic-Operations-on-Weight_002dBalanced-Trees">Basic Operations on Weight-Balanced Trees</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Weight_002dBalanced-Trees.html#Weight_002dBalanced-Trees">Weight-Balanced Trees</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Weight_002dBalanced-Trees.html#Weight_002dBalanced-Trees">Weight-Balanced Trees</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.7.1 Construction of Weight-Balanced Trees</h4>
+
+<p>Binary trees require there to be a total order on the keys used to
+arrange the elements in the tree.  Weight-balanced trees are organized
+by <em>types</em>, where the type is an object encapsulating the ordering
+relation.  Creating a tree is a two-stage process.  First a tree type
+must be created from the predicate that gives the ordering.  The tree type
+is then used for making trees, either empty or singleton trees or trees
+from other aggregate structures like association lists.  Once created, a
+tree `knows' its type and the type is used to test compatibility between
+trees in operations taking two trees.  Usually a small number of tree
+types are created at the beginning of a program and used many times
+throughout the program's execution.
+
+<div class="defun">
+&mdash; procedure: <b>make-wt-tree-type</b><var> key&lt;?<a name="index-make_002dwt_002dtree_002dtype-1759"></a></var><br>
+<blockquote><p>This procedure creates and returns a new tree type based on the ordering
+predicate <var>key&lt;?</var>. 
+<var>Key&lt;?</var> must be a total ordering, having the property that for all
+key values <code>a</code>, <code>b</code> and <code>c</code>:
+
+     <pre class="example">          (key&lt;? a a)                         &rArr; #f
+          (and (key&lt;? a b) (key&lt;? b a))       &rArr; #f
+          (if (and (key&lt;? a b) (key&lt;? b c))
+              (key&lt;? a c)
+              #t)                             &rArr; #t
+</pre>
+        <p class="noindent">Two key values are assumed to be equal if neither is less than the other
+by <var>key&lt;?</var>.
+
+        <p>Each call to <code>make-wt-tree-type</code> returns a distinct value, and
+trees are only compatible if their tree types are <code>eq?</code>.  A
+consequence is that trees that are intended to be used in binary-tree
+operations must all be created with a tree type originating from the
+same call to <code>make-wt-tree-type</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>number-wt-type</b><var><a name="index-number_002dwt_002dtype-1760"></a></var><br>
+<blockquote><p>A standard tree type for trees with numeric keys.  <code>Number-wt-type</code>
+could have been defined by
+
+     <pre class="example">          (define number-wt-type (make-wt-tree-type  &lt;))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>string-wt-type</b><var><a name="index-string_002dwt_002dtype-1761"></a></var><br>
+<blockquote><p>A standard tree type for trees with string keys.  <code>String-wt-type</code>
+could have been defined by
+
+     <pre class="example">          (define string-wt-type (make-wt-tree-type  string&lt;?))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-wt-tree</b><var> wt-tree-type<a name="index-make_002dwt_002dtree-1762"></a></var><br>
+<blockquote><p>This procedure creates and returns a newly allocated weight-balanced
+tree.  The tree is empty, i.e. it contains no associations. 
+<var>Wt-tree-type</var> is a weight-balanced tree type obtained by calling
+<code>make-wt-tree-type</code>; the returned tree has this type. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>singleton-wt-tree</b><var> wt-tree-type key datum<a name="index-singleton_002dwt_002dtree-1763"></a></var><br>
+<blockquote><p>This procedure creates and returns a newly allocated weight-balanced
+tree.  The tree contains a single association, that of <var>datum</var> with
+<var>key</var>.  <var>Wt-tree-type</var> is a weight-balanced tree type obtained
+by calling <code>make-wt-tree-type</code>; the returned tree has this type. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>alist-&gt;wt-tree</b><var> tree-type alist<a name="index-alist_002d_003ewt_002dtree-1764"></a></var><br>
+<blockquote><p>Returns a newly allocated weight-balanced tree that contains the same
+associations as <var>alist</var>.  This procedure is equivalent to:
+
+     <pre class="example">          (lambda (type alist)
+            (let ((tree (make-wt-tree type)))
+              (for-each (lambda (association)
+                          (wt-tree/add! tree
+                                        (car association)
+                                        (cdr association)))
+                        alist)
+              tree))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

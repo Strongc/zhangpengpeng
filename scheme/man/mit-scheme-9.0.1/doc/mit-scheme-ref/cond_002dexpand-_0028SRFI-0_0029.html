@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>cond-expand (SRFI 0) - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="SRFI-syntax.html#SRFI-syntax" title="SRFI syntax">
+<link rel="prev" href="SRFI-syntax.html#SRFI-syntax" title="SRFI syntax">
+<link rel="next" href="receive-_0028SRFI-8_0029.html#receive-_0028SRFI-8_0029" title="receive (SRFI 8)">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="cond-expand-(SRFI-0)"></a>
+<a name="cond_002dexpand-_0028SRFI-0_0029"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="receive-_0028SRFI-8_0029.html#receive-_0028SRFI-8_0029">receive (SRFI 8)</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="SRFI-syntax.html#SRFI-syntax">SRFI syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="SRFI-syntax.html#SRFI-syntax">SRFI syntax</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.12.1 cond-expand (SRFI 0)</h4>
+
+<p><a name="index-SRFI-0-407"></a><a href="http://srfi.schemers.org/srfi-0/srfi-0.html"><acronym>SRFI</acronym> 0</a>
+is a mechanism for portably determining the availability of
+<a href="http://srfi.schemers.org/"><acronym>SRFI</acronym></a> <dfn>features</dfn>. 
+The <code>cond-expand</code> special form conditionally expands according to
+the features available.
+
+<div class="defun">
+&mdash; special form: <b>cond-expand</b><var> clause clause dots<a name="index-cond_002dexpand-408"></a></var><br>
+<blockquote><p>Each <var>clause</var> has the form
+
+     <pre class="example">          (<var>feature-requirement</var> <var>expression</var> ...)
+</pre>
+        <p>where <var>feature-requirement</var> can have one of the following forms:
+
+     <pre class="example">          <var>feature-identifier</var>
+          (and <var>feature-requirement</var> ...)
+          (or <var>feature-requirement</var> ...)
+          (not <var>feature-requirement</var>)
+          else
+</pre>
+        <p>(Note that at most one <code>else</code> clause may be present, and it must
+always be the last clause.)
+
+        <p>The <code>cond-expand</code> special form tests for the existence of features
+at macro-expansion time.  It either expands into the body of one of its
+<var>clause</var>s or signals an error during syntactic processing. 
+<code>cond-expand</code> expands into the body of the first <var>clause</var> whose
+<var>feature-requirement</var> is currently satisfied (an <code>else</code>
+<var>clause</var>, if present, is selected if none of the previous
+<var>clauses</var> is selected).
+
+        <p>A <var>feature-requirement</var> has an obvious interpretation as a logical
+formula, where the <var>feature-identifier</var> variables have meaning true
+if the feature corresponding to the <var>feature-identifier</var>, as
+specified in the <acronym>SRFI</acronym> registry, is in effect at the location
+of the <code>cond-expand</code> form, and false otherwise.  A
+<var>feature-requirement</var> is satisfied if its formula is true under this
+interpretation.
+
+     <pre class="example">          (cond-expand
+            ((and srfi-1 srfi-10)
+             (write 1))
+            ((or srfi-1 srfi-10)
+             (write 2))
+            (else))
+          
+          (cond-expand
+            (command-line
+             (define (program-name) (car (argv)))))
+</pre>
+        <p>The second example assumes that <code>command-line</code> is an alias for some
+feature which gives access to command line arguments.  Note that an
+error will be signaled at macro-expansion time if this feature is not
+present.
+
+        <p>Note that MIT/GNU Scheme allows <code>cond-expand</code> in any context where a
+special form is allowed.  This is an extension of the semantics defined
+by <acronym>SRFI 0</acronym>, which only allows <code>cond-expand</code> at top level. 
+</p></blockquote></div>
+
+   </body></html>
+

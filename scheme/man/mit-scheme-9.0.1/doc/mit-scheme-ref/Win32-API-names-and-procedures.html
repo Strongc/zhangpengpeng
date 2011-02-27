@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Win32 API names and procedures - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Foreign-function-interface.html#Foreign-function-interface" title="Foreign function interface">
+<link rel="prev" href="Windows-Foreign-Procedures.html#Windows-Foreign-Procedures" title="Windows Foreign Procedures">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Win32-API-names-and-procedures"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Windows-Foreign-Procedures.html#Windows-Foreign-Procedures">Windows Foreign Procedures</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Foreign-function-interface.html#Foreign-function-interface">Foreign function interface</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.2.3 Win32 API names and procedures</h4>
+
+<p>This section is a moving target. 
+<a name="index-Win32-API-names-3163"></a><a name="index-naming-conventions-3164"></a>
+The <code>#define</code> values from <samp><span class="file">wingdi.h</span></samp> and <samp><span class="file">winuser.h</span></samp> are
+available as bindings in the <code>(win32)</code> package environment.  The
+<code>#define</code> symbols are all uppercase; these have been translated to
+all lowercase Scheme identifiers, thus <code>WM_LBUTTONUP</code> is the scheme
+variable <code>wm_lbuttonup</code>.  As Scheme is case insensitive, the
+upper-case version may be used and probably should to make the code look
+more like conventional Windows code.  The Scheme bindings have been
+produced automagically.  Most of the <code>#define</code>-symbols contain an
+underscore so there are not many name clashes.  There is one very
+notable name clash, however: <code>ERROR</code> is <code>#define</code>d to 0, which
+shadows the scheme procedure <code>error</code> in the root package
+environment.  To signal an error, use <code>access</code> to get <code>error</code>
+from the system global environment:
+
+<pre class="example">     (declare (usual-integrations))
+     ...
+     ((access error system-global-environment) "Complain" ...)
+</pre>
+   <p>The set of procedures is incomplete because procedures have been added
+on a by-need basis for the implementation of other parts of the system,
+e.g.  Scheme Graphics.  Look in the implementation for further details.
+
+   <p>Win32 API procedure names have been uniformly converted into Scheme
+identifiers as follows:
+
+     <ul>
+<li>A leading uppercase letter is translated into a lowercase letter. 
+<li>Subsequent sequences of uppercase letters are translated into lowercase
+letters preceeded by a hyphen (minus symbol), i.e. hyphens are inserted
+at a lowercase to uppercase transition. 
+<li>Predicates beginning with <code>Is</code> finally have a
+question-mark appended. 
+</ul>
+
+<p class="noindent">Example: applying these rules to <code>IsWindow</code> yields
+<code>is-window?</code>, and <code>GetDC</code> is translated into <code>get-dc</code>.
+
+<!-- [It might be worthwhile just keeping the same names.  As the -->
+<!-- Win32 API procedure names are uniformly `WordWordWordACRONYMWord', case -->
+<!-- insensitivity is unlikely to be a problem.  The only problem is the -->
+<!-- potential for a clash between a procedure name and a type -->
+<!-- name.] -->
+   </body></html>
+

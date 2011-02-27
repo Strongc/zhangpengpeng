@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>Indexing Operations on Weight-Balanced Trees - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Weight_002dBalanced-Trees.html#Weight_002dBalanced-Trees" title="Weight-Balanced Trees">
+<link rel="prev" href="Advanced-Operations-on-Weight_002dBalanced-Trees.html#Advanced-Operations-on-Weight_002dBalanced-Trees" title="Advanced Operations on Weight-Balanced Trees">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Indexing-Operations-on-Weight-Balanced-Trees"></a>
+<a name="Indexing-Operations-on-Weight_002dBalanced-Trees"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Advanced-Operations-on-Weight_002dBalanced-Trees.html#Advanced-Operations-on-Weight_002dBalanced-Trees">Advanced Operations on Weight-Balanced Trees</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Weight_002dBalanced-Trees.html#Weight_002dBalanced-Trees">Weight-Balanced Trees</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.7.4 Indexing Operations on Weight-Balanced Trees</h4>
+
+<p>Weight-balanced trees support operations that view the tree as sorted
+sequence of associations.  Elements of the sequence can be accessed by
+position, and the position of an element in the sequence can be
+determined, both in logarthmic time.
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/index</b><var> wt-tree index<a name="index-wt_002dtree_002findex-1784"></a></var><br>
+&mdash; procedure: <b>wt-tree/index-datum</b><var> wt-tree index<a name="index-wt_002dtree_002findex_002ddatum-1785"></a></var><br>
+&mdash; procedure: <b>wt-tree/index-pair</b><var> wt-tree index<a name="index-wt_002dtree_002findex_002dpair-1786"></a></var><br>
+<blockquote><p>Returns the 0-based <var>index</var>th association of <var>wt-tree</var> in the
+sorted sequence under the tree's ordering relation on the keys. 
+<code>wt-tree/index</code> returns the <var>index</var>th key,
+<code>wt-tree/index-datum</code> returns the datum associated with the
+<var>index</var>th key and <code>wt-tree/index-pair</code> returns a new pair
+<code>(</code><var>key</var><code> . </code><var>datum</var><code>)</code> which is the <code>cons</code> of the
+<var>index</var>th key and its datum.  The average and worst-case times
+required by this operation are proportional to the logarithm of the
+number of associations in the tree.
+
+        <p>These operations signal a condition of type
+<code>condition-type:bad-range-argument</code> if <var>index</var><code>&lt;0</code> or if
+<var>index</var> is greater than or equal to the number of associations in
+the tree.  If the tree is empty, they signal an anonymous error.
+
+        <p>Indexing can be used to find the median and maximum keys in the tree as
+follows:
+
+     <pre class="example">          median:   (wt-tree/index <var>wt-tree</var>
+                                   (quotient (wt-tree/size <var>wt-tree</var>)
+                                             2))
+          maximum:  (wt-tree/index <var>wt-tree</var>
+                                   (- (wt-tree/size <var>wt-tree</var>)
+                                      1))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/rank</b><var> wt-tree key<a name="index-wt_002dtree_002frank-1787"></a></var><br>
+<blockquote><p>Determines the 0-based position of <var>key</var> in the sorted sequence of
+the keys under the tree's ordering relation, or <code>#f</code> if the tree
+has no association with for <var>key</var>.  This procedure returns either an
+exact non-negative integer or <code>#f</code>.  The average and worst-case
+times required by this operation are proportional to the logarithm of
+the number of associations in the tree. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/min</b><var> wt-tree<a name="index-wt_002dtree_002fmin-1788"></a></var><br>
+&mdash; procedure: <b>wt-tree/min-datum</b><var> wt-tree<a name="index-wt_002dtree_002fmin_002ddatum-1789"></a></var><br>
+&mdash; procedure: <b>wt-tree/min-pair</b><var> wt-tree<a name="index-wt_002dtree_002fmin_002dpair-1790"></a></var><br>
+<blockquote><p>Returns the association of <var>wt-tree</var> that has the least key under the tree's ordering relation. 
+<code>wt-tree/min</code> returns the least key,
+<code>wt-tree/min-datum</code> returns the datum associated with the
+least key and <code>wt-tree/min-pair</code> returns a new pair
+<code>(key . datum)</code> which is the <code>cons</code> of the minimum key and its datum. 
+The average and worst-case times required by this operation are
+proportional to the logarithm of the number of associations in the tree.
+
+        <p>These operations signal an error if the tree is empty. 
+They could have been written
+
+     <pre class="example">          (define (wt-tree/min tree)
+            (wt-tree/index tree 0))
+          (define (wt-tree/min-datum tree)
+            (wt-tree/index-datum tree 0))
+          (define (wt-tree/min-pair tree)
+            (wt-tree/index-pair tree 0))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/delete-min</b><var> wt-tree<a name="index-wt_002dtree_002fdelete_002dmin-1791"></a></var><br>
+<blockquote><p>Returns a new tree containing all of the associations in <var>wt-tree</var>
+except the association with the least key under the <var>wt-tree</var>'s
+ordering relation.  An error is signalled if the tree is empty.  The
+average and worst-case times required by this operation are proportional
+to the logarithm of the number of associations in the tree.  This
+operation is equivalent to
+
+     <pre class="example">          (wt-tree/delete <var>wt-tree</var> (wt-tree/min <var>wt-tree</var>))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/delete-min!</b><var> wt-tree<a name="index-wt_002dtree_002fdelete_002dmin_0021-1792"></a></var><br>
+<blockquote><p>Removes the association with the least key under the <var>wt-tree</var>'s
+ordering relation.  An error is signalled if the tree is empty.  The
+average and worst-case times required by this operation are proportional
+to the logarithm of the number of associations in the tree.  This
+operation is equivalent to
+
+     <pre class="example">          (wt-tree/delete! <var>wt-tree</var> (wt-tree/min <var>wt-tree</var>))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

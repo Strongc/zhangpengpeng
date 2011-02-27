@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>Iteration - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Special-Forms.html#Special-Forms" title="Special Forms">
+<link rel="prev" href="Sequencing.html#Sequencing" title="Sequencing">
+<link rel="next" href="Structure-Definitions.html#Structure-Definitions" title="Structure Definitions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Iteration"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Structure-Definitions.html#Structure-Definitions">Structure Definitions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sequencing.html#Sequencing">Sequencing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Special-Forms.html#Special-Forms">Special Forms</a>
+<hr>
+</div>
+
+<h3 class="section">2.9 Iteration</h3>
+
+<p><a name="index-expression_002c-iteration-_0028defn_0029-335"></a><a name="index-iteration-expression-_0028defn_0029-336"></a><a name="index-looping-_0028see-iteration-expressions_0029-337"></a><a name="index-tail-recursion_002c-vs_002e-iteration-expression-338"></a>The <dfn>iteration expressions</dfn> are: &ldquo;named <code>let</code>&rdquo; and <code>do</code>. 
+They are also binding expressions, but are more commonly referred to as
+iteration expressions.  Because Scheme is properly tail-recursive, you
+don't need to use these special forms to express iteration; you can
+simply use appropriately written &ldquo;recursive&rdquo; procedure calls.
+
+<div class="defun">
+&mdash; special form: <b>let</b><var> name </var>((<var>variable init</var>)<var> <small class="dots">...</small></var>)<var> expression expression <small class="dots">...</small><a name="index-let-339"></a></var><br>
+<blockquote><p><a name="index-named-let-_0028defn_0029-340"></a>MIT/GNU Scheme permits a variant on the syntax of <code>let</code> called
+&ldquo;named <code>let</code>&rdquo; which provides a more general looping construct
+than <code>do</code>, and may also be used to express recursions.
+
+        <p>Named <code>let</code> has the same syntax and semantics as ordinary
+<code>let</code> except that <var>name</var> is bound within the <var>expression</var>s
+to a procedure whose formal arguments are the <var>variable</var>s and whose
+body is the <var>expression</var>s.  Thus the execution of the
+<var>expression</var>s may be repeated by invoking the procedure named by
+<var>name</var>.
+
+        <p><a name="index-unassigned-variable_002c-and-named-let-341"></a>MIT/GNU Scheme allows any of the <var>init</var>s to be omitted, in which
+case the corresponding <var>variable</var>s are unassigned.
+
+        <p>Note: the following expressions are equivalent:
+
+     <pre class="example">          (let <var>name</var> ((<var>variable</var> <var>init</var>) ...)
+            <var>expression</var>
+            <var>expression</var> ...)
+          
+          ((letrec ((<var>name</var>
+                     (named-lambda (<var>name</var> <var>variable</var> ...)
+                       <var>expression</var>
+                       <var>expression</var> ...)))
+             <var>name</var>)
+           <var>init</var> ...)
+</pre>
+        <p>Here is an example:
+
+     <pre class="example">          (let loop
+               ((numbers '(3 -2 1 6 -5))
+                (nonneg '())
+                (neg '()))
+            (cond ((null? numbers)
+                   (list nonneg neg))
+                  ((&gt;= (car numbers) 0)
+                   (loop (cdr numbers)
+                         (cons (car numbers) nonneg)
+                         neg))
+                  (else
+                   (loop (cdr numbers)
+                         nonneg
+                         (cons (car numbers) neg)))))
+          
+               &rArr;  ((6 1 3) (-5 -2))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; special form: <b>do</b> ((<var>variable init step</var>)<var> <small class="dots">...</small></var>) (<var>test expression <small class="dots">...</small></var>)<var> command <small class="dots">...</small><a name="index-do-342"></a></var><br>
+<blockquote><p><code>do</code> is an iteration construct.  It specifies a set of variables to
+be bound, how they are to be initialized at the start, and how they are
+to be updated on each iteration.  When a termination condition is met,
+the loop exits with a specified result value.
+
+        <p><code>do</code> expressions are evaluated as follows: The <var>init</var>
+expressions are evaluated (in some unspecified order), the
+<var>variable</var>s are bound to fresh locations, the results of the
+<var>init</var> expressions are stored in the bindings of the
+<var>variable</var>s, and then the iteration phase begins.
+
+        <p>Each iteration begins by evaluating <var>test</var>; if the result is false,
+then the <var>command</var> expressions are evaluated in order for effect,
+the <var>step</var> expressions are evaluated in some unspecified order, the
+<var>variable</var>s are bound to fresh locations, the results of the
+<var>step</var>s are stored in the bindings of the <var>variable</var>s, and the
+next iteration begins.
+
+        <p>If <var>test</var> evaluates to a true value, then the <var>expression</var>s are
+evaluated from left to right and the value of the last <var>expression</var>
+is returned as the value of the <code>do</code> expression.  If no
+<var>expression</var>s are present, then the value of the <code>do</code>
+expression is unspecified in standard Scheme; in MIT/GNU Scheme, the
+value of <var>test</var> is returned.
+
+        <p><a name="index-region-of-variable-binding_002c-do-343"></a><a name="index-variable-binding_002c-do-344"></a>The region of the binding of a <var>variable</var> consists of the entire
+<code>do</code> expression except for the <var>init</var>s.  It is an error for a
+<var>variable</var> to appear more than once in the list of <code>do</code>
+variables.
+
+        <p>A <var>step</var> may be omitted, in which case the effect is the same as if
+<code>(</code><var>variable</var> <var>init</var> <var>variable</var><code>)</code> had been written
+instead of <code>(</code><var>variable</var> <var>init</var><code>)</code>.
+
+     <pre class="example">          (do ((vec (make-vector 5))
+                (i 0 (+ i 1)))
+              ((= i 5) vec)
+             (vector-set! vec i i))               &rArr;  #(0 1 2 3 4)
+          
+          (let ((x '(1 3 5 7 9)))
+             (do ((x x (cdr x))
+                  (sum 0 (+ sum (car x))))
+                 ((null? x) sum)))                &rArr;  25
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

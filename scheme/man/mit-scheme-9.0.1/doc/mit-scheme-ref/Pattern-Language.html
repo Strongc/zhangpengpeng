@@ -1,0 +1,191 @@
+<html lang="en">
+<head>
+<title>Pattern Language - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Macros.html#Macros" title="Macros">
+<link rel="prev" href="Syntactic-Binding-Constructs.html#Syntactic-Binding-Constructs" title="Syntactic Binding Constructs">
+<link rel="next" href="Syntactic-Closures.html#Syntactic-Closures" title="Syntactic Closures">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Pattern-Language"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Syntactic-Closures.html#Syntactic-Closures">Syntactic Closures</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntactic-Binding-Constructs.html#Syntactic-Binding-Constructs">Syntactic Binding Constructs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Macros.html#Macros">Macros</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.11.2 Pattern Language</h4>
+
+<p>MIT/GNU Scheme supports a high-level pattern language for specifying macro
+transformers.  This pattern language is defined by the Revised^4 Report
+and is portable to other conforming Scheme implementations.  To use the
+pattern language, specify a <var>transformer-spec</var> as a
+<code>syntax-rules</code> form:
+
+<div class="defun">
+&mdash; special form: <b>syntax-rules</b><var> literals syntax-rule <small class="dots">...</small><a name="index-syntax_002drules-377"></a></var><br>
+<blockquote><p><var>Literals</var> is a list of identifiers and each <var>syntax-rule</var>
+should be of the form
+
+     <pre class="example">          (<var>pattern</var> <var>template</var>)
+</pre>
+        <p>The <var>pattern</var> in a <var>syntax-rule</var> is a list <var>pattern</var> that
+begins with the keyword for the macro.
+
+        <p>A <var>pattern</var> is either an identifier, a constant, or one of the
+following
+
+     <pre class="example">          (<var>pattern</var> ...)
+          (<var>pattern</var> <var>pattern</var> ... . <var>pattern</var>)
+          (<var>pattern</var> ... <var>pattern</var> <var>ellipsis</var>)
+</pre>
+        <p class="noindent">and a template is either an identifier, a constant, or one of the
+following
+
+     <pre class="example">          (<var>element</var> ...)
+          (<var>element</var> <var>element</var> ... . <var>template</var>)
+</pre>
+        <p><a name="index-g_t_002e_002e_002e-378"></a>where an <var>element</var> is a <var>template</var> optionally followed by an
+<var>ellipsis</var> and an <var>ellipsis</var> is the identifier &lsquo;<samp><span class="samp">...</span></samp>&rsquo; (which
+cannot be used as an identifier in either a template or a pattern).
+
+        <p>An instance of <code>syntax-rules</code> produces a new macro transformer by
+specifying a sequence of hygienic rewrite rules.  A use of a macro whose
+keyword is associated with a transformer specified by
+<code>syntax-rules</code> is matched against the patterns contained in the
+<var>syntax-rule</var>s, beginning with the leftmost <var>syntax-rule</var>.  When
+a match is found, the macro use is transcribed hygienically according to
+the template.
+
+        <p>An identifier that appears in the pattern of a <var>syntax-rule</var> is a
+<dfn>pattern-variable</dfn>, unless it is the keyword that begins the
+pattern, is listed in <var>literals</var>, or is the identifier &lsquo;<samp><span class="samp">...</span></samp>&rsquo;. 
+Pattern variables match arbitrary input elements and are used to refer
+to elements of the input in the template.  It is an error for the same
+pattern variable to appear more than once in a <var>pattern</var>.
+
+        <p>The keyword at the beginning of the pattern in a <var>syntax-rule</var> is
+not involved in the matching and is not considered a pattern variable or
+literal identifier.
+
+        <p>Identifiers that appear in <var>literals</var> are interpreted as literal
+identifiers to be matched against corresponding subforms of the input. 
+A subform in the input matches a literal identifier if and only if it is
+an identifier and either both its occurrence in the macro expression and
+its occurrence in the macro definition have the same lexical binding, or
+the two identifiers are equal and both have no lexical binding.
+
+        <p>A subpattern followed by &lsquo;<samp><span class="samp">...</span></samp>&rsquo; can match zero or more elements of
+the input.  It is an error for &lsquo;<samp><span class="samp">...</span></samp>&rsquo; to appear in <var>literals</var>. 
+Within a pattern the identifier &lsquo;<samp><span class="samp">...</span></samp>&rsquo; must follow the last element
+of a nonempty sequence of subpatterns.
+
+        <p>More formally, an input form <var>F</var> matches a pattern <var>P</var> if and
+only if:
+
+          <ul>
+<li><var>P</var> is a non-literal identifier; or
+
+          <li><var>P</var> is a literal identifier and <var>F</var> is an identifier with the
+same binding; or
+
+          <li><var>P</var> is a list <code>(</code><var>P_1</var><code> ... </code><var>P_n</var><code>)</code> and <var>F</var> is a
+list of <var>n</var> forms that match <var>P_1</var> through <var>P_n</var>,
+respectively; or
+
+          <li><var>P</var> is an improper list <code>(</code><var>P_1</var> <var>P_2</var><code> ... </code><var>P_n</var><code>
+. </code><var>P_n+1</var><code>)</code> and <var>F</var> is a list or improper list of <var>n</var> or
+more forms that match <var>P_1</var> through <var>P_n</var>, respectively, and
+whose <var>n</var>th &ldquo;cdr&rdquo; matches <var>P_n+1</var>; or
+
+          <li><var>P</var> is of the form <code>(</code><var>P_1</var><code> ... </code><var>P_n</var> <var>P_n+1</var>
+<var>ellipsis</var><code>)</code> where <var>ellipsis</var> is the identifier &lsquo;<samp><span class="samp">...</span></samp>&rsquo; and
+<var>F</var> is a proper list of at least <var>n</var> forms, the first <var>n</var> of
+which match <var>P_1</var> through <var>P_n</var>, respectively, and each
+remaining element of <var>F</var> matches <var>P_n+1</var>; or
+
+          <li><var>P</var> is a datum and <var>F</var> is equal to <var>P</var> in the sense of the
+<code>equal?</code> procedure. 
+</ul>
+
+        <p>It is an error to use a macro keyword, within the scope of its
+binding, in an expression that does not match any of the patterns.
+
+        <p>When a macro use is transcribed according to the template of the
+matching <var>syntax rule</var>, pattern variables that occur in the template
+are replaced by the subforms they match in the input.  Pattern variables
+that occur in subpatterns followed by one or more instances of the
+identifier &lsquo;<samp><span class="samp">...</span></samp>&rsquo; are allowed only in subtemplates that are followed
+by as many instances of &lsquo;<samp><span class="samp">...</span></samp>&rsquo;.  They are replaced in the output by
+all of the subforms they match in the input, distributed as indicated. 
+It is an error if the output cannot be built up as specified.
+
+        <p>Identifiers that appear in the template but are not pattern variables or
+the identifier &lsquo;<samp><span class="samp">...</span></samp>&rsquo; are inserted into the output as literal
+identifiers.  If a literal identifier is inserted as a free identifier
+then it refers to the binding of that identifier within whose scope the
+instance of <code>syntax-rules</code> appears.  If a literal identifier is
+inserted as a bound identifier then it is in effect renamed to prevent
+inadvertent captures of free identifiers.
+
+     <pre class="example">          (let ((=&gt; #f))
+            (cond (#t =&gt; 'ok)))           &rArr; ok
+</pre>
+        <p>The macro transformer for <code>cond</code> recognizes <code>=&gt;</code>
+as a local variable, and hence an expression, and not as the
+top-level identifier <code>=&gt;</code>, which the macro transformer treats
+as a syntactic keyword.  Thus the example expands into
+
+     <pre class="example">          (let ((=&gt; #f))
+            (if #t (begin =&gt; 'ok)))
+</pre>
+        <p>instead of
+
+     <pre class="example">          (let ((=&gt; #f))
+            (let ((temp #t))
+              (if temp
+                  ('ok temp))))
+</pre>
+        <p>which would result in an invalid procedure call. 
+</p></blockquote></div>
+
+   </body></html>
+

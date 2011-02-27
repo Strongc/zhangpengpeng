@@ -1,0 +1,251 @@
+<html lang="en">
+<head>
+<title>REXP abstraction - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Regular-Expressions.html#Regular-Expressions" title="Regular Expressions">
+<link rel="prev" href="Regular_002dexpression-procedures.html#Regular_002dexpression-procedures" title="Regular-expression procedures">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="REXP-abstraction"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Regular_002dexpression-procedures.html#Regular_002dexpression-procedures">Regular-expression procedures</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.8.2 REXP abstraction</h4>
+
+<p><a name="index-REXP-abstraction-1035"></a>In addition to providing standard regular-expression support, MIT/GNU
+Scheme also provides the <acronym>REXP</acronym> abstraction.  This is an
+alternative way to write regular expressions that is easier to read
+and understand than the standard notation.  Regular expressions
+written in this notation can be translated into the standard notation.
+
+   <p>The <acronym>REXP</acronym> abstraction is a set of combinators that are
+composed into a complete regular expression.  Each combinator directly
+corresponds to a particular piece of regular-expression notation.  For
+example, the expression <code>(rexp-any-char)</code> corresponds to the
+<code>.</code> character in standard regular-expression notation, while
+<code>(rexp* </code><var>rexp</var><code>)</code> corresponds to the <code>*</code> character.
+
+   <p>The primary advantages of <acronym>REXP</acronym> are that it makes the nesting
+structure of regular expressions explicit, and that it simplifies the
+description of complex regular expressions by allowing them to be
+built up using straightforward combinators.
+
+<div class="defun">
+&mdash; procedure: <b>rexp?</b><var> object<a name="index-rexp_003f-1036"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is a <acronym>REXP</acronym> expression, or
+<code>#f</code> otherwise.  A <acronym>REXP</acronym> is one of: a string, which
+represents the pattern matching that string; a character set, which
+represents the pattern matching a character in that set; or an object
+returned by calling one of the procedures defined here. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-&gt;regexp</b><var> rexp<a name="index-rexp_002d_003eregexp-1037"></a></var><br>
+<blockquote><p>Converts <var>rexp</var> to standard regular-expression notation, returning
+a newly-allocated string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-compile</b><var> rexp<a name="index-rexp_002dcompile-1038"></a></var><br>
+<blockquote><p>Converts <var>rexp</var> to standard regular-expression notation, then
+compiles it and returns the compiled result.  Equivalent to
+
+     <pre class="example">          (re-compile-pattern (rexp-&gt;regexp <var>rexp</var>) #f)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-any-char</b><var><a name="index-rexp_002dany_002dchar-1039"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches any single character except a
+newline.  This is equivalent to the <code>.</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-line-start</b><var><a name="index-rexp_002dline_002dstart-1040"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches the start of a line.  This is
+equivalent to the <code>^</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-line-end</b><var><a name="index-rexp_002dline_002dend-1041"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches the end of a line.  This is
+equivalent to the <code>$</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-string-start</b><var><a name="index-rexp_002dstring_002dstart-1042"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches the start of the text being
+matched.  This is equivalent to the <code>\`</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-string-end</b><var><a name="index-rexp_002dstring_002dend-1043"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches the end of the text being
+matched.  This is equivalent to the <code>\'</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-word-edge</b><var><a name="index-rexp_002dword_002dedge-1044"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches the start or end of a word. 
+This is equivalent to the <code>\b</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-not-word-edge</b><var><a name="index-rexp_002dnot_002dword_002dedge-1045"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches anywhere that is not the start
+or end of a word.  This is equivalent to the <code>\B</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-word-start</b><var><a name="index-rexp_002dword_002dstart-1046"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches the start of a word. 
+This is equivalent to the <code>\&lt;</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-word-end</b><var><a name="index-rexp_002dword_002dend-1047"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches the end of a word. 
+This is equivalent to the <code>\&gt;</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-word-char</b><var><a name="index-rexp_002dword_002dchar-1048"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches any word-constituent character. 
+This is equivalent to the <code>\w</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-not-word-char</b><var><a name="index-rexp_002dnot_002dword_002dchar-1049"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches any character that isn't a word
+constituent.  This is equivalent to the <code>\W</code> construct. 
+</p></blockquote></div>
+
+   <p>The next two procedures accept a <var>syntax-type</var> argument specifying
+the syntax class to be matched against.  This argument is a symbol
+selected from the following list.  Each symbol is followed by the
+equivalent character used in standard regular-expression notation. 
+<code>whitespace</code> (space character),
+<code>punctuation</code> (<code>.</code>),
+<code>word</code> (<code>w</code>),
+<code>symbol</code> (<code>_</code>),
+<code>open</code> (<code>(</code>),
+<code>close</code> (<code>)</code>),
+<code>quote</code> (<code>'</code>),
+<code>string-delimiter</code> (<code>"</code>),
+<code>math-delimiter</code> (<code>$</code>),
+<code>escape</code> (<code>\</code>),
+<code>char-quote</code> (<code>/</code>),
+<code>comment-start</code> (<code>&lt;</code>),
+<code>comment-end</code> (<code>&gt;</code>).
+
+<div class="defun">
+&mdash; procedure: <b>rexp-syntax-char</b><var> syntax-type<a name="index-rexp_002dsyntax_002dchar-1050"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches any character of type
+<var>syntax-type</var>.  This is equivalent to the <code>\s</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-not-syntax-char</b><var> syntax-type<a name="index-rexp_002dnot_002dsyntax_002dchar-1051"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches any character not of type
+<var>syntax-type</var>.  This is equivalent to the <code>\S</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-sequence</b><var> rexp <small class="dots">...</small><a name="index-rexp_002dsequence-1052"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches each <var>rexp</var> argument in
+sequence.  If no <var>rexp</var> argument is supplied, the result matches
+the null string.  This is equivalent to concatenating the regular
+expressions corresponding to each <var>rexp</var> argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-alternatives</b><var> rexp <small class="dots">...</small><a name="index-rexp_002dalternatives-1053"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches any of the <var>rexp</var>
+arguments.  This is equivalent to concatenating the regular
+expressions corresponding to each <var>rexp</var> argument, separating them
+by the <code>\|</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-group</b><var> rexp <small class="dots">...</small><a name="index-rexp_002dgroup-1054"></a></var><br>
+<blockquote><p><code>rexp-group</code> is like <code>rexp-sequence</code>, except that the result
+is marked as a match group.  This is equivalent to the <code>\(</code>
+<small class="dots">...</small> <code>\)</code> construct. 
+</p></blockquote></div>
+
+   <p>The next three procedures in principal accept a single <acronym>REXP</acronym>
+argument.  For convenience, they accept multiple arguments, which are
+converted into a single argument by <code>rexp-group</code>.  Note, however,
+that if only one <acronym>REXP</acronym> argument is supplied, and it's very
+simple, no grouping occurs.
+
+<div class="defun">
+&mdash; procedure: <b>rexp*</b><var> rexp <small class="dots">...</small><a name="index-rexp_002a-1055"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches zero or more instances of the
+pattern matched by the <var>rexp</var> arguments.  This is equivalent to
+the <code>*</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp+</b><var> rexp <small class="dots">...</small><a name="index-rexp_002b-1056"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches one or more instances of the
+pattern matched by the <var>rexp</var> arguments.  This is equivalent to
+the <code>+</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-optional</b><var> rexp <small class="dots">...</small><a name="index-rexp_002doptional-1057"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches zero or one instances of the
+pattern matched by the <var>rexp</var> arguments.  This is equivalent to
+the <code>?</code> construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>rexp-case-fold</b><var> rexp<a name="index-rexp_002dcase_002dfold-1058"></a></var><br>
+<blockquote><p>Returns a <acronym>REXP</acronym> that matches the same pattern as <var>rexp</var>,
+but is insensitive to character case.  This has no equivalent in
+standard regular-expression notation. 
+</p></blockquote></div>
+
+   </body></html>
+

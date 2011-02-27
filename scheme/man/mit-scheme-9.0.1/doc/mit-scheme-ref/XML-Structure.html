@@ -1,0 +1,244 @@
+<html lang="en">
+<head>
+<title>XML Structure - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="XML-Support.html#XML-Support" title="XML Support">
+<link rel="prev" href="XML-Names.html#XML-Names" title="XML Names">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="XML-Structure"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="XML-Names.html#XML-Names">XML Names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="XML-Support.html#XML-Support">XML Support</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.12.4 XML Structure</h4>
+
+<p>The output from the <acronym>XML</acronym> parser and the input to the
+<acronym>XML</acronym> output procedure is a complex data structure composed of
+a hierarchy of typed components.  Each component is a record whose
+fields correspond to parts of the <acronym>XML</acronym> structure that the
+record represents.  There are no special operations on these records;
+each is a tuple with named subparts.  The root record type is
+<code>xml-document</code>, which represents a complete <acronym>XML</acronym>
+document.
+
+   <p>Each record type <var>type</var> has the following associated bindings:
+
+     <dl>
+<dt><code>&lt;</code><var>type</var><code>&gt;</code><dd>is a variable bound to the record-type descriptor for <var>type</var>.  The
+record-type descriptor may be used as a specializer in <acronym>SOS</acronym>
+method definitions, which greatly simplifies code to dispatch on these
+types.
+
+     <br><dt><var>type</var><code>?</code><dd>is a predicate for records of type <var>type</var>.  It accepts one
+argument, which can be any object, and returns <code>#t</code> if the object
+is a record of this type, or <code>#f</code> otherwise.
+
+     <br><dt><code>make-</code><var>type</var><dd>is a constructor for records of type <var>type</var>.  It accepts one
+argument for each field of <var>type</var>, in the same order that they are
+written in the type description, and returns a newly-allocated record
+of that type.
+
+     <br><dt><var>type</var><code>-</code><var>field</var><dd>is an accessor procedure for the field <var>field</var> in records of type
+<var>type</var>.  It accepts one argument, which must be a record of that
+type, and returns the contents of the corresponding field in the
+record.
+
+     <br><dt><code>set-</code><var>type</var><code>-</code><var>field</var><code>!</code><dd>is a modifier procedure for the field <var>field</var> in records of type
+<var>type</var>.  It accepts two arguments: the first must be a record of
+that type, and the second is a new value for the corresponding field. 
+The record's field is modified to have the new value. 
+</dl>
+
+<div class="defun">
+&mdash; record type: <b>xml-document</b><var> declaration misc-1 dtd misc-2 root misc-3<a name="index-xml_002ddocument-2363"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002ddocument_003e-2364"></a><a name="index-xml_002ddocument_003f-2365"></a><a name="index-make_002dxml_002ddocument-2366"></a><a name="index-xml_002ddocument_002ddeclaration-2367"></a><a name="index-xml_002ddocument_002dmisc_002d1-2368"></a><a name="index-xml_002ddocument_002ddtd-2369"></a><a name="index-xml_002ddocument_002dmisc_002d2-2370"></a><a name="index-xml_002ddocument_002droot-2371"></a><a name="index-xml_002ddocument_002dmisc_002d3-2372"></a><a name="index-set_002dxml_002ddocument_002ddeclaration_0021-2373"></a><a name="index-set_002dxml_002ddocument_002dmisc_002d1_0021-2374"></a><a name="index-set_002dxml_002ddocument_002ddtd_0021-2375"></a><a name="index-set_002dxml_002ddocument_002dmisc_002d2_0021-2376"></a><a name="index-set_002dxml_002ddocument_002droot_0021-2377"></a><a name="index-set_002dxml_002ddocument_002dmisc_002d3_0021-2378"></a>The <code>xml-document</code> record is the top-level record representing a
+complete <acronym>XML</acronym> document.  <var>Declaration</var> is either an
+<code>xml-declaration</code> object or <code>#f</code>.  <var>Dtd</var> is either an
+<code>xml-dtd</code> object or <code>#f</code>.  <var>Root</var> is an <code>xml-element</code>
+object.  <var>Misc-1</var>, <var>misc-2</var>, and <var>misc-3</var> are lists of
+miscellaneous items; a miscellaneous item is either an
+<code>xml-comment</code> object, an <code>xml-processing-instructions</code> object,
+or a string of whitespace. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; record type: <b>xml-declaration</b><var> version encoding standalone<a name="index-xml_002ddeclaration-2379"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002ddeclaration_003e-2380"></a><a name="index-xml_002ddeclaration_003f-2381"></a><a name="index-make_002dxml_002ddeclaration-2382"></a><a name="index-xml_002ddeclaration_002dversion-2383"></a><a name="index-xml_002ddeclaration_002dencoding-2384"></a><a name="index-xml_002ddeclaration_002dstandalone-2385"></a><a name="index-set_002dxml_002ddeclaration_002dversion_0021-2386"></a><a name="index-set_002dxml_002ddeclaration_002dencoding_0021-2387"></a><a name="index-set_002dxml_002ddeclaration_002dstandalone_0021-2388"></a>The <code>xml-declaration</code> record represents the &lsquo;<samp><span class="samp">&lt;?xml ... 
+?&gt;</span></samp>&rsquo; declaration that optionally appears at the beginning of an
+<acronym>XML</acronym> document.  <var>Version</var> is a version string, typically
+<code>"1.0"</code>.  <var>Encoding</var> is either an encoding string or
+<code>#f</code>.  <var>Standalone</var> is either <code>"yes"</code>, <code>"no"</code>, or
+<code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; record type: <b>xml-element</b><var> name attributes contents<a name="index-xml_002delement-2389"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002delement_003e-2390"></a><a name="index-xml_002delement_003f-2391"></a><a name="index-make_002dxml_002delement-2392"></a><a name="index-xml_002delement_002dname-2393"></a><a name="index-xml_002delement_002dattributes-2394"></a><a name="index-xml_002delement_002dcontent-2395"></a><a name="index-set_002dxml_002delement_002dname_0021-2396"></a><a name="index-set_002dxml_002delement_002dattributes_0021-2397"></a><a name="index-set_002dxml_002delement_002dcontent_0021-2398"></a>The <code>xml-element</code> record represents general <acronym>XML</acronym> elements;
+the bulk of a typical <acronym>XML</acronym> document consists of these elements. 
+<var>Name</var> is the element name (an <acronym>XML</acronym> name). 
+<var>Attributes</var> is a list of <acronym>XML</acronym> attribute objects. 
+<var>Contents</var> is a list of the contents of the element.  Each element
+of this list is either a string, an <code>xml-element</code> record or an
+<code>xml-processing-instructions</code> record. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; record type: <b>xml-processing-instructions</b><var> name text<a name="index-xml_002dprocessing_002dinstructions-2399"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002dprocessing_002dinstructions_003e-2400"></a><a name="index-xml_002dprocessing_002dinstructions_003f-2401"></a><a name="index-make_002dxml_002dprocessing_002dinstructions-2402"></a><a name="index-xml_002dprocessing_002dinstructions_002dname-2403"></a><a name="index-xml_002dprocessing_002dinstructions_002dtext-2404"></a><a name="index-set_002dxml_002dprocessing_002dinstructions_002dname_0021-2405"></a><a name="index-set_002dxml_002dprocessing_002dinstructions_002dtext_0021-2406"></a>The <code>xml-processing-instructions</code> record represents processing
+instructions, which have the form &lsquo;<samp><span class="samp">&lt;?</span><var>name</var><span class="samp"> ... ?&gt;</span></samp>&rsquo;. 
+These instructions are intended to contain non-<acronym>XML</acronym> data that
+will be processed by another interpreter; for example they might
+contain <acronym>PHP</acronym> programs.  The <var>name</var> field is the processor
+name (a symbol), and the <var>text</var> field is the body of the
+instructions (a string). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; record type: <b>xml-dtd</b><var> root external internal<a name="index-xml_002ddtd-2407"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002ddtd_003e-2408"></a><a name="index-xml_002ddtd_003f-2409"></a><a name="index-make_002dxml_002ddtd-2410"></a><a name="index-xml_002ddtd_002droot-2411"></a><a name="index-xml_002ddtd_002dexternal-2412"></a><a name="index-xml_002ddtd_002dinternal-2413"></a><a name="index-set_002dxml_002ddtd_002droot_0021-2414"></a><a name="index-set_002dxml_002ddtd_002dexternal_0021-2415"></a><a name="index-set_002dxml_002ddtd_002dinternal_0021-2416"></a>The <code>xml-dtd</code> record represents a document type declaration.  The
+<var>root</var> field is an <acronym>XML</acronym> name for the root element of the
+document.  <var>External</var> is either an <code>xml-external-id</code> record
+or <code>#f</code>.  <var>Internal</var> is a list of <acronym>DTD</acronym> element
+records (e.g. <code>xml-!element</code>, <code>xml-!attlist</code>, etc.). 
+</p></blockquote></div>
+
+   <p>The remaining record types are valid only within a <acronym>DTD</acronym>.
+
+<div class="defun">
+&mdash; record type: <b>xml-!element</b><var> name content-type<a name="index-xml_002d_0021element-2417"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002d_0021element_003e-2418"></a><a name="index-xml_002d_0021element_003f-2419"></a><a name="index-make_002dxml_002d_0021element-2420"></a><a name="index-xml_002d_0021element_002dname-2421"></a><a name="index-xml_002d_0021element_002dcontent_002dtype-2422"></a><a name="index-set_002dxml_002d_0021element_002dname_0021-2423"></a><a name="index-set_002dxml_002d_0021element_002dcontent_002dtype_0021-2424"></a>The <code>xml-!element</code> record represents an element-type
+declaration.  <var>Name</var> is the <acronym>XML</acronym> name of the type being
+declared (a symbol).  <var>Content-type</var> describes the type and can
+have several different values, as follows:
+
+          <ul>
+<li>The <acronym>XML</acronym> names &lsquo;<samp><span class="samp">EMPTY</span></samp>&rsquo; and &lsquo;<samp><span class="samp">ANY</span></samp>&rsquo; correspond to the
+<acronym>XML</acronym> keywords of the same name.
+
+          <li>A list &lsquo;<samp><span class="samp">(MIX </span><var>type</var><span class="samp"> ...)</span></samp>&rsquo; corresponds to the
+&lsquo;<samp><span class="samp">(#PCDATA | </span><var>type</var><span class="samp"> | ...)</span></samp>&rsquo; syntax. 
+</ul>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; record type: <b>xml-!attlist</b><var> name definitions<a name="index-xml_002d_0021attlist-2425"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002d_0021attlist_003e-2426"></a><a name="index-xml_002d_0021attlist_003f-2427"></a><a name="index-make_002dxml_002d_0021attlist-2428"></a><a name="index-xml_002d_0021attlist_002dname-2429"></a><a name="index-xml_002d_0021attlist_002ddefinitions-2430"></a><a name="index-set_002dxml_002d_0021attlist_002dname_0021-2431"></a><a name="index-set_002dxml_002d_0021attlist_002ddefinitions_0021-2432"></a>The <code>xml-!attlist</code> record represents an attribute-list
+declaration.  <var>Name</var> is the <acronym>XML</acronym> name of the type for
+which attributes are being declared (a symbol).  <var>Definitions</var> is
+a list of attribute definitions, each of which is a list of three
+elements <code>(</code><var>name</var> <var>type</var> <var>default</var><code>)</code>.  <var>Name</var> is
+an <acronym>XML</acronym> name for the name of the attribute (a symbol). 
+<var>Type</var> describes the attribute type, and can have one of the
+following values:
+
+          <ul>
+<li>The <acronym>XML</acronym> names &lsquo;<samp><span class="samp">CDATA</span></samp>&rsquo;, &lsquo;<samp><span class="samp">IDREFS</span></samp>&rsquo;, &lsquo;<samp><span class="samp">IDREF</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">ID</span></samp>&rsquo;, &lsquo;<samp><span class="samp">ENTITY</span></samp>&rsquo;, &lsquo;<samp><span class="samp">ENTITIES</span></samp>&rsquo;, &lsquo;<samp><span class="samp">NMTOKENS</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">NMTOKEN</span></samp>&rsquo; correspond to the <acronym>XML</acronym> keywords of the same
+names.
+
+          <li>A list &lsquo;<samp><span class="samp">(NOTATION </span><var>name1</var> <var>name2</var><span class="samp"> ...)</span></samp>&rsquo; corresponds
+to the &lsquo;<samp><span class="samp">NOTATION (</span><var>name1</var><span class="samp"> | </span><var>name2</var><span class="samp"> ...)</span></samp>&rsquo; syntax.
+
+          <li>A list &lsquo;<samp><span class="samp">(ENUMERATED </span><var>name1</var> <var>name2</var><span class="samp"> ...)</span></samp>&rsquo; corresponds
+to the &lsquo;<samp><span class="samp">(</span><var>name1</var><span class="samp"> | </span><var>name2</var><span class="samp"> ...)</span></samp>&rsquo; syntax. 
+</ul>
+
+        <p><var>Default</var> describes the default value for the attribute, and can
+have one of the following values:
+
+          <ul>
+<li>The <acronym>XML</acronym> names &lsquo;<samp><span class="samp">#REQUIRED</span></samp>&rsquo; and &lsquo;<samp><span class="samp">#IMPLIED</span></samp>&rsquo;
+correspond to the <acronym>XML</acronym> keywords of the same names.
+
+          <li>A list &lsquo;<samp><span class="samp">(#FIXED </span><var>value</var><span class="samp">)</span></samp>&rsquo; corresponds to the &lsquo;<samp><span class="samp">#FIXED
+"</span><var>value</var><span class="samp">"</span></samp>&rsquo; syntax.  <var>Value</var> is represented as a string.
+
+          <li>A list &lsquo;<samp><span class="samp">(DEFAULT </span><var>value</var><span class="samp">)</span></samp>&rsquo; corresponds to the
+&lsquo;<samp><span class="samp">"</span><var>value</var><span class="samp">"</span></samp>&rsquo; syntax.  <var>Value</var> is represented as a string. 
+</ul>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; record type: <b>xml-!entity</b><var> name value<a name="index-xml_002d_0021entity-2433"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002d_0021entity_003e-2434"></a><a name="index-xml_002d_0021entity_003f-2435"></a><a name="index-make_002dxml_002d_0021entity-2436"></a><a name="index-xml_002d_0021entity_002dname-2437"></a><a name="index-xml_002d_0021entity_002dvalue-2438"></a><a name="index-set_002dxml_002d_0021entity_002dname_0021-2439"></a><a name="index-set_002dxml_002d_0021entity_002dvalue_0021-2440"></a>The <code>xml-!entity</code> record represents a general entity declaration. 
+<var>Name</var> is an <acronym>XML</acronym> name for the entity.  <var>Value</var> is the
+entity's value, either a string or an <code>xml-external-id</code> record. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; record type: <b>xml-parameter-!entity</b><var> name value<a name="index-xml_002dparameter_002d_0021entity-2441"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002dparameter_002d_0021entity_003e-2442"></a><a name="index-xml_002dparameter_002d_0021entity_003f-2443"></a><a name="index-make_002dxml_002dparameter_002d_0021entity-2444"></a><a name="index-xml_002dparameter_002d_0021entity_002dname-2445"></a><a name="index-xml_002dparameter_002d_0021entity_002dvalue-2446"></a><a name="index-set_002dxml_002dparameter_002d_0021entity_002dname_0021-2447"></a><a name="index-set_002dxml_002dparameter_002d_0021entity_002dvalue_0021-2448"></a>The <code>xml-parameter-!entity</code> record represents a parameter entity
+declaration.  <var>Name</var> is an <acronym>XML</acronym> name for the entity. 
+<var>Value</var> is the entity's value, either a string or an
+<code>xml-external-id</code> record. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; record type: <b>xml-unparsed-!entity</b><var> name id notation<a name="index-xml_002dunparsed_002d_0021entity-2449"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002dunparsed_002d_0021entity_003e-2450"></a><a name="index-xml_002dunparsed_002d_0021entity_003f-2451"></a><a name="index-make_002dxml_002dunparsed_002d_0021entity-2452"></a><a name="index-xml_002dunparsed_002d_0021entity_002dname-2453"></a><a name="index-xml_002dunparsed_002d_0021entity_002did-2454"></a><a name="index-xml_002dunparsed_002d_0021entity_002dnotation-2455"></a><a name="index-set_002dxml_002dunparsed_002d_0021entity_002dname_0021-2456"></a><a name="index-set_002dxml_002dunparsed_002d_0021entity_002did_0021-2457"></a><a name="index-set_002dxml_002dunparsed_002d_0021entity_002dnotation_0021-2458"></a>The <code>xml-unparsed-!entity</code> record represents an unparsed entity
+declaration.  <code>Name</code> is an <acronym>XML</acronym> name for the entity. 
+<var>Id</var> is an <code>xml-external-id</code> record.  <var>Notation</var> is an
+<acronym>XML</acronym> name for the notation. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; record type: <b>xml-!notation</b><var> name id<a name="index-xml_002d_0021notation-2459"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002d_0021notation_003e-2460"></a><a name="index-xml_002d_0021notation_003f-2461"></a><a name="index-make_002dxml_002d_0021notation-2462"></a><a name="index-xml_002d_0021notation_002dname-2463"></a><a name="index-xml_002d_0021notation_002did-2464"></a><a name="index-set_002dxml_002d_0021notation_002dname_0021-2465"></a><a name="index-set_002dxml_002d_0021notation_002did_0021-2466"></a>The <code>xml-!notation</code> record represents a notation declaration. 
+<code>Name</code> is an <acronym>XML</acronym> name for the notation.  <var>Id</var> is an
+<code>xml-external-id</code> record. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; record type: <b>xml-external-id</b><var> id uri<a name="index-xml_002dexternal_002did-2467"></a></var><br>
+<blockquote><p><a name="index-g_t_003cxml_002dexternal_002did_003e-2468"></a><a name="index-xml_002dexternal_002did_003f-2469"></a><a name="index-make_002dxml_002dexternal_002did-2470"></a><a name="index-xml_002dexternal_002did_002did-2471"></a><a name="index-xml_002dexternal_002did_002duri-2472"></a><a name="index-set_002dxml_002dexternal_002did_002did_0021-2473"></a><a name="index-set_002dxml_002dexternal_002did_002duri_0021-2474"></a>The <code>xml-external-id</code> record is a reference to an external
+<acronym>DTD</acronym>.  This reference consists of two parts: <var>id</var> is a
+public <acronym>ID</acronym> literal, corresponding to the &lsquo;<samp><span class="samp">PUBLIC</span></samp>&rsquo;
+keyword, while <var>uri</var> is a system literal, corresponding to the
+&lsquo;<samp><span class="samp">SYSTEM</span></samp>&rsquo; keyword.  Either or both may be present, depending on
+the context.  <var>Id</var> is represented as a string, while <var>uri</var> is
+represented as a <acronym>URI</acronym> record. 
+</p></blockquote></div>
+
+   </body></html>
+

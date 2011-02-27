@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<title>Custom Graphics Operations - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Graphics.html#Graphics" title="Graphics">
+<link rel="prev" href="Clipping-of-Graphics-Output.html#Clipping-of-Graphics-Output" title="Clipping of Graphics Output">
+<link rel="next" href="Images.html#Images" title="Images">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Custom-Graphics-Operations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Images.html#Images">Images</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Clipping-of-Graphics-Output.html#Clipping-of-Graphics-Output">Clipping of Graphics Output</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Graphics.html#Graphics">Graphics</a>
+<hr>
+</div>
+
+<h3 class="section">17.7 Custom Graphics Operations</h3>
+
+<p><a name="index-custom-operations_002c-on-graphics-device-3019"></a><a name="index-graphics_002c-custom-operations-3020"></a>
+In addition to the standard operations, a graphics device may support
+<dfn>custom operations</dfn>.  For example, most devices have custom
+operations to control color.  <code>graphics-operation</code> is used to
+invoke custom operations.
+
+<div class="defun">
+&mdash; procedure: <b>graphics-operation</b><var> graphics-device name object <small class="dots">...</small><a name="index-graphics_002doperation-3021"></a></var><br>
+<blockquote><p>Invokes the graphics operation on <var>graphics-device</var> whose name is
+the symbol <var>name</var>, passing it the remaining arguments.  This
+procedure can be used to invoke the standard operations, as well as
+custom operations that are specific to a particular graphics device
+type.  The names of the standard graphics operations are formed by
+removing the <code>graphics-</code> prefix from the corresponding procedure. 
+For example, the following are equivalent:
+
+     <pre class="example">          (graphics-draw-point device x y)
+          (graphics-operation device 'draw-point x y)
+</pre>
+        <p>For information on the custom operations for a particular device, see
+the documentation for its type. 
+</p></blockquote></div>
+
+   </body></html>
+

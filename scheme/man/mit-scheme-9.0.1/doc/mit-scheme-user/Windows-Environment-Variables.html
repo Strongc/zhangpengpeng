@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Windows Environment Variables - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Environment-Variables.html#Environment-Variables" title="Environment Variables">
+<link rel="prev" href="Edwin-Environment-Variables.html#Edwin-Environment-Variables" title="Edwin Environment Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Windows-Environment-Variables"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Edwin-Environment-Variables.html#Edwin-Environment-Variables">Edwin Environment Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Environment-Variables.html#Environment-Variables">Environment Variables</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.6.4 Environment Variables for Microsoft Windows</h4>
+
+<p>These environment variables are specific to the Microsoft Windows
+implementation.
+
+     <dl>
+<dt><samp><span class="env">MITSCHEME_FONT</span></samp><dd><a name="index-MITSCHEME_005fFONT-71"></a><a name="index-fonts-72"></a>A string specifying a font name and characteristics, for example
+&lsquo;<samp><span class="samp">Courier New 16 bold</span></samp>&rsquo;.  Allowed characteristics are <var>integer</var>,
+specifying the font size in points, and the following style modifiers:
+&lsquo;<samp><span class="samp">bold</span></samp>&rsquo;, &lsquo;<samp><span class="samp">italic</span></samp>&rsquo;, &lsquo;<samp><span class="samp">regular</span></samp>&rsquo;, &lsquo;<samp><span class="samp">underline</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">strikeout</span></samp>&rsquo;.  You should specify only fixed-width fonts as
+variable-width fonts are not drawn correctly.
+
+     <p>Once in Edwin, the font can be changed with the <code>set-font</code> and
+<code>set-default-font</code> commands.
+
+     <br><dt><samp><span class="env">MITSCHEME_GEOMETRY</span></samp><dd><a name="index-MITSCHEME_005fGEOMETRY-73"></a><a name="index-window-position-74"></a>Four integers separated by commas or spaces that specify the placement
+and size of the MIT/GNU Scheme window as a
+<var>left</var>,<var>top</var>,<var>width</var>,<var>height</var> quadruple.  The units are
+screen pixels, and &lsquo;<samp><span class="samp">-1</span></samp>&rsquo; means allow the system to choose this
+parameter.  E.g. &lsquo;<samp><span class="samp">-1,-1,500,300</span></samp>&rsquo; places a 500 by 300 pixel window
+at some system-determined position on the screen.  The width and height
+include the window border and title.  The default value is
+&lsquo;<samp><span class="samp">-1,-1,-1,-1</span></samp>&rsquo;.
+
+     <br><dt><samp><span class="env">MITSCHEME_FOREGROUND</span></samp><dd><a name="index-MITSCHEME_005fFOREGROUND-75"></a><a name="index-window-color-76"></a>A value specifying the window text color.  The color is specified as
+hex blue, green and red values (<em>not</em> RGB): e.g. 
+<code>0xff0000</code> for blue.
+
+     <br><dt><samp><span class="env">MITSCHEME_BACKGROUND</span></samp><dd><a name="index-MITSCHEME_005fBACKGROUND-77"></a>A value specifying the window background color.  See
+<samp><span class="env">MITSCHEME_FOREGROUND</span></samp>.
+
+     <br><dt><samp><span class="env">HOMEDRIVE</span></samp><dt><samp><span class="env">HOMEPATH</span></samp><dd><a name="index-HOMEDRIVE-78"></a><a name="index-HOMEPATH-79"></a>These variables are used together to indicate the user's home
+directory.  This is the preferred way to specify the home directory.
+
+     <br><dt><samp><span class="env">USERNAME</span></samp><dt><samp><span class="env">USER</span></samp><dd><a name="index-USERNAME-80"></a><a name="index-USER-81"></a>Specifies the login name of the user running Scheme.  This is used for
+several different purposes.  <samp><span class="env">USERNAME</span></samp> is preferred; <samp><span class="env">USER</span></samp>
+is used if <samp><span class="env">USERNAME</span></samp> is not defined.  If neither of these
+variables is defined, an error is signalled when the username is
+required.
+
+     <br><dt><samp><span class="env">USERDIR</span></samp><dd><a name="index-USERDIR-82"></a>Specifies a directory that contains the home directories of users. 
+One of the places in which Scheme looks for the user's home directory,
+by searching for a subdirectory with the user's login name. 
+</dl>
+
+   </body></html>
+

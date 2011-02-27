@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Constructors and Accessors for Ports - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Port-Primitives.html#Port-Primitives" title="Port Primitives">
+<link rel="prev" href="Port-Types.html#Port-Types" title="Port Types">
+<link rel="next" href="Input-Port-Operations.html#Input-Port-Operations" title="Input Port Operations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Constructors-and-Accessors-for-Ports"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Input-Port-Operations.html#Input-Port-Operations">Input Port Operations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Port-Types.html#Port-Types">Port Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Port-Primitives.html#Port-Primitives">Port Primitives</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.9.2 Constructors and Accessors for Ports</h4>
+
+<p>The procedures in this section provide means for constructing ports,
+accessing the type of a port, and manipulating the state of a port.
+
+<div class="defun">
+&mdash; procedure: <b>make-port</b><var> port-type state<a name="index-make_002dport-2160"></a></var><br>
+<blockquote><p>Returns a new port with type <var>port-type</var> and the given
+<var>state</var>.  The port will be an input, output, or <acronym>I/O</acronym> port
+according to <var>port-type</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port/type</b><var> port<a name="index-port_002ftype-2161"></a></var><br>
+<blockquote><p>Returns the port type of <var>port</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port/state</b><var> port<a name="index-port_002fstate-2162"></a></var><br>
+<blockquote><p>Returns the state component of <var>port</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>set-port/state!</b><var> port object<a name="index-set_002dport_002fstate_0021-2163"></a></var><br>
+<blockquote><p>Changes the state component of <var>port</var> to be <var>object</var>. 
+Returns an unspecified value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port/operation</b><var> port symbol<a name="index-port_002foperation-2164"></a></var><br>
+<blockquote><p>Equivalent to
+
+     <pre class="example">          (port-type/operation (port/type <var>port</var>) <var>symbol</var>)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port/operation-names</b><var> port<a name="index-port_002foperation_002dnames-2165"></a></var><br>
+<blockquote><p>Equivalent to
+
+     <pre class="example">          (port-type/operation-names (port/type <var>port</var>))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-eof-object</b><var> input-port<a name="index-make_002deof_002dobject-2166"></a></var><br>
+<blockquote><p><a name="index-EOF-object_002c-construction-2167"></a><a name="index-construction_002c-of-EOF-object-2168"></a><a name="index-eof_002dobject_003f-2169"></a>Returns an object that satisfies the predicate <code>eof-object?</code>.  This
+is sometimes useful when building input ports. 
+</p></blockquote></div>
+
+   </body></html>
+

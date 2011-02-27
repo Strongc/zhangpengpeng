@@ -1,0 +1,925 @@
+<html lang="en">
+<head>
+<title>MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License."
+
+     (a) The FSF's Back-Cover Text is: "You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">MIT/GNU Scheme 9.0.1</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html#Top">MIT/GNU Scheme</a>
+<li><a name="toc_Acknowledgements" href="Acknowledgements.html#Acknowledgements">Acknowledgements</a>
+<li><a name="toc_Overview" href="Overview.html#Overview">1 Overview</a>
+<ul>
+<li><a href="Notational-Conventions.html#Notational-Conventions">1.1 Notational Conventions</a>
+<ul>
+<li><a href="Errors.html#Errors">1.1.1 Errors</a>
+<li><a href="Examples.html#Examples">1.1.2 Examples</a>
+<li><a href="Entry-Format.html#Entry-Format">1.1.3 Entry Format</a>
+</li></ul>
+<li><a href="Scheme-Concepts.html#Scheme-Concepts">1.2 Scheme Concepts</a>
+<ul>
+<li><a href="Variable-Bindings.html#Variable-Bindings">1.2.1 Variable Bindings</a>
+<li><a href="Environment-Concepts.html#Environment-Concepts">1.2.2 Environment Concepts</a>
+<li><a href="Initial-and-Current-Environments.html#Initial-and-Current-Environments">1.2.3 Initial and Current Environments</a>
+<li><a href="Static-Scoping.html#Static-Scoping">1.2.4 Static Scoping</a>
+<li><a href="True-and-False.html#True-and-False">1.2.5 True and False</a>
+<li><a href="External-Representations.html#External-Representations">1.2.6 External Representations</a>
+<li><a href="Disjointness-of-Types.html#Disjointness-of-Types">1.2.7 Disjointness of Types</a>
+<li><a href="Storage-Model.html#Storage-Model">1.2.8 Storage Model</a>
+</li></ul>
+<li><a href="Lexical-Conventions.html#Lexical-Conventions">1.3 Lexical Conventions</a>
+<ul>
+<li><a href="Whitespace.html#Whitespace">1.3.1 Whitespace</a>
+<li><a href="Delimiters.html#Delimiters">1.3.2 Delimiters</a>
+<li><a href="Identifiers.html#Identifiers">1.3.3 Identifiers</a>
+<li><a href="Uppercase-and-Lowercase.html#Uppercase-and-Lowercase">1.3.4 Uppercase and Lowercase</a>
+<li><a href="Naming-Conventions.html#Naming-Conventions">1.3.5 Naming Conventions</a>
+<li><a href="Comments.html#Comments">1.3.6 Comments</a>
+<li><a href="Additional-Notations.html#Additional-Notations">1.3.7 Additional Notations</a>
+</li></ul>
+<li><a href="Expressions.html#Expressions">1.4 Expressions</a>
+<ul>
+<li><a href="Literal-Expressions.html#Literal-Expressions">1.4.1 Literal Expressions</a>
+<li><a href="Variable-References.html#Variable-References">1.4.2 Variable References</a>
+<li><a href="Special-Form-Syntax.html#Special-Form-Syntax">1.4.3 Special Form Syntax</a>
+<li><a href="Procedure-Call-Syntax.html#Procedure-Call-Syntax">1.4.4 Procedure Call Syntax</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Special-Forms" href="Special-Forms.html#Special-Forms">2 Special Forms</a>
+<ul>
+<li><a href="Lambda-Expressions.html#Lambda-Expressions">2.1 Lambda Expressions</a>
+<li><a href="Lexical-Binding.html#Lexical-Binding">2.2 Lexical Binding</a>
+<li><a href="Dynamic-Binding.html#Dynamic-Binding">2.3 Dynamic Binding</a>
+<li><a href="Definitions.html#Definitions">2.4 Definitions</a>
+<ul>
+<li><a href="Top_002dLevel-Definitions.html#Top_002dLevel-Definitions">2.4.1 Top-Level Definitions</a>
+<li><a href="Internal-Definitions.html#Internal-Definitions">2.4.2 Internal Definitions</a>
+</li></ul>
+<li><a href="Assignments.html#Assignments">2.5 Assignments</a>
+<li><a href="Quoting.html#Quoting">2.6 Quoting</a>
+<li><a href="Conditionals.html#Conditionals">2.7 Conditionals</a>
+<li><a href="Sequencing.html#Sequencing">2.8 Sequencing</a>
+<li><a href="Iteration.html#Iteration">2.9 Iteration</a>
+<li><a href="Structure-Definitions.html#Structure-Definitions">2.10 Structure Definitions</a>
+<li><a href="Macros.html#Macros">2.11 Macros</a>
+<ul>
+<li><a href="Syntactic-Binding-Constructs.html#Syntactic-Binding-Constructs">2.11.1 Binding Constructs for Syntactic Keywords</a>
+<li><a href="Pattern-Language.html#Pattern-Language">2.11.2 Pattern Language</a>
+<li><a href="Syntactic-Closures.html#Syntactic-Closures">2.11.3 Syntactic Closures</a>
+<ul>
+<li><a href="Syntax-Terminology.html#Syntax-Terminology">2.11.3.1 Syntax Terminology</a>
+<li><a href="SC-Transformer-Definition.html#SC-Transformer-Definition">2.11.3.2 Transformer Definition</a>
+<li><a href="SC-Identifiers.html#SC-Identifiers">2.11.3.3 Identifiers</a>
+</li></ul>
+<li><a href="Explicit-Renaming.html#Explicit-Renaming">2.11.4 Explicit Renaming</a>
+</li></ul>
+<li><a href="SRFI-syntax.html#SRFI-syntax">2.12 SRFI syntax</a>
+<ul>
+<li><a href="cond_002dexpand-_0028SRFI-0_0029.html#cond_002dexpand-_0028SRFI-0_0029">2.12.1 cond-expand (SRFI 0)</a>
+<li><a href="receive-_0028SRFI-8_0029.html#receive-_0028SRFI-8_0029">2.12.2 receive (SRFI 8)</a>
+<li><a href="and_002dlet_002a-_0028SRFI-2_0029.html#and_002dlet_002a-_0028SRFI-2_0029">2.12.3 and-let* (SRFI 2)</a>
+<li><a href="define_002drecord_002dtype-_0028SRFI-9_0029.html#define_002drecord_002dtype-_0028SRFI-9_0029">2.12.4 define-record-type (SRFI 9)</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Equivalence-Predicates" href="Equivalence-Predicates.html#Equivalence-Predicates">3 Equivalence Predicates</a>
+<li><a name="toc_Numbers" href="Numbers.html#Numbers">4 Numbers</a>
+<ul>
+<li><a href="Numerical-types.html#Numerical-types">4.1 Numerical types</a>
+<li><a href="Exactness.html#Exactness">4.2 Exactness</a>
+<li><a href="Implementation-restrictions.html#Implementation-restrictions">4.3 Implementation restrictions</a>
+<li><a href="Syntax-of-numerical-constants.html#Syntax-of-numerical-constants">4.4 Syntax of numerical constants</a>
+<li><a href="Numerical-operations.html#Numerical-operations">4.5 Numerical operations</a>
+<li><a href="Numerical-input-and-output.html#Numerical-input-and-output">4.6 Numerical input and output</a>
+<li><a href="Fixnum-and-Flonum-Operations.html#Fixnum-and-Flonum-Operations">4.7 Fixnum and Flonum Operations</a>
+<ul>
+<li><a href="Fixnum-Operations.html#Fixnum-Operations">4.7.1 Fixnum Operations</a>
+<li><a href="Flonum-Operations.html#Flonum-Operations">4.7.2 Flonum Operations</a>
+</li></ul>
+<li><a href="Random-Numbers.html#Random-Numbers">4.8 Random Numbers</a>
+</li></ul>
+<li><a name="toc_Characters" href="Characters.html#Characters">5 Characters</a>
+<ul>
+<li><a href="External-Representation-of-Characters.html#External-Representation-of-Characters">5.1 External Representation of Characters</a>
+<li><a href="Comparison-of-Characters.html#Comparison-of-Characters">5.2 Comparison of Characters</a>
+<li><a href="Miscellaneous-Character-Operations.html#Miscellaneous-Character-Operations">5.3 Miscellaneous Character Operations</a>
+<li><a href="Internal-Representation-of-Characters.html#Internal-Representation-of-Characters">5.4 Internal Representation of Characters</a>
+<li><a href="ISO_002d8859_002d1-Characters.html#ISO_002d8859_002d1-Characters">5.5 ISO-8859-1 Characters</a>
+<li><a href="Character-Sets.html#Character-Sets">5.6 Character Sets</a>
+<li><a href="Unicode.html#Unicode">5.7 Unicode</a>
+<ul>
+<li><a href="Wide-Strings.html#Wide-Strings">5.7.1 Wide Strings</a>
+<li><a href="Unicode-Representations.html#Unicode-Representations">5.7.2 Unicode Representations</a>
+<li><a href="Alphabets.html#Alphabets">5.7.3 Alphabets</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Strings" href="Strings.html#Strings">6 Strings</a>
+<ul>
+<li><a href="Construction-of-Strings.html#Construction-of-Strings">6.1 Construction of Strings</a>
+<li><a href="Selecting-String-Components.html#Selecting-String-Components">6.2 Selecting String Components</a>
+<li><a href="Comparison-of-Strings.html#Comparison-of-Strings">6.3 Comparison of Strings</a>
+<li><a href="Alphabetic-Case-in-Strings.html#Alphabetic-Case-in-Strings">6.4 Alphabetic Case in Strings</a>
+<li><a href="Cutting-and-Pasting-Strings.html#Cutting-and-Pasting-Strings">6.5 Cutting and Pasting Strings</a>
+<li><a href="Searching-Strings.html#Searching-Strings">6.6 Searching Strings</a>
+<li><a href="Matching-Strings.html#Matching-Strings">6.7 Matching Strings</a>
+<li><a href="Regular-Expressions.html#Regular-Expressions">6.8 Regular Expressions</a>
+<ul>
+<li><a href="Regular_002dexpression-procedures.html#Regular_002dexpression-procedures">6.8.1 Regular-expression procedures</a>
+<li><a href="REXP-abstraction.html#REXP-abstraction">6.8.2 REXP abstraction</a>
+</li></ul>
+<li><a href="Modification-of-Strings.html#Modification-of-Strings">6.9 Modification of Strings</a>
+<li><a href="Variable_002dLength-Strings.html#Variable_002dLength-Strings">6.10 Variable-Length Strings</a>
+<li><a href="Byte-Vectors.html#Byte-Vectors">6.11 Byte Vectors</a>
+</li></ul>
+<li><a name="toc_Lists" href="Lists.html#Lists">7 Lists</a>
+<ul>
+<li><a href="Pairs.html#Pairs">7.1 Pairs</a>
+<li><a href="Construction-of-Lists.html#Construction-of-Lists">7.2 Construction of Lists</a>
+<li><a href="Selecting-List-Components.html#Selecting-List-Components">7.3 Selecting List Components</a>
+<li><a href="Cutting-and-Pasting-Lists.html#Cutting-and-Pasting-Lists">7.4 Cutting and Pasting Lists</a>
+<li><a href="Filtering-Lists.html#Filtering-Lists">7.5 Filtering Lists</a>
+<li><a href="Searching-Lists.html#Searching-Lists">7.6 Searching Lists</a>
+<li><a href="Mapping-of-Lists.html#Mapping-of-Lists">7.7 Mapping of Lists</a>
+<li><a href="Reduction-of-Lists.html#Reduction-of-Lists">7.8 Reduction of Lists</a>
+<li><a href="Miscellaneous-List-Operations.html#Miscellaneous-List-Operations">7.9 Miscellaneous List Operations</a>
+</li></ul>
+<li><a name="toc_Vectors" href="Vectors.html#Vectors">8 Vectors</a>
+<ul>
+<li><a href="Construction-of-Vectors.html#Construction-of-Vectors">8.1 Construction of Vectors</a>
+<li><a href="Selecting-Vector-Components.html#Selecting-Vector-Components">8.2 Selecting Vector Components</a>
+<li><a href="Cutting-Vectors.html#Cutting-Vectors">8.3 Cutting Vectors</a>
+<li><a href="Modifying-Vectors.html#Modifying-Vectors">8.4 Modifying Vectors</a>
+</li></ul>
+<li><a name="toc_Bit-Strings" href="Bit-Strings.html#Bit-Strings">9 Bit Strings</a>
+<ul>
+<li><a href="Construction-of-Bit-Strings.html#Construction-of-Bit-Strings">9.1 Construction of Bit Strings</a>
+<li><a href="Selecting-Bit-String-Components.html#Selecting-Bit-String-Components">9.2 Selecting Bit String Components</a>
+<li><a href="Cutting-and-Pasting-Bit-Strings.html#Cutting-and-Pasting-Bit-Strings">9.3 Cutting and Pasting Bit Strings</a>
+<li><a href="Bitwise-Operations-on-Bit-Strings.html#Bitwise-Operations-on-Bit-Strings">9.4 Bitwise Operations on Bit Strings</a>
+<li><a href="Modification-of-Bit-Strings.html#Modification-of-Bit-Strings">9.5 Modification of Bit Strings</a>
+<li><a href="Integer-Conversions-of-Bit-Strings.html#Integer-Conversions-of-Bit-Strings">9.6 Integer Conversions of Bit Strings</a>
+</li></ul>
+<li><a name="toc_Miscellaneous-Datatypes" href="Miscellaneous-Datatypes.html#Miscellaneous-Datatypes">10 Miscellaneous Datatypes</a>
+<ul>
+<li><a href="Booleans.html#Booleans">10.1 Booleans</a>
+<li><a href="Symbols.html#Symbols">10.2 Symbols</a>
+<li><a href="Cells.html#Cells">10.3 Cells</a>
+<li><a href="Records.html#Records">10.4 Records</a>
+<li><a href="Promises.html#Promises">10.5 Promises</a>
+<li><a href="Streams.html#Streams">10.6 Streams</a>
+<li><a href="Weak-Pairs.html#Weak-Pairs">10.7 Weak Pairs</a>
+</li></ul>
+<li><a name="toc_Associations" href="Associations.html#Associations">11 Associations</a>
+<ul>
+<li><a href="Association-Lists.html#Association-Lists">11.1 Association Lists</a>
+<li><a href="1D-Tables.html#1D-Tables">11.2 1D Tables</a>
+<li><a href="The-Association-Table.html#The-Association-Table">11.3 The Association Table</a>
+<li><a href="Hash-Tables.html#Hash-Tables">11.4 Hash Tables</a>
+<ul>
+<li><a href="Construction-of-Hash-Tables.html#Construction-of-Hash-Tables">11.4.1 Construction of Hash Tables</a>
+<li><a href="Basic-Hash-Table-Operations.html#Basic-Hash-Table-Operations">11.4.2 Basic Hash Table Operations</a>
+<li><a href="Resizing-of-Hash-Tables.html#Resizing-of-Hash-Tables">11.4.3 Resizing of Hash Tables</a>
+<li><a href="Address-Hashing.html#Address-Hashing">11.4.4 Address Hashing</a>
+</li></ul>
+<li><a href="Object-Hashing.html#Object-Hashing">11.5 Object Hashing</a>
+<li><a href="Red_002dBlack-Trees.html#Red_002dBlack-Trees">11.6 Red-Black Trees</a>
+<li><a href="Weight_002dBalanced-Trees.html#Weight_002dBalanced-Trees">11.7 Weight-Balanced Trees</a>
+<ul>
+<li><a href="Construction-of-Weight_002dBalanced-Trees.html#Construction-of-Weight_002dBalanced-Trees">11.7.1 Construction of Weight-Balanced Trees</a>
+<li><a href="Basic-Operations-on-Weight_002dBalanced-Trees.html#Basic-Operations-on-Weight_002dBalanced-Trees">11.7.2 Basic Operations on Weight-Balanced Trees</a>
+<li><a href="Advanced-Operations-on-Weight_002dBalanced-Trees.html#Advanced-Operations-on-Weight_002dBalanced-Trees">11.7.3 Advanced Operations on Weight-Balanced Trees</a>
+<li><a href="Indexing-Operations-on-Weight_002dBalanced-Trees.html#Indexing-Operations-on-Weight_002dBalanced-Trees">11.7.4 Indexing Operations on Weight-Balanced Trees</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Procedures" href="Procedures.html#Procedures">12 Procedures</a>
+<ul>
+<li><a href="Procedure-Operations.html#Procedure-Operations">12.1 Procedure Operations</a>
+<li><a href="Arity.html#Arity">12.2 Arity</a>
+<li><a href="Primitive-Procedures.html#Primitive-Procedures">12.3 Primitive Procedures</a>
+<li><a href="Continuations.html#Continuations">12.4 Continuations</a>
+<li><a href="Application-Hooks.html#Application-Hooks">12.5 Application Hooks</a>
+<li><a href="Generic-Dispatch.html#Generic-Dispatch">12.6 Generic Dispatch</a>
+<ul>
+<li><a href="Generic-Procedures.html#Generic-Procedures">12.6.1 Generic Procedures</a>
+<li><a href="Method-Generators.html#Method-Generators">12.6.2 Method Generators</a>
+<li><a href="Dispatch-Tags.html#Dispatch-Tags">12.6.3 Dispatch Tags</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Environments" href="Environments.html#Environments">13 Environments</a>
+<ul>
+<li><a href="Environment-Operations.html#Environment-Operations">13.1 Environment Operations</a>
+<li><a href="Environment-Variables.html#Environment-Variables">13.2 Environment Variables</a>
+<li><a href="REPL-Environment.html#REPL-Environment">13.3 REPL Environment</a>
+<li><a href="Top_002dlevel-Environments.html#Top_002dlevel-Environments">13.4 Top-level Environments</a>
+</li></ul>
+<li><a name="toc_Input_002fOutput" href="Input_002fOutput.html#Input_002fOutput">14 Input/Output</a>
+<ul>
+<li><a href="Ports.html#Ports">14.1 Ports</a>
+<li><a href="File-Ports.html#File-Ports">14.2 File Ports</a>
+<li><a href="String-Ports.html#String-Ports">14.3 String Ports</a>
+<li><a href="Input-Procedures.html#Input-Procedures">14.4 Input Procedures</a>
+<li><a href="Output-Procedures.html#Output-Procedures">14.5 Output Procedures</a>
+<li><a href="Format.html#Format">14.6 Format</a>
+<li><a href="Custom-Output.html#Custom-Output">14.7 Custom Output</a>
+<li><a href="Prompting.html#Prompting">14.8 Prompting</a>
+<li><a href="Port-Primitives.html#Port-Primitives">14.9 Port Primitives</a>
+<ul>
+<li><a href="Port-Types.html#Port-Types">14.9.1 Port Types</a>
+<li><a href="Constructors-and-Accessors-for-Ports.html#Constructors-and-Accessors-for-Ports">14.9.2 Constructors and Accessors for Ports</a>
+<li><a href="Input-Port-Operations.html#Input-Port-Operations">14.9.3 Input Port Operations</a>
+<li><a href="Output-Port-Operations.html#Output-Port-Operations">14.9.4 Output Port Operations</a>
+<li><a href="Blocking-Mode.html#Blocking-Mode">14.9.5 Blocking Mode</a>
+<li><a href="Terminal-Mode.html#Terminal-Mode">14.9.6 Terminal Mode</a>
+</li></ul>
+<li><a href="Parser-Buffers.html#Parser-Buffers">14.10 Parser Buffers</a>
+<li><a href="Parser-Language.html#Parser-Language">14.11 Parser Language</a>
+<ul>
+<li><a href="_002aMatcher.html#_002aMatcher">14.11.1 *Matcher</a>
+<li><a href="_002aParser.html#_002aParser">14.11.2 *Parser</a>
+<li><a href="Parser_002dlanguage-Macros.html#Parser_002dlanguage-Macros">14.11.3 Parser-language Macros</a>
+</li></ul>
+<li><a href="XML-Support.html#XML-Support">14.12 XML Support</a>
+<ul>
+<li><a href="XML-Input.html#XML-Input">14.12.1 XML Input</a>
+<li><a href="XML-Output.html#XML-Output">14.12.2 XML Output</a>
+<li><a href="XML-Names.html#XML-Names">14.12.3 XML Names</a>
+<li><a href="XML-Structure.html#XML-Structure">14.12.4 XML Structure</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Operating_002dSystem-Interface" href="Operating_002dSystem-Interface.html#Operating_002dSystem-Interface">15 Operating-System Interface</a>
+<ul>
+<li><a href="Pathnames.html#Pathnames">15.1 Pathnames</a>
+<ul>
+<li><a href="Filenames-and-Pathnames.html#Filenames-and-Pathnames">15.1.1 Filenames and Pathnames</a>
+<li><a href="Components-of-Pathnames.html#Components-of-Pathnames">15.1.2 Components of Pathnames</a>
+<li><a href="Operations-on-Pathnames.html#Operations-on-Pathnames">15.1.3 Operations on Pathnames</a>
+<li><a href="Miscellaneous-Pathnames.html#Miscellaneous-Pathnames">15.1.4 Miscellaneous Pathname Procedures</a>
+</li></ul>
+<li><a href="Working-Directory.html#Working-Directory">15.2 Working Directory</a>
+<li><a href="File-Manipulation.html#File-Manipulation">15.3 File Manipulation</a>
+<li><a href="Directory-Reader.html#Directory-Reader">15.4 Directory Reader</a>
+<li><a href="Date-and-Time.html#Date-and-Time">15.5 Date and Time</a>
+<ul>
+<li><a href="Universal-Time.html#Universal-Time">15.5.1 Universal Time</a>
+<li><a href="Decoded-Time.html#Decoded-Time">15.5.2 Decoded Time</a>
+<li><a href="File-Time.html#File-Time">15.5.3 File Time</a>
+<li><a href="Time_002dFormat-Conversion.html#Time_002dFormat-Conversion">15.5.4 Time-Format Conversion</a>
+<li><a href="External-Representation-of-Time.html#External-Representation-of-Time">15.5.5 External Representation of Time</a>
+</li></ul>
+<li><a href="Machine-Time.html#Machine-Time">15.6 Machine Time</a>
+<li><a href="Subprocesses.html#Subprocesses">15.7 Subprocesses</a>
+<ul>
+<li><a href="Subprocess-Procedures.html#Subprocess-Procedures">15.7.1 Subprocess Procedures</a>
+<li><a href="Subprocess-Conditions.html#Subprocess-Conditions">15.7.2 Subprocess Conditions</a>
+<li><a href="Subprocess-Options.html#Subprocess-Options">15.7.3 Subprocess Options</a>
+</li></ul>
+<li><a href="TCP-Sockets.html#TCP-Sockets">15.8 TCP Sockets</a>
+<li><a href="Miscellaneous-OS-Facilities.html#Miscellaneous-OS-Facilities">15.9 Miscellaneous OS Facilities</a>
+</li></ul>
+<li><a name="toc_Error-System" href="Error-System.html#Error-System">16 Error System</a>
+<ul>
+<li><a href="Condition-Signalling.html#Condition-Signalling">16.1 Condition Signalling</a>
+<li><a href="Error-Messages.html#Error-Messages">16.2 Error Messages</a>
+<li><a href="Condition-Handling.html#Condition-Handling">16.3 Condition Handling</a>
+<li><a href="Restarts.html#Restarts">16.4 Restarts</a>
+<ul>
+<li><a href="Establishing-Restart-Code.html#Establishing-Restart-Code">16.4.1 Establishing Restart Code</a>
+<li><a href="Invoking-Standard-Restart-Code.html#Invoking-Standard-Restart-Code">16.4.2 Invoking Standard Restart Code</a>
+<li><a href="Finding-and-Invoking-General-Restart-Code.html#Finding-and-Invoking-General-Restart-Code">16.4.3 Finding and Invoking General Restart Code</a>
+<li><a href="The-Named-Restart-Abstraction.html#The-Named-Restart-Abstraction">16.4.4 The Named Restart Abstraction</a>
+</li></ul>
+<li><a href="Condition-Instances.html#Condition-Instances">16.5 Condition Instances</a>
+<ul>
+<li><a href="Generating-Operations-on-Conditions.html#Generating-Operations-on-Conditions">16.5.1 Generating Operations on Conditions</a>
+<li><a href="Condition-State.html#Condition-State">16.5.2 Condition Abstraction</a>
+<li><a href="Simple-Condition-Instance-Operations.html#Simple-Condition-Instance-Operations">16.5.3 Simple Operations on Condition Instances</a>
+</li></ul>
+<li><a href="Condition-Types.html#Condition-Types">16.6 Condition Types</a>
+<li><a href="Taxonomy.html#Taxonomy">16.7 Condition-Type Taxonomy</a>
+</li></ul>
+<li><a name="toc_Graphics" href="Graphics.html#Graphics">17 Graphics</a>
+<ul>
+<li><a href="Opening-and-Closing-of-Graphics-Devices.html#Opening-and-Closing-of-Graphics-Devices">17.1 Opening and Closing of Graphics Devices</a>
+<li><a href="Coordinates-for-Graphics.html#Coordinates-for-Graphics">17.2 Coordinates for Graphics</a>
+<li><a href="Drawing-Graphics.html#Drawing-Graphics">17.3 Drawing Graphics</a>
+<li><a href="Characteristics-of-Graphics-Output.html#Characteristics-of-Graphics-Output">17.4 Characteristics of Graphics Output</a>
+<li><a href="Buffering-of-Graphics-Output.html#Buffering-of-Graphics-Output">17.5 Buffering of Graphics Output</a>
+<li><a href="Clipping-of-Graphics-Output.html#Clipping-of-Graphics-Output">17.6 Clipping of Graphics Output</a>
+<li><a href="Custom-Graphics-Operations.html#Custom-Graphics-Operations">17.7 Custom Graphics Operations</a>
+<li><a href="Images.html#Images">17.8 Images</a>
+<li><a href="X-Graphics.html#X-Graphics">17.9 X Graphics</a>
+<ul>
+<li><a href="X-Graphics-Type.html#X-Graphics-Type">17.9.1 X Graphics Type</a>
+<li><a href="Utilities-for-X-Graphics.html#Utilities-for-X-Graphics">17.9.2 Utilities for X Graphics</a>
+<li><a href="Custom-Operations-on-X-Graphics-Devices.html#Custom-Operations-on-X-Graphics-Devices">17.9.3 Custom Operations on X Graphics Devices</a>
+</li></ul>
+<li><a href="Win32-Graphics.html#Win32-Graphics">17.10 Win32 Graphics</a>
+<ul>
+<li><a href="Win32-Graphics-Type.html#Win32-Graphics-Type">17.10.1 Win32 Graphics Type</a>
+<li><a href="Custom-Operations-for-Win32-Graphics.html#Custom-Operations-for-Win32-Graphics">17.10.2 Custom Operations for Win32 Graphics</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Win32-Package-Reference" href="Win32-Package-Reference.html#Win32-Package-Reference">18 Win32 Package Reference</a>
+<ul>
+<li><a href="Win32-Package-Overview.html#Win32-Package-Overview">18.1 Overview</a>
+<li><a href="Foreign-function-interface.html#Foreign-function-interface">18.2 Foreign Function Interface</a>
+<ul>
+<li><a href="Windows-Types.html#Windows-Types">18.2.1 Windows Types</a>
+<li><a href="Windows-Foreign-Procedures.html#Windows-Foreign-Procedures">18.2.2 Windows Foreign Procedures</a>
+<li><a href="Win32-API-names-and-procedures.html#Win32-API-names-and-procedures">18.2.3 Win32 API names and procedures</a>
+</li></ul>
+<li><a href="Device-Independent-Bitmap-Utilities.html#Device-Independent-Bitmap-Utilities">18.3 Device Independent Bitmap Utilities</a>
+<ul>
+<li><a href="DIB-procedures.html#DIB-procedures">18.3.1 DIB procedures</a>
+<li><a href="Other-parts-of-the-DIB-Utilities-implementation.html#Other-parts-of-the-DIB-Utilities-implementation">18.3.2 Other parts of the DIB Utilities implementation</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_GNU-Free-Documentation-License" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<ul>
+<li><a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">A.1 ADDENDUM: How to use this License for your documents</a>
+</li></ul>
+<li><a name="toc_Binding-Index" href="Binding-Index.html#Binding-Index">Appendix B Binding Index</a>
+<li><a name="toc_Concept-Index" href="Concept-Index.html#Concept-Index">Appendix C Concept Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Acknowledgements.html#Acknowledgements">Acknowledgements</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="../index.html#dir">(dir)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#dir">(dir)</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">MIT/GNU Scheme</h2>
+
+<p>This manual documents MIT/GNU Scheme 9.0.1.
+
+   <p>Copyright &copy; 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.2 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual,&rdquo;
+and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled &ldquo;GNU Free Documentation
+License.&rdquo;
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have freedom to copy and modify
+this GNU Manual, like GNU software.  Copies published by the Free
+Software Foundation raise funds for GNU development.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="Acknowledgements.html#Acknowledgements">Acknowledgements</a>
+<li><a accesskey="2" href="Overview.html#Overview">Overview</a>
+<li><a accesskey="3" href="Special-Forms.html#Special-Forms">Special Forms</a>
+<li><a accesskey="4" href="Equivalence-Predicates.html#Equivalence-Predicates">Equivalence Predicates</a>
+<li><a accesskey="5" href="Numbers.html#Numbers">Numbers</a>
+<li><a accesskey="6" href="Characters.html#Characters">Characters</a>
+<li><a accesskey="7" href="Strings.html#Strings">Strings</a>
+<li><a accesskey="8" href="Lists.html#Lists">Lists</a>
+<li><a accesskey="9" href="Vectors.html#Vectors">Vectors</a>
+<li><a href="Bit-Strings.html#Bit-Strings">Bit Strings</a>
+<li><a href="Miscellaneous-Datatypes.html#Miscellaneous-Datatypes">Miscellaneous Datatypes</a>
+<li><a href="Associations.html#Associations">Associations</a>
+<li><a href="Procedures.html#Procedures">Procedures</a>
+<li><a href="Environments.html#Environments">Environments</a>
+<li><a href="Input_002fOutput.html#Input_002fOutput">Input/Output</a>
+<li><a href="Operating_002dSystem-Interface.html#Operating_002dSystem-Interface">Operating-System Interface</a>
+<li><a href="Error-System.html#Error-System">Error System</a>
+<li><a href="Graphics.html#Graphics">Graphics</a>
+<li><a href="Win32-Package-Reference.html#Win32-Package-Reference">Win32 Package Reference</a>
+<li><a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>
+<li><a href="Binding-Index.html#Binding-Index">Binding Index</a>
+<li><a href="Concept-Index.html#Concept-Index">Concept Index</a>
+
+</li></ul>
+<p>--- The Detailed Node Listing ---
+
+<p>Overview
+
+</p>
+<ul class="menu">
+<li><a href="Notational-Conventions.html#Notational-Conventions">Notational Conventions</a>
+<li><a href="Scheme-Concepts.html#Scheme-Concepts">Scheme Concepts</a>
+<li><a href="Lexical-Conventions.html#Lexical-Conventions">Lexical Conventions</a>
+<li><a href="Expressions.html#Expressions">Expressions</a>
+
+</li></ul>
+<p>Notational Conventions
+
+</p>
+<ul class="menu">
+<li><a href="Errors.html#Errors">Errors</a>
+<li><a href="Examples.html#Examples">Examples</a>
+<li><a href="Entry-Format.html#Entry-Format">Entry Format</a>
+
+</li></ul>
+<p>Scheme Concepts
+
+</p>
+<ul class="menu">
+<li><a href="Variable-Bindings.html#Variable-Bindings">Variable Bindings</a>
+<li><a href="Environment-Concepts.html#Environment-Concepts">Environment Concepts</a>
+<li><a href="Initial-and-Current-Environments.html#Initial-and-Current-Environments">Initial and Current Environments</a>
+<li><a href="Static-Scoping.html#Static-Scoping">Static Scoping</a>
+<li><a href="True-and-False.html#True-and-False">True and False</a>
+<li><a href="External-Representations.html#External-Representations">External Representations</a>
+<li><a href="Disjointness-of-Types.html#Disjointness-of-Types">Disjointness of Types</a>
+<li><a href="Storage-Model.html#Storage-Model">Storage Model</a>
+
+</li></ul>
+<p>Lexical Conventions
+
+</p>
+<ul class="menu">
+<li><a href="Whitespace.html#Whitespace">Whitespace</a>
+<li><a href="Delimiters.html#Delimiters">Delimiters</a>
+<li><a href="Identifiers.html#Identifiers">Identifiers</a>
+<li><a href="Uppercase-and-Lowercase.html#Uppercase-and-Lowercase">Uppercase and Lowercase</a>
+<li><a href="Naming-Conventions.html#Naming-Conventions">Naming Conventions</a>
+<li><a href="Comments.html#Comments">Comments</a>
+<li><a href="Additional-Notations.html#Additional-Notations">Additional Notations</a>
+
+</li></ul>
+<p>Expressions
+
+</p>
+<ul class="menu">
+<li><a href="Literal-Expressions.html#Literal-Expressions">Literal Expressions</a>
+<li><a href="Variable-References.html#Variable-References">Variable References</a>
+<li><a href="Special-Form-Syntax.html#Special-Form-Syntax">Special Form Syntax</a>
+<li><a href="Procedure-Call-Syntax.html#Procedure-Call-Syntax">Procedure Call Syntax</a>
+
+</li></ul>
+<p>Special Forms
+
+</p>
+<ul class="menu">
+<li><a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>
+<li><a href="Lexical-Binding.html#Lexical-Binding">Lexical Binding</a>
+<li><a href="Dynamic-Binding.html#Dynamic-Binding">Dynamic Binding</a>
+<li><a href="Definitions.html#Definitions">Definitions</a>
+<li><a href="Assignments.html#Assignments">Assignments</a>
+<li><a href="Quoting.html#Quoting">Quoting</a>
+<li><a href="Conditionals.html#Conditionals">Conditionals</a>
+<li><a href="Sequencing.html#Sequencing">Sequencing</a>
+<li><a href="Iteration.html#Iteration">Iteration</a>
+<li><a href="Structure-Definitions.html#Structure-Definitions">Structure Definitions</a>
+<li><a href="Macros.html#Macros">Macros</a>
+<li><a href="SRFI-syntax.html#SRFI-syntax">SRFI syntax</a>
+
+</li></ul>
+<p>Definitions
+
+</p>
+<ul class="menu">
+<li><a href="Top_002dLevel-Definitions.html#Top_002dLevel-Definitions">Top-Level Definitions</a>
+<li><a href="Internal-Definitions.html#Internal-Definitions">Internal Definitions</a>
+
+</li></ul>
+<p>Macros
+
+</p>
+<ul class="menu">
+<li><a href="Syntactic-Binding-Constructs.html#Syntactic-Binding-Constructs">Syntactic Binding Constructs</a>
+<li><a href="Pattern-Language.html#Pattern-Language">Pattern Language</a>
+<li><a href="Syntactic-Closures.html#Syntactic-Closures">Syntactic Closures</a>
+<li><a href="Explicit-Renaming.html#Explicit-Renaming">Explicit Renaming</a>
+
+</li></ul>
+<p>Syntactic Closures
+
+</p>
+<ul class="menu">
+<li><a href="Syntax-Terminology.html#Syntax-Terminology">Syntax Terminology</a>
+<li><a href="SC-Transformer-Definition.html#SC-Transformer-Definition">SC Transformer Definition</a>
+<li><a href="SC-Identifiers.html#SC-Identifiers">SC Identifiers</a>
+
+</li></ul>
+<p>SRFI syntax
+
+</p>
+<ul class="menu">
+<li><a href="cond_002dexpand-_0028SRFI-0_0029.html#cond_002dexpand-_0028SRFI-0_0029">cond-expand (SRFI 0)</a>
+<li><a href="receive-_0028SRFI-8_0029.html#receive-_0028SRFI-8_0029">receive (SRFI 8)</a>
+<li><a href="and_002dlet_002a-_0028SRFI-2_0029.html#and_002dlet_002a-_0028SRFI-2_0029">and-let* (SRFI 2)</a>
+<li><a href="define_002drecord_002dtype-_0028SRFI-9_0029.html#define_002drecord_002dtype-_0028SRFI-9_0029">define-record-type (SRFI 9)</a>
+
+</li></ul>
+<p>Numbers
+
+</p>
+<ul class="menu">
+<li><a href="Numerical-types.html#Numerical-types">Numerical types</a>
+<li><a href="Exactness.html#Exactness">Exactness</a>
+<li><a href="Implementation-restrictions.html#Implementation-restrictions">Implementation restrictions</a>
+<li><a href="Syntax-of-numerical-constants.html#Syntax-of-numerical-constants">Syntax of numerical constants</a>
+<li><a href="Numerical-operations.html#Numerical-operations">Numerical operations</a>
+<li><a href="Numerical-input-and-output.html#Numerical-input-and-output">Numerical input and output</a>
+<li><a href="Fixnum-and-Flonum-Operations.html#Fixnum-and-Flonum-Operations">Fixnum and Flonum Operations</a>
+<li><a href="Random-Numbers.html#Random-Numbers">Random Numbers</a>
+
+</li></ul>
+<p>Fixnum and Flonum Operations
+
+</p>
+<ul class="menu">
+<li><a href="Fixnum-Operations.html#Fixnum-Operations">Fixnum Operations</a>
+<li><a href="Flonum-Operations.html#Flonum-Operations">Flonum Operations</a>
+
+</li></ul>
+<p>Characters
+
+</p>
+<ul class="menu">
+<li><a href="External-Representation-of-Characters.html#External-Representation-of-Characters">External Representation of Characters</a>
+<li><a href="Comparison-of-Characters.html#Comparison-of-Characters">Comparison of Characters</a>
+<li><a href="Miscellaneous-Character-Operations.html#Miscellaneous-Character-Operations">Miscellaneous Character Operations</a>
+<li><a href="Internal-Representation-of-Characters.html#Internal-Representation-of-Characters">Internal Representation of Characters</a>
+<li><a href="ISO_002d8859_002d1-Characters.html#ISO_002d8859_002d1-Characters">ISO-8859-1 Characters</a>
+<li><a href="Character-Sets.html#Character-Sets">Character Sets</a>
+<li><a href="Unicode.html#Unicode">Unicode</a>
+
+</li></ul>
+<p>Unicode
+
+</p>
+<ul class="menu">
+<li><a href="Wide-Strings.html#Wide-Strings">Wide Strings</a>
+<li><a href="Unicode-Representations.html#Unicode-Representations">Unicode Representations</a>
+<li><a href="Alphabets.html#Alphabets">Alphabets</a>
+
+</li></ul>
+<p>Strings
+
+</p>
+<ul class="menu">
+<li><a href="Construction-of-Strings.html#Construction-of-Strings">Construction of Strings</a>
+<li><a href="Selecting-String-Components.html#Selecting-String-Components">Selecting String Components</a>
+<li><a href="Comparison-of-Strings.html#Comparison-of-Strings">Comparison of Strings</a>
+<li><a href="Alphabetic-Case-in-Strings.html#Alphabetic-Case-in-Strings">Alphabetic Case in Strings</a>
+<li><a href="Cutting-and-Pasting-Strings.html#Cutting-and-Pasting-Strings">Cutting and Pasting Strings</a>
+<li><a href="Searching-Strings.html#Searching-Strings">Searching Strings</a>
+<li><a href="Matching-Strings.html#Matching-Strings">Matching Strings</a>
+<li><a href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>
+<li><a href="Modification-of-Strings.html#Modification-of-Strings">Modification of Strings</a>
+<li><a href="Variable_002dLength-Strings.html#Variable_002dLength-Strings">Variable-Length Strings</a>
+<li><a href="Byte-Vectors.html#Byte-Vectors">Byte Vectors</a>
+
+</li></ul>
+<p>Regular Expressions
+
+</p>
+<ul class="menu">
+<li><a href="Regular_002dexpression-procedures.html#Regular_002dexpression-procedures">Regular-expression procedures</a>
+<li><a href="REXP-abstraction.html#REXP-abstraction">REXP abstraction</a>
+
+</li></ul>
+<p>Lists
+
+</p>
+<ul class="menu">
+<li><a href="Pairs.html#Pairs">Pairs</a>
+<li><a href="Construction-of-Lists.html#Construction-of-Lists">Construction of Lists</a>
+<li><a href="Selecting-List-Components.html#Selecting-List-Components">Selecting List Components</a>
+<li><a href="Cutting-and-Pasting-Lists.html#Cutting-and-Pasting-Lists">Cutting and Pasting Lists</a>
+<li><a href="Filtering-Lists.html#Filtering-Lists">Filtering Lists</a>
+<li><a href="Searching-Lists.html#Searching-Lists">Searching Lists</a>
+<li><a href="Mapping-of-Lists.html#Mapping-of-Lists">Mapping of Lists</a>
+<li><a href="Reduction-of-Lists.html#Reduction-of-Lists">Reduction of Lists</a>
+<li><a href="Miscellaneous-List-Operations.html#Miscellaneous-List-Operations">Miscellaneous List Operations</a>
+
+</li></ul>
+<p>Vectors
+
+</p>
+<ul class="menu">
+<li><a href="Construction-of-Vectors.html#Construction-of-Vectors">Construction of Vectors</a>
+<li><a href="Selecting-Vector-Components.html#Selecting-Vector-Components">Selecting Vector Components</a>
+<li><a href="Cutting-Vectors.html#Cutting-Vectors">Cutting Vectors</a>
+<li><a href="Modifying-Vectors.html#Modifying-Vectors">Modifying Vectors</a>
+
+</li></ul>
+<p>Bit Strings
+
+</p>
+<ul class="menu">
+<li><a href="Construction-of-Bit-Strings.html#Construction-of-Bit-Strings">Construction of Bit Strings</a>
+<li><a href="Selecting-Bit-String-Components.html#Selecting-Bit-String-Components">Selecting Bit String Components</a>
+<li><a href="Cutting-and-Pasting-Bit-Strings.html#Cutting-and-Pasting-Bit-Strings">Cutting and Pasting Bit Strings</a>
+<li><a href="Bitwise-Operations-on-Bit-Strings.html#Bitwise-Operations-on-Bit-Strings">Bitwise Operations on Bit Strings</a>
+<li><a href="Modification-of-Bit-Strings.html#Modification-of-Bit-Strings">Modification of Bit Strings</a>
+<li><a href="Integer-Conversions-of-Bit-Strings.html#Integer-Conversions-of-Bit-Strings">Integer Conversions of Bit Strings</a>
+
+</li></ul>
+<p>Miscellaneous Datatypes
+
+</p>
+<ul class="menu">
+<li><a href="Booleans.html#Booleans">Booleans</a>
+<li><a href="Symbols.html#Symbols">Symbols</a>
+<li><a href="Cells.html#Cells">Cells</a>
+<li><a href="Records.html#Records">Records</a>
+<li><a href="Promises.html#Promises">Promises</a>
+<li><a href="Streams.html#Streams">Streams</a>
+<li><a href="Weak-Pairs.html#Weak-Pairs">Weak Pairs</a>
+
+</li></ul>
+<p>Associations
+
+</p>
+<ul class="menu">
+<li><a href="Association-Lists.html#Association-Lists">Association Lists</a>
+<li><a href="1D-Tables.html#g_t1D-Tables">1D Tables</a>
+<li><a href="The-Association-Table.html#The-Association-Table">The Association Table</a>
+<li><a href="Hash-Tables.html#Hash-Tables">Hash Tables</a>
+<li><a href="Object-Hashing.html#Object-Hashing">Object Hashing</a>
+<li><a href="Red_002dBlack-Trees.html#Red_002dBlack-Trees">Red-Black Trees</a>
+<li><a href="Weight_002dBalanced-Trees.html#Weight_002dBalanced-Trees">Weight-Balanced Trees</a>
+
+</li></ul>
+<p>Hash Tables
+
+</p>
+<ul class="menu">
+<li><a href="Construction-of-Hash-Tables.html#Construction-of-Hash-Tables">Construction of Hash Tables</a>
+<li><a href="Basic-Hash-Table-Operations.html#Basic-Hash-Table-Operations">Basic Hash Table Operations</a>
+<li><a href="Resizing-of-Hash-Tables.html#Resizing-of-Hash-Tables">Resizing of Hash Tables</a>
+<li><a href="Address-Hashing.html#Address-Hashing">Address Hashing</a>
+
+</li></ul>
+<p>Weight-Balanced Trees
+
+</p>
+<ul class="menu">
+<li><a href="Construction-of-Weight_002dBalanced-Trees.html#Construction-of-Weight_002dBalanced-Trees">Construction of Weight-Balanced Trees</a>
+<li><a href="Basic-Operations-on-Weight_002dBalanced-Trees.html#Basic-Operations-on-Weight_002dBalanced-Trees">Basic Operations on Weight-Balanced Trees</a>
+<li><a href="Advanced-Operations-on-Weight_002dBalanced-Trees.html#Advanced-Operations-on-Weight_002dBalanced-Trees">Advanced Operations on Weight-Balanced Trees</a>
+<li><a href="Indexing-Operations-on-Weight_002dBalanced-Trees.html#Indexing-Operations-on-Weight_002dBalanced-Trees">Indexing Operations on Weight-Balanced Trees</a>
+
+</li></ul>
+<p>Procedures
+
+</p>
+<ul class="menu">
+<li><a href="Procedure-Operations.html#Procedure-Operations">Procedure Operations</a>
+<li><a href="Arity.html#Arity">Arity</a>
+<li><a href="Primitive-Procedures.html#Primitive-Procedures">Primitive Procedures</a>
+<li><a href="Continuations.html#Continuations">Continuations</a>
+<li><a href="Application-Hooks.html#Application-Hooks">Application Hooks</a>
+<li><a href="Generic-Dispatch.html#Generic-Dispatch">Generic Dispatch</a>
+
+</li></ul>
+<p>Generic Dispatch
+
+</p>
+<ul class="menu">
+<li><a href="Generic-Procedures.html#Generic-Procedures">Generic Procedures</a>
+<li><a href="Method-Generators.html#Method-Generators">Method Generators</a>
+<li><a href="Dispatch-Tags.html#Dispatch-Tags">Dispatch Tags</a>
+
+</li></ul>
+<p>Environments
+
+</p>
+<ul class="menu">
+<li><a href="Environment-Operations.html#Environment-Operations">Environment Operations</a>
+<li><a href="Environment-Variables.html#Environment-Variables">Environment Variables</a>
+<li><a href="REPL-Environment.html#REPL-Environment">REPL Environment</a>
+<li><a href="Top_002dlevel-Environments.html#Top_002dlevel-Environments">Top-level Environments</a>
+
+</li></ul>
+<p>Input/Output
+
+</p>
+<ul class="menu">
+<li><a href="Ports.html#Ports">Ports</a>
+<li><a href="File-Ports.html#File-Ports">File Ports</a>
+<li><a href="String-Ports.html#String-Ports">String Ports</a>
+<li><a href="Input-Procedures.html#Input-Procedures">Input Procedures</a>
+<li><a href="Output-Procedures.html#Output-Procedures">Output Procedures</a>
+<li><a href="Format.html#Format">Format</a>
+<li><a href="Custom-Output.html#Custom-Output">Custom Output</a>
+<li><a href="Prompting.html#Prompting">Prompting</a>
+<li><a href="Port-Primitives.html#Port-Primitives">Port Primitives</a>
+<li><a href="Parser-Buffers.html#Parser-Buffers">Parser Buffers</a>
+<li><a href="Parser-Language.html#Parser-Language">Parser Language</a>
+<li><a href="XML-Support.html#XML-Support">XML Support</a>
+
+</li></ul>
+<p>Port Primitives
+
+</p>
+<ul class="menu">
+<li><a href="Port-Types.html#Port-Types">Port Types</a>
+<li><a href="Constructors-and-Accessors-for-Ports.html#Constructors-and-Accessors-for-Ports">Constructors and Accessors for Ports</a>
+<li><a href="Input-Port-Operations.html#Input-Port-Operations">Input Port Operations</a>
+<li><a href="Output-Port-Operations.html#Output-Port-Operations">Output Port Operations</a>
+<li><a href="Blocking-Mode.html#Blocking-Mode">Blocking Mode</a>
+<li><a href="Terminal-Mode.html#Terminal-Mode">Terminal Mode</a>
+
+</li></ul>
+<p>Parser Language
+
+</p>
+<ul class="menu">
+<li><a href="_002aMatcher.html#g_t_002aMatcher">*Matcher</a>
+<li><a href="_002aParser.html#g_t_002aParser">*Parser</a>
+<li><a href="Parser_002dlanguage-Macros.html#Parser_002dlanguage-Macros">Parser-language Macros</a>
+
+</li></ul>
+<p>XML Support
+
+</p>
+<ul class="menu">
+<li><a href="XML-Input.html#XML-Input">XML Input</a>
+<li><a href="XML-Output.html#XML-Output">XML Output</a>
+<li><a href="XML-Names.html#XML-Names">XML Names</a>
+<li><a href="XML-Structure.html#XML-Structure">XML Structure</a>
+
+</li></ul>
+<p>Operating-System Interface
+
+</p>
+<ul class="menu">
+<li><a href="Pathnames.html#Pathnames">Pathnames</a>
+<li><a href="Working-Directory.html#Working-Directory">Working Directory</a>
+<li><a href="File-Manipulation.html#File-Manipulation">File Manipulation</a>
+<li><a href="Directory-Reader.html#Directory-Reader">Directory Reader</a>
+<li><a href="Date-and-Time.html#Date-and-Time">Date and Time</a>
+<li><a href="Machine-Time.html#Machine-Time">Machine Time</a>
+<li><a href="Subprocesses.html#Subprocesses">Subprocesses</a>
+<li><a href="TCP-Sockets.html#TCP-Sockets">TCP Sockets</a>
+<li><a href="Miscellaneous-OS-Facilities.html#Miscellaneous-OS-Facilities">Miscellaneous OS Facilities</a>
+
+</li></ul>
+<p>Pathnames
+
+</p>
+<ul class="menu">
+<li><a href="Filenames-and-Pathnames.html#Filenames-and-Pathnames">Filenames and Pathnames</a>
+<li><a href="Components-of-Pathnames.html#Components-of-Pathnames">Components of Pathnames</a>
+<li><a href="Operations-on-Pathnames.html#Operations-on-Pathnames">Operations on Pathnames</a>
+<li><a href="Miscellaneous-Pathnames.html#Miscellaneous-Pathnames">Miscellaneous Pathnames</a>
+
+</li></ul>
+<p>Date and Time
+
+</p>
+<ul class="menu">
+<li><a href="Universal-Time.html#Universal-Time">Universal Time</a>
+<li><a href="Decoded-Time.html#Decoded-Time">Decoded Time</a>
+<li><a href="File-Time.html#File-Time">File Time</a>
+<li><a href="Time_002dFormat-Conversion.html#Time_002dFormat-Conversion">Time-Format Conversion</a>
+<li><a href="External-Representation-of-Time.html#External-Representation-of-Time">External Representation of Time</a>
+
+</li></ul>
+<p>Subprocesses
+
+</p>
+<ul class="menu">
+<li><a href="Subprocess-Procedures.html#Subprocess-Procedures">Subprocess Procedures</a>
+<li><a href="Subprocess-Conditions.html#Subprocess-Conditions">Subprocess Conditions</a>
+<li><a href="Subprocess-Options.html#Subprocess-Options">Subprocess Options</a>
+
+</li></ul>
+<p>Error System
+
+</p>
+<ul class="menu">
+<li><a href="Condition-Signalling.html#Condition-Signalling">Condition Signalling</a>
+<li><a href="Error-Messages.html#Error-Messages">Error Messages</a>
+<li><a href="Condition-Handling.html#Condition-Handling">Condition Handling</a>
+<li><a href="Restarts.html#Restarts">Restarts</a>
+<li><a href="Condition-Instances.html#Condition-Instances">Condition Instances</a>
+<li><a href="Condition-Types.html#Condition-Types">Condition Types</a>
+<li><a href="Taxonomy.html#Taxonomy">Taxonomy</a>
+
+</li></ul>
+<p>Restarts
+
+</p>
+<ul class="menu">
+<li><a href="Establishing-Restart-Code.html#Establishing-Restart-Code">Establishing Restart Code</a>
+<li><a href="Invoking-Standard-Restart-Code.html#Invoking-Standard-Restart-Code">Invoking Standard Restart Code</a>
+<li><a href="Finding-and-Invoking-General-Restart-Code.html#Finding-and-Invoking-General-Restart-Code">Finding and Invoking General Restart Code</a>
+<li><a href="The-Named-Restart-Abstraction.html#The-Named-Restart-Abstraction">The Named Restart Abstraction</a>
+
+</li></ul>
+<p>Condition Instances
+
+</p>
+<ul class="menu">
+<li><a href="Generating-Operations-on-Conditions.html#Generating-Operations-on-Conditions">Generating Operations on Conditions</a>
+<li><a href="Condition-State.html#Condition-State">Condition State</a>
+<li><a href="Simple-Condition-Instance-Operations.html#Simple-Condition-Instance-Operations">Simple Condition Instance Operations</a>
+
+</li></ul>
+<p>Graphics
+
+</p>
+<ul class="menu">
+<li><a href="Opening-and-Closing-of-Graphics-Devices.html#Opening-and-Closing-of-Graphics-Devices">Opening and Closing of Graphics Devices</a>
+<li><a href="Coordinates-for-Graphics.html#Coordinates-for-Graphics">Coordinates for Graphics</a>
+<li><a href="Drawing-Graphics.html#Drawing-Graphics">Drawing Graphics</a>
+<li><a href="Characteristics-of-Graphics-Output.html#Characteristics-of-Graphics-Output">Characteristics of Graphics Output</a>
+<li><a href="Buffering-of-Graphics-Output.html#Buffering-of-Graphics-Output">Buffering of Graphics Output</a>
+<li><a href="Clipping-of-Graphics-Output.html#Clipping-of-Graphics-Output">Clipping of Graphics Output</a>
+<li><a href="Custom-Graphics-Operations.html#Custom-Graphics-Operations">Custom Graphics Operations</a>
+<li><a href="Images.html#Images">Images</a>
+<li><a href="X-Graphics.html#X-Graphics">X Graphics</a>:                   Graphics on the X Window System
+<li><a href="Win32-Graphics.html#Win32-Graphics">Win32 Graphics</a>:               Graphics on Microsoft Windows and Windows NT
+
+</li></ul>
+<p>X Graphics
+
+</p>
+<ul class="menu">
+<li><a href="X-Graphics-Type.html#X-Graphics-Type">X Graphics Type</a>
+<li><a href="Utilities-for-X-Graphics.html#Utilities-for-X-Graphics">Utilities for X Graphics</a>
+<li><a href="Custom-Operations-on-X-Graphics-Devices.html#Custom-Operations-on-X-Graphics-Devices">Custom Operations on X Graphics Devices</a>
+
+</li></ul>
+<p>Win32 Graphics
+
+</p>
+<ul class="menu">
+<li><a href="Win32-Graphics-Type.html#Win32-Graphics-Type">Win32 Graphics Type</a>
+<li><a href="Custom-Operations-for-Win32-Graphics.html#Custom-Operations-for-Win32-Graphics">Custom Operations for Win32 Graphics</a>:   Custom Operations for Win32 Graphics Devices
+
+</li></ul>
+<p>Win32 Package Reference
+
+</p>
+<ul class="menu">
+<li><a href="Win32-Package-Overview.html#Win32-Package-Overview">Win32 Package Overview</a>
+<li><a href="Foreign-function-interface.html#Foreign-function-interface">Foreign function interface</a>
+<li><a href="Device-Independent-Bitmap-Utilities.html#Device-Independent-Bitmap-Utilities">Device Independent Bitmap Utilities</a>
+
+</li></ul>
+<p>Foreign Function Interface
+
+</p>
+<ul class="menu">
+<li><a href="Windows-Types.html#Windows-Types">Windows Types</a>
+<li><a href="Windows-Foreign-Procedures.html#Windows-Foreign-Procedures">Windows Foreign Procedures</a>
+<li><a href="Win32-API-names-and-procedures.html#Win32-API-names-and-procedures">Win32 API names and procedures</a>
+
+</li></ul>
+<p>Device Independent Bitmap Utilities
+
+</p>
+<ul class="menu">
+<li><a href="DIB-procedures.html#DIB-procedures">DIB procedures</a>
+<li><a href="Other-parts-of-the-DIB-Utilities-implementation.html#Other-parts-of-the-DIB-Utilities-implementation">Other parts of the DIB Utilities implementation</a>
+
+   </ul>
+
+   </body></html>
+

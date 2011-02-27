@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Drawing Graphics - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Graphics.html#Graphics" title="Graphics">
+<link rel="prev" href="Coordinates-for-Graphics.html#Coordinates-for-Graphics" title="Coordinates for Graphics">
+<link rel="next" href="Characteristics-of-Graphics-Output.html#Characteristics-of-Graphics-Output" title="Characteristics of Graphics Output">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Drawing-Graphics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Characteristics-of-Graphics-Output.html#Characteristics-of-Graphics-Output">Characteristics of Graphics Output</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Coordinates-for-Graphics.html#Coordinates-for-Graphics">Coordinates for Graphics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Graphics.html#Graphics">Graphics</a>
+<hr>
+</div>
+
+<h3 class="section">17.3 Drawing Graphics</h3>
+
+<p><a name="index-graphics_002c-drawing-2990"></a>
+The procedures in this section provide the basic drawing capabilities of
+Scheme's graphics system.
+
+<div class="defun">
+&mdash; procedure: <b>graphics-clear</b><var> graphics-device<a name="index-graphics_002dclear-2991"></a></var><br>
+<blockquote><p>Clears the display of <var>graphics-device</var>.  Unaffected by the current
+drawing mode. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>graphics-draw-point</b><var> graphics-device x y<a name="index-graphics_002ddraw_002dpoint-2992"></a></var><br>
+<blockquote><p>Draws a single point on <var>graphics-device</var> at the virtual coordinates
+given by <var>x</var> and <var>y</var>, using the current drawing mode. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>graphics-erase-point</b><var> graphics-device x y<a name="index-graphics_002derase_002dpoint-2993"></a></var><br>
+<blockquote><p>Erases a single point on <var>graphics-device</var> at the virtual
+coordinates given by <var>x</var> and <var>y</var>.  This procedure is unaffected
+by the current drawing mode. 
+</p></blockquote></div>
+
+<p class="noindent">This is equivalent to
+
+<pre class="example">     (lambda (device x y)
+       (graphics-bind-drawing-mode device 0
+         (lambda ()
+           (graphics-draw-point device x y))))
+</pre>
+   <div class="defun">
+&mdash; procedure: <b>graphics-draw-line</b><var> graphics-device x-start y-start x-end y-end<a name="index-graphics_002ddraw_002dline-2994"></a></var><br>
+<blockquote><p><var>X-start</var>, <var>y-start</var>, <var>x-end</var>, and <var>y-end</var> must be real
+numbers.  Draws a line on <var>graphics-device</var> that connects the points
+(<var>x-start</var>, <var>y-start</var>) and (<var>x-end</var>, <var>y-end</var>).  The line
+is drawn using the current drawing mode and line style. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>graphics-draw-text</b><var> graphics-device x y string<a name="index-graphics_002ddraw_002dtext-2995"></a></var><br>
+<blockquote><p>Draws the characters of <var>string</var> at the point (<var>x</var>, <var>y</var>) on
+<var>graphics-device</var>, using the current drawing mode.  The
+characteristics of the characters drawn are device-dependent, but all
+devices are initialized so that the characters are drawn upright, from
+left to right, with the leftmost edge of the leftmost character at
+<var>x</var>, and the baseline of the characters at <var>y</var>. 
+</p></blockquote></div>
+
+   <p><a name="index-graphics_002c-cursor-_0028defn_0029-2996"></a><a name="index-cursor_002c-graphics-_0028defn_0029-2997"></a>The following two procedures provide an alternate mechanism for drawing
+lines, which is more akin to using a plotter.  They maintain a
+<dfn>cursor</dfn>, which can be positioned to a particular point and then
+dragged to another point, producing a line.  Sequences of connected line
+segments can be drawn by dragging the cursor from point to point.
+
+   <p>Many graphics operations have an unspecified effect on the cursor.  The
+following exceptions are guaranteed to leave the cursor unaffected:
+
+<pre class="example">     graphics-device-coordinate-limits
+     graphics-coordinate-limits
+     graphics-enable-buffering
+     graphics-disable-buffering
+     graphics-flush
+     graphics-bind-drawing-mode
+     graphics-set-drawing-mode
+     graphics-bind-line-style
+     graphics-set-line-style
+</pre>
+   <p>The initial state of the cursor is unspecified.
+
+<div class="defun">
+&mdash; procedure: <b>graphics-move-cursor</b><var> graphics-device x y<a name="index-graphics_002dmove_002dcursor-2998"></a></var><br>
+<blockquote><p>Moves the cursor for <var>graphics-device</var> to the point (<var>x</var>,
+<var>y</var>).  The contents of the device's display are unchanged. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>graphics-drag-cursor</b><var> graphics-device x y<a name="index-graphics_002ddrag_002dcursor-2999"></a></var><br>
+<blockquote><p>Draws a line from <var>graphics-device</var>'s cursor to the point (<var>x</var>,
+<var>y</var>), simultaneously moving the cursor to that point.  The line is
+drawn using the current drawing mode and line style. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,247 @@
+<html lang="en">
+<head>
+<title>Advanced Operations on Weight-Balanced Trees - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Weight_002dBalanced-Trees.html#Weight_002dBalanced-Trees" title="Weight-Balanced Trees">
+<link rel="prev" href="Basic-Operations-on-Weight_002dBalanced-Trees.html#Basic-Operations-on-Weight_002dBalanced-Trees" title="Basic Operations on Weight-Balanced Trees">
+<link rel="next" href="Indexing-Operations-on-Weight_002dBalanced-Trees.html#Indexing-Operations-on-Weight_002dBalanced-Trees" title="Indexing Operations on Weight-Balanced Trees">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Advanced-Operations-on-Weight-Balanced-Trees"></a>
+<a name="Advanced-Operations-on-Weight_002dBalanced-Trees"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Indexing-Operations-on-Weight_002dBalanced-Trees.html#Indexing-Operations-on-Weight_002dBalanced-Trees">Indexing Operations on Weight-Balanced Trees</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Operations-on-Weight_002dBalanced-Trees.html#Basic-Operations-on-Weight_002dBalanced-Trees">Basic Operations on Weight-Balanced Trees</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Weight_002dBalanced-Trees.html#Weight_002dBalanced-Trees">Weight-Balanced Trees</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.7.3 Advanced Operations on Weight-Balanced Trees</h4>
+
+<p>In the following the <em>size</em> of a tree is the number of associations
+that the tree contains, and a <em>smaller</em> tree contains fewer
+associations.
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/split&lt;</b><var> wt-tree bound<a name="index-wt_002dtree_002fsplit_003c-1774"></a></var><br>
+<blockquote><p>Returns a new tree containing all and only the associations in
+<var>wt-tree</var> that have a key that is less than <var>bound</var> in the
+ordering relation of the tree type of <var>wt-tree</var>.  The average and
+worst-case times required by this operation are proportional to the
+logarithm of the size of <var>wt-tree</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/split&gt;</b><var> wt-tree bound<a name="index-wt_002dtree_002fsplit_003e-1775"></a></var><br>
+<blockquote><p>Returns a new tree containing all and only the associations in
+<var>wt-tree</var> that have a key that is greater than <var>bound</var> in the
+ordering relation of the tree type of <var>wt-tree</var>.  The average and
+worst-case times required by this operation are proportional to the
+logarithm of the size of <var>wt-tree</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/union</b><var> wt-tree-1 wt-tree-2<a name="index-wt_002dtree_002funion-1776"></a></var><br>
+<blockquote><p>Returns a new tree containing all the associations from both trees. 
+This operation is asymmetric: when both trees have an association for
+the same key, the returned tree associates the datum from <var>wt-tree-2</var>
+with the key.  Thus if the trees are viewed as discrete maps then
+<code>wt-tree/union</code> computes the map override of <var>wt-tree-1</var> by
+<var>wt-tree-2</var>.  If the trees are viewed as sets the result is the set
+union of the arguments. 
+The worst-case time required by this operation
+is proportional to the sum of the sizes of both trees. 
+If the minimum key of one tree is greater than the maximum key of
+the other tree then the worst-case time required is proportional to
+the logarithm of the size of the larger tree. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/intersection</b><var> wt-tree-1 wt-tree-2<a name="index-wt_002dtree_002fintersection-1777"></a></var><br>
+<blockquote><p>Returns a new tree containing all and only those associations from
+<var>wt-tree-1</var> that have keys appearing as the key of an association
+in <var>wt-tree-2</var>.  Thus the associated data in the result are those
+from <var>wt-tree-1</var>.  If the trees are being used as sets the result is
+the set intersection of the arguments.  As a discrete map operation,
+<code>wt-tree/intersection</code> computes the domain restriction of
+<var>wt-tree-1</var> to (the domain of) <var>wt-tree-2</var>. 
+The worst-case time required by this operation is proportional to
+the sum of the sizes of the trees. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/difference</b><var> wt-tree-1 wt-tree-2<a name="index-wt_002dtree_002fdifference-1778"></a></var><br>
+<blockquote><p>Returns a new tree containing all and only those associations from
+<var>wt-tree-1</var> that have keys that <em>do not</em> appear as the key of
+an association in <var>wt-tree-2</var>.  If the trees are viewed as sets the
+result is the asymmetric set difference of the arguments.  As a discrete
+map operation, it computes the domain restriction of <var>wt-tree-1</var> to
+the complement of (the domain of) <var>wt-tree-2</var>. 
+The worst-case time required by this operation is proportional to
+the sum of the sizes of the trees. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/subset?</b><var> wt-tree-1 wt-tree-2<a name="index-wt_002dtree_002fsubset_003f-1779"></a></var><br>
+<blockquote><p>Returns <code>#t</code> iff the key of each association in <var>wt-tree-1</var> is
+the key of some association in <var>wt-tree-2</var>, otherwise returns <code>#f</code>. 
+Viewed as a set operation, <code>wt-tree/subset?</code> is the improper subset
+predicate. 
+A proper subset predicate can be constructed:
+
+     <pre class="example">          (define (proper-subset? s1 s2)
+            (and (wt-tree/subset? s1 s2)
+                 (&lt; (wt-tree/size s1) (wt-tree/size s2))))
+</pre>
+        <p>As a discrete map operation, <code>wt-tree/subset?</code> is the subset
+test on the domain(s) of the map(s).  In the worst-case the time
+required by this operation is proportional to the size of
+<var>wt-tree-1</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/set-equal?</b><var> wt-tree-1 wt-tree-2<a name="index-wt_002dtree_002fset_002dequal_003f-1780"></a></var><br>
+<blockquote><p>Returns <code>#t</code> iff for every association in <var>wt-tree-1</var> there is
+an association in <var>wt-tree-2</var> that has the same key, and <em>vice
+versa</em>.
+
+        <p>Viewing the arguments as sets, <code>wt-tree/set-equal?</code> is the set
+equality predicate.  As a map operation it determines if two maps are
+defined on the same domain.
+
+        <p>This procedure is equivalent to
+
+     <pre class="example">          (lambda (wt-tree-1 wt-tree-2)
+            (and (wt-tree/subset? wt-tree-1 wt-tree-2
+                 (wt-tree/subset? wt-tree-2 wt-tree-1)))
+</pre>
+        <p>In the worst case the time required by this operation is proportional to
+the size of the smaller tree. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/fold</b><var> combiner initial wt-tree<a name="index-wt_002dtree_002ffold-1781"></a></var><br>
+<blockquote><p>This procedure reduces <var>wt-tree</var> by combining all the associations,
+using an reverse in-order traversal, so the associations are visited in
+reverse order.  <var>Combiner</var> is a procedure of three arguments: a key,
+a datum and the accumulated result so far.  Provided <var>combiner</var>
+takes time bounded by a constant, <code>wt-tree/fold</code> takes time
+proportional to the size of <var>wt-tree</var>.
+
+        <p>A sorted association list can be derived simply:
+
+     <pre class="example">          (wt-tree/fold (lambda (key datum list)
+                          (cons (cons key datum) list))
+                        '()
+                        <var>wt-tree</var>))
+</pre>
+        <p>The data in the associations can be summed like this:
+
+     <pre class="example">          (wt-tree/fold (lambda (key datum sum) (+ sum datum))
+                        0
+                        <var>wt-tree</var>)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/for-each</b><var> action wt-tree<a name="index-wt_002dtree_002ffor_002deach-1782"></a></var><br>
+<blockquote><p>This procedure traverses <var>wt-tree</var> in order, applying <var>action</var> to
+each association. 
+The associations are processed in increasing order of their keys. 
+<var>Action</var> is a procedure of two arguments that takes the key and
+datum respectively of the association. 
+Provided <var>action</var> takes time bounded by a constant,
+<code>wt-tree/for-each</code> takes time proportional to the size of
+<var>wt-tree</var>. 
+The example prints the tree:
+
+     <pre class="example">          (wt-tree/for-each (lambda (key value)
+                              (display (list key value)))
+                            <var>wt-tree</var>))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>wt-tree/union-merge</b><var> wt-tree-1 wt-tree-2 merge<a name="index-wt_002dtree_002funion_002dmerge-1783"></a></var><br>
+<blockquote><p>Returns a new tree containing all the associations from both trees.  If
+both trees have an association for the same key, the datum associated
+with that key in the result tree is computed by applying the procedure
+<var>merge</var> to the key, the value from <var>wt-tree-1</var> and the value
+from <var>wt-tree-2</var>.  <var>Merge</var> is of the form
+
+     <pre class="example">          (lambda (<var>key</var> <var>datum-1</var> <var>datum-2</var>) ...)
+</pre>
+        <p>If some key occurs only in one tree, that association will appear in the
+result tree without being processed by <var>merge</var>, so for this
+operation to make sense, either <var>merge</var> must have both a right and
+left identity that correspond to the association being absent in one of
+the trees, or some guarantee must be made, for example, all the keys in
+one tree are known to occur in the other.
+
+        <p>These are all reasonable procedures for <var>merge</var>
+
+     <pre class="example">          (lambda (key val1 val2) (+ val1 val2))
+          (lambda (key val1 val2) (append val1 val2))
+          (lambda (key val1 val2) (wt-tree/union val1 val2))
+</pre>
+        <p>However, a procedure like
+
+     <pre class="example">          (lambda (key val1 val2) (- val1 val2))
+</pre>
+        <p>would result in a subtraction of the data for all associations with keys
+occuring in both trees but associations with keys occuring in only the
+second tree would be copied, not negated, as is presumably be intent. 
+The programmer might ensure that this never happens.
+
+        <p>This procedure has the same time behavior as <code>wt-tree/union</code> but
+with a slightly worse constant factor.  Indeed, <code>wt-tree/union</code>
+might have been defined like this:
+
+     <pre class="example">          (define (wt-tree/union tree1 tree2)
+            (wt-tree/union-merge tree1 tree2
+                                 (lambda (key val1 val2) val2)))
+</pre>
+        </blockquote></div>
+
+   <p>The <var>merge</var> procedure takes the <var>key</var> as a parameter in case the
+data are not independent of the key.
+
+   </body></html>
+

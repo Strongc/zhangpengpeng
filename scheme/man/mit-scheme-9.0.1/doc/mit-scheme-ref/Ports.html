@@ -1,0 +1,233 @@
+<html lang="en">
+<head>
+<title>Ports - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Input_002fOutput.html#Input_002fOutput" title="Input/Output">
+<link rel="prev" href="Input_002fOutput.html#Input_002fOutput" title="Input/Output">
+<link rel="next" href="File-Ports.html#File-Ports" title="File Ports">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Ports"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="File-Ports.html#File-Ports">File Ports</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Input_002fOutput.html#Input_002fOutput">Input/Output</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Input_002fOutput.html#Input_002fOutput">Input/Output</a>
+<hr>
+</div>
+
+<h3 class="section">14.1 Ports</h3>
+
+<p><a name="index-port-_0028defn_0029-1951"></a><a name="index-console_002di_002fo_002dport-1952"></a>Scheme uses ports for <acronym>I/O</acronym>.  A <dfn>port</dfn>, which can be
+treated like any other Scheme object, serves as a source or sink for
+data.  A port must be open before it can be read from or written to. 
+The standard <acronym>I/O</acronym> port, <code>console-i/o-port</code>, is opened
+automatically when you start Scheme.  When you use a file for input or
+output, you need to explicitly open and close a port to the file (with
+procedures described in this chapter).  Additional procedures let you
+open ports to strings.
+
+   <p><a name="index-current-input-port-_0028defn_0029-1953"></a><a name="index-input-port_002c-current-_0028defn_0029-1954"></a><a name="index-port_002c-current-1955"></a><a name="index-read_002dchar-1956"></a><a name="index-read-1957"></a>Many input procedures, such as <code>read-char</code> and <code>read</code>, read
+data from the current input port by default, or from a port that you
+specify.  The current input port is initially <code>console-i/o-port</code>,
+but Scheme provides procedures that let you change the current input
+port to be a file or string.
+
+   <p><a name="index-current-output-port-_0028defn_0029-1958"></a><a name="index-output-port_002c-current-_0028defn_0029-1959"></a><a name="index-write_002dchar-1960"></a><a name="index-display-1961"></a>Similarly, many output procedures, such as <code>write-char</code> and
+<code>display</code>, write data to the current output port by default, or to
+a port that you specify.  The current output port is initially
+<code>console-i/o-port</code>, but Scheme provides procedures that let you
+change the current output port to be a file or string.
+
+   <p>All ports read or write only <acronym>ISO-8859-1</acronym> characters.
+
+   <p>Every port is either an input port, an output port, or both.  The
+following predicates distinguish all of the possible cases.
+
+<div class="defun">
+&mdash; procedure: <b>port?</b><var> object<a name="index-port_003f-1962"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-port-1963"></a>Returns <code>#t</code> if <var>object</var> is a port, otherwise returns
+<code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>input-port?</b><var> object<a name="index-input_002dport_003f-1964"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is an input port, otherwise returns
+<code>#f</code>.  Any object satisfying this predicate also satisfies
+<code>port?</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>output-port?</b><var> object<a name="index-output_002dport_003f-1965"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is an output port, otherwise returns
+<code>#f</code>.  Any object satisfying this predicate also satisfies
+<code>port?</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>i/o-port?</b><var> object<a name="index-i_002fo_002dport_003f-1966"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is both an input port and an output
+port, otherwise returns <code>#f</code>.  Any object satisfying this predicate
+also satisfies <code>port?</code>, <code>input-port?</code>, and
+<code>output-port?</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>guarantee-port</b><var> object<a name="index-guarantee_002dport-1967"></a></var><br>
+&mdash; procedure: <b>guarantee-input-port</b><var> object<a name="index-guarantee_002dinput_002dport-1968"></a></var><br>
+&mdash; procedure: <b>guarantee-output-port</b><var> object<a name="index-guarantee_002doutput_002dport-1969"></a></var><br>
+&mdash; procedure: <b>guarantee-i/o-port</b><var> object<a name="index-guarantee_002di_002fo_002dport-1970"></a></var><br>
+<blockquote><p>These procedures check the type of <var>object</var>, signalling an error
+of type<br> <code>condition-type:wrong-type-argument</code> if it is not a
+port, input port, output port, or <acronym>I/O</acronym> port, respectively. 
+Otherwise they return <var>object</var>. 
+<a name="index-condition_002dtype_003awrong_002dtype_002dargument-1971"></a></p></blockquote></div>
+
+   <p><a name="index-standard-ports-1972"></a>The next five procedures return the runtime system's <dfn>standard
+ports</dfn>.  All of the standard ports are dynamically bound by the
+<acronym>REP</acronym> loop; this means that when a new <acronym>REP</acronym> loop is
+started, for example by an error, each of these ports is dynamically
+bound to the <acronym>I/O</acronym> port of the <acronym>REP</acronym> loop.  When the
+<acronym>REP</acronym> loop exits, the ports revert to their original values.
+
+<div class="defun">
+&mdash; procedure: <b>current-input-port</b><var><a name="index-current_002dinput_002dport-1973"></a></var><br>
+<blockquote><p><a name="index-console_002dinput_002dport-1974"></a>Returns the current input port.  This is the default port used by many
+input procedures.  Initially, <code>current-input-port</code> returns the
+value of <code>console-i/o-port</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>current-output-port</b><var><a name="index-current_002doutput_002dport-1975"></a></var><br>
+<blockquote><p><a name="index-console_002doutput_002dport-1976"></a>Returns the current output port.  This is the default port used by many
+output procedures.  Initially, <code>current-output-port</code> returns the
+value of <code>console-i/o-port</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>notification-output-port</b><var><a name="index-notification_002doutput_002dport-1977"></a></var><br>
+<blockquote><p>Returns an output port suitable for generating &ldquo;notifications&rdquo;, that
+is, messages to the user that supply interesting information about the
+execution of a program.  For example, the <code>load</code> procedure writes
+messages to this port informing the user that a file is being loaded. 
+Initially, <code>notification-output-port</code> returns the value of
+<code>console-i/o-port</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>trace-output-port</b><var><a name="index-trace_002doutput_002dport-1978"></a></var><br>
+<blockquote><p>Returns an output port suitable for generating &ldquo;tracing&rdquo; information
+about a program's execution.  The output generated by the <code>trace</code>
+procedure is sent to this port.  Initially, <code>trace-output-port</code>
+returns the value of <code>console-i/o-port</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>interaction-i/o-port</b><var><a name="index-interaction_002di_002fo_002dport-1979"></a></var><br>
+<blockquote><p>Returns an <acronym>I/O</acronym> port suitable for querying or prompting the
+user.  The standard prompting procedures use this port by default
+(see <a href="Prompting.html#Prompting">Prompting</a>).  Initially, <code>interaction-i/o-port</code> returns
+the value of <code>console-i/o-port</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>with-input-from-port</b><var> input-port thunk<a name="index-with_002dinput_002dfrom_002dport-1980"></a></var><br>
+&mdash; procedure: <b>with-output-to-port</b><var> output-port thunk<a name="index-with_002doutput_002dto_002dport-1981"></a></var><br>
+&mdash; procedure: <b>with-notification-output-port</b><var> output-port thunk<a name="index-with_002dnotification_002doutput_002dport-1982"></a></var><br>
+&mdash; procedure: <b>with-trace-output-port</b><var> output-port thunk<a name="index-with_002dtrace_002doutput_002dport-1983"></a></var><br>
+&mdash; procedure: <b>with-interaction-i/o-port</b><var> i/o-port thunk<a name="index-with_002dinteraction_002di_002fo_002dport-1984"></a></var><br>
+<blockquote><p><var>Thunk</var> must be a procedure of no arguments.  Each of these
+procedures binds one of the standard ports to its first argument, calls
+<var>thunk</var> with no arguments, restores the port to its original value,
+and returns the result that was yielded by <var>thunk</var>.  This temporary
+binding is performed the same way as dynamic binding of a variable,
+including the behavior in the presence of continuations (see <a href="Dynamic-Binding.html#Dynamic-Binding">Dynamic Binding</a>).
+
+        <p><code>with-input-from-port</code> binds the current input port,
+<code>with-output-to-port</code> binds the current output port,
+<code>with-notification-output-port</code> binds the &ldquo;notification&rdquo; output
+port, <code>with-trace-output-port</code> binds the &ldquo;trace&rdquo; output port,
+and <code>with-interaction-i/o-port</code> binds the &ldquo;interaction&rdquo;
+<acronym>I/O</acronym> port. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>set-current-input-port!</b><var> input-port<a name="index-set_002dcurrent_002dinput_002dport_0021-1985"></a></var><br>
+&mdash; procedure: <b>set-current-output-port!</b><var> output-port<a name="index-set_002dcurrent_002doutput_002dport_0021-1986"></a></var><br>
+&mdash; procedure: <b>set-notification-output-port!</b><var> output-port<a name="index-set_002dnotification_002doutput_002dport_0021-1987"></a></var><br>
+&mdash; procedure: <b>set-trace-output-port!</b><var> output-port<a name="index-set_002dtrace_002doutput_002dport_0021-1988"></a></var><br>
+&mdash; procedure: <b>set-interaction-i/o-port!</b><var> i/o-port<a name="index-set_002dinteraction_002di_002fo_002dport_0021-1989"></a></var><br>
+<blockquote><p>Each of these procedures alters the binding of one of the standard ports
+and returns an unspecified value.  The binding that is modified
+corresponds to the name of the procedure. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>console-i/o-port</b><var><a name="index-console_002di_002fo_002dport-1990"></a></var><br>
+<blockquote><p><a name="index-port_002c-console-1991"></a><a name="index-console_002c-port-1992"></a><a name="index-input-port_002c-console-1993"></a><a name="index-output-port_002c-console-1994"></a><code>console-i/o-port</code> is an <acronym>I/O</acronym> port that communicates
+with the &ldquo;console&rdquo;.  Under unix, the console is the controlling
+terminal of the Scheme process.  Under Windows, the console is the
+window that is created when Scheme starts up.
+
+        <p>This variable is rarely used; instead programs should use one of the
+standard ports defined above.  This variable should not be modified. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>close-port</b><var> port<a name="index-close_002dport-1995"></a></var><br>
+<blockquote><p><a name="index-closing_002c-of-port-1996"></a>Closes <var>port</var> and returns an unspecified value.  If <var>port</var> is a
+file port, the file is closed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>close-input-port</b><var> port<a name="index-close_002dinput_002dport-1997"></a></var><br>
+<blockquote><p>Closes <var>port</var> and returns an unspecified value.  <var>Port</var> must
+be an input port or an <acronym>I/O</acronym> port; if it is an <acronym>I/O</acronym>
+port, then only the input side of the port is closed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>close-output-port</b><var> port<a name="index-close_002doutput_002dport-1998"></a></var><br>
+<blockquote><p>Closes <var>port</var> and returns an unspecified value.  <var>Port</var> must
+be an output port or an <acronym>I/O</acronym> port; if it is an <acronym>I/O</acronym>
+port, then only the output side of the port is closed. 
+</p></blockquote></div>
+
+   </body></html>
+

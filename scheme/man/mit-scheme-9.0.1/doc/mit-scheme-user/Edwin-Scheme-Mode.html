@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Edwin Scheme Mode - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edwin.html#Edwin" title="Edwin">
+<link rel="prev" href="Leaving-Edwin.html#Leaving-Edwin" title="Leaving Edwin">
+<link rel="next" href="Edwin-Scheme-Evaluation.html#Edwin-Scheme-Evaluation" title="Edwin Scheme Evaluation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Edwin-Scheme-Mode"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Edwin-Scheme-Evaluation.html#Edwin-Scheme-Evaluation">Edwin Scheme Evaluation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Leaving-Edwin.html#Leaving-Edwin">Leaving Edwin</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edwin.html#Edwin">Edwin</a>
+<hr>
+</div>
+
+<h3 class="section">7.3 Scheme Mode</h3>
+
+<p>As you might expect, Edwin has special support for editing and
+evaluating Scheme code.  This section describes <dfn>Scheme Mode</dfn>, the
+appropriate mode for editing MIT/GNU Scheme programs.
+
+   <p>Scheme mode is normally entered automatically by visiting a file whose
+file name ends in &lsquo;<samp><span class="samp">.scm</span></samp>&rsquo;.  You can also mark a file as Scheme code
+by placing the string &lsquo;<samp><span class="samp">-*-Scheme-*-</span></samp>&rsquo; on the first line of the
+file.  Finally, you can put any buffer in Scheme mode by executing the
+command <kbd>M-x scheme-mode</kbd>.
+
+   <p>Scheme mode is similar to the Emacs modes that edit Lisp code.  So, for
+example, <kbd>C-i</kbd> indents the current line, and <kbd>C-M-q</kbd> indents the
+expression to the right of point.  The close parenthesis will
+temporarily flash the matching open parenthesis.  Most Scheme constructs
+requiring special indentation are recognized by Scheme mode, for
+example, <code>begin</code>, <code>do</code>, and <code>let</code>.
+
+   <p>Scheme mode also provides support that is specific to Scheme programs,
+much as Emacs-Lisp mode does in Emacs.  Completion of global variable
+names is provided: type the first few characters of a variable, then
+type <kbd>C-M-i</kbd>, and Edwin will attempt to complete the variable name
+using the current set of bound variables.  If <kbd>C-M-i</kbd> is given a
+prefix argument, it will complete the name using the current set of
+interned symbols (which includes the bound variables as a subset).
+
+   <p>The <kbd>M-A</kbd> command (note the <em>uppercase</em> <kbd>A</kbd>) will show the
+parameters of a procedure when point is inside a procedure call.  For
+example, type the string &lsquo;<samp><span class="samp">(quotient</span></samp>&rsquo;, then press <kbd>M-A</kbd>, and the
+command will echo &lsquo;<samp><span class="samp">(n d)</span></samp>&rsquo; in the echo area.  With a prefix
+argument, <kbd>M-A</kbd> will insert the parameter names in the buffer at
+point, so in this example, the buffer would contain &lsquo;<samp><span class="samp">(quotient n d</span></samp>&rsquo;
+after running <kbd>C-u M-A</kbd>.
+
+   </body></html>
+

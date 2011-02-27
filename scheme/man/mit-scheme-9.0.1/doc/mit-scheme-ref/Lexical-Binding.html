@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+<title>Lexical Binding - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Special-Forms.html#Special-Forms" title="Special Forms">
+<link rel="prev" href="Lambda-Expressions.html#Lambda-Expressions" title="Lambda Expressions">
+<link rel="next" href="Dynamic-Binding.html#Dynamic-Binding" title="Dynamic Binding">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Lexical-Binding"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Dynamic-Binding.html#Dynamic-Binding">Dynamic Binding</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Special-Forms.html#Special-Forms">Special Forms</a>
+<hr>
+</div>
+
+<h3 class="section">2.2 Lexical Binding</h3>
+
+<p><a name="index-lexical-binding-expression-208"></a><a name="index-binding-expression_002c-lexical-209"></a><a name="index-block-structure-210"></a>The three binding constructs <code>let</code>, <code>let*</code>, and <code>letrec</code>,
+give Scheme block structure.  The syntax of the three constructs is
+identical, but they differ in the regions they establish for their
+variable bindings.  In a <code>let</code> expression, the initial values are
+computed before any of the variables become bound.  In a <code>let*</code>
+expression, the evaluations and bindings are sequentially interleaved. 
+And in a <code>letrec</code> expression, all the bindings are in effect while
+the initial values are being computed (thus allowing mutually recursive
+definitions).
+
+<div class="defun">
+&mdash; special form: <b>let</b> ((<var>variable init</var>)<var> <small class="dots">...</small></var>)<var> expression expression <small class="dots">...</small><a name="index-let-211"></a></var><br>
+<blockquote><p><a name="index-region-of-variable-binding_002c-let-212"></a><a name="index-variable-binding_002c-let-213"></a>The <var>init</var>s are evaluated in the current environment (in some
+unspecified order), the <var>variable</var>s are bound to fresh locations
+holding the results, the <var>expression</var>s are evaluated sequentially in
+the extended environment, and the value of the last <var>expression</var> is
+returned.  Each binding of a <var>variable</var> has the <var>expression</var>s as
+its region.
+
+        <p>MIT/GNU Scheme allows any of the <var>init</var>s to be omitted, in which
+case the corresponding <var>variable</var>s are unassigned.
+
+        <p><a name="index-lambda_002c-implicit-in-let-214"></a>Note that the following are equivalent:
+
+     <pre class="example">          (let ((<var>variable</var> <var>init</var>) ...) <var>expression</var> <var>expression</var> ...)
+          ((lambda (<var>variable</var> ...) <var>expression</var> <var>expression</var> ...) <var>init</var> ...)
+</pre>
+        <p>Some examples:
+
+     <pre class="example">          (let ((x 2) (y 3))
+            (* x y))                              &rArr;  6
+          
+          (let ((x 2) (y 3))
+            (let ((foo (lambda (z) (+ x y z)))
+                  (x 7))
+              (foo 4)))                           &rArr;  9
+</pre>
+        <p>See <a href="Iteration.html#Iteration">Iteration</a>, for information on &ldquo;named <code>let</code>&rdquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; special form: <b>let*</b> ((<var>variable init</var>)<var> <small class="dots">...</small></var>)<var> expression expression <small class="dots">...</small><a name="index-let_002a-215"></a></var><br>
+<blockquote><p><a name="index-region-of-variable-binding_002c-let_002a-216"></a><a name="index-variable-binding_002c-let_002a-217"></a><code>let*</code> is similar to <code>let</code>, but the bindings are performed
+sequentially from left to right, and the region of a binding is that
+part of the <code>let*</code> expression to the right of the binding.  Thus
+the second binding is done in an environment in which the first binding
+is visible, and so on.
+
+        <p>Note that the following are equivalent:
+
+     <pre class="example">          (let* ((<var>variable1</var> <var>init1</var>)
+                 (<var>variable2</var> <var>init2</var>)
+                 ...
+                 (<var>variableN</var> <var>initN</var>))
+             <var>expression</var>
+             <var>expression</var> ...)
+          
+          (let ((<var>variable1</var> <var>init1</var>))
+            (let ((<var>variable2</var> <var>init2</var>))
+              ...
+                (let ((<var>variableN</var> <var>initN</var>))
+                  <var>expression</var>
+                  <var>expression</var> ...)
+              ...))
+</pre>
+        <p>An example:
+
+     <pre class="example">          (let ((x 2) (y 3))
+            (let* ((x 7)
+                   (z (+ x y)))
+              (* z x)))                           &rArr;  70
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; special form: <b>letrec</b> ((<var>variable init</var>)<var> <small class="dots">...</small></var>)<var> expression expression <small class="dots">...</small><a name="index-letrec-218"></a></var><br>
+<blockquote><p><a name="index-region-of-variable-binding_002c-letrec-219"></a><a name="index-variable-binding_002c-letrec-220"></a>The <var>variable</var>s are bound to fresh locations holding unassigned
+values, the <var>init</var>s are evaluated in the extended environment (in
+some unspecified order), each <var>variable</var> is assigned to the result
+of the corresponding <var>init</var>, the <var>expression</var>s are evaluated
+sequentially in the extended environment, and the value of the last
+<var>expression</var> is returned.  Each binding of a <var>variable</var> has the
+entire <code>letrec</code> expression as its region, making it possible to
+define mutually recursive procedures.
+
+        <p>MIT/GNU Scheme allows any of the <var>init</var>s to be omitted, in which
+case the corresponding <var>variable</var>s are unassigned.
+
+     <pre class="example">          (letrec ((even?
+                    (lambda (n)
+                      (if (zero? n)
+                          #t
+                          (odd? (- n 1)))))
+                   (odd?
+                    (lambda (n)
+                      (if (zero? n)
+                          #f
+                          (even? (- n 1))))))
+            (even? 88))                           &rArr;  #t
+</pre>
+        <p><a name="index-lambda-221"></a><a name="index-delay-222"></a>One restriction on <code>letrec</code> is very important: it shall be possible
+to evaluated each <var>init</var> without assigning or referring to the value
+of any <var>variable</var>.  If this restriction is violated, then it is an
+error.  The restriction is necessary because Scheme passes arguments by
+value rather than by name.  In the most common uses of <code>letrec</code>,
+all the <var>init</var>s are <code>lambda</code> or <code>delay</code> expressions and
+the restriction is satisfied automatically. 
+</p></blockquote></div>
+
+   </body></html>
+

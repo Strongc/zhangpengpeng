@@ -1,0 +1,180 @@
+<html lang="en">
+<head>
+<title>String Ports - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Input_002fOutput.html#Input_002fOutput" title="Input/Output">
+<link rel="prev" href="File-Ports.html#File-Ports" title="File Ports">
+<link rel="next" href="Input-Procedures.html#Input-Procedures" title="Input Procedures">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="String-Ports"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Input-Procedures.html#Input-Procedures">Input Procedures</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Ports.html#File-Ports">File Ports</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Input_002fOutput.html#Input_002fOutput">Input/Output</a>
+<hr>
+</div>
+
+<h3 class="section">14.3 String Ports</h3>
+
+<p><a name="index-string_002c-input-and-output-ports-2034"></a><a name="index-port_002c-string-2035"></a><a name="index-input-port_002c-string-2036"></a><a name="index-output-port_002c-string-2037"></a><a name="index-I_002fO_002c-to-strings-2038"></a>This section describes the simplest kinds of ports: input ports that
+read their input from given strings, and output ports that accumulate
+their output and return it as a string.  It also describes
+&ldquo;truncating&rdquo; output ports, which can limit the length of the resulting
+string to a given value.
+
+<div class="defun">
+&mdash; procedure: <b>open-input-string</b><var> string </var>[<var>start </var>[<var>end</var>]]<var><a name="index-open_002dinput_002dstring-2039"></a></var><br>
+<blockquote><p><a name="index-string_002c-converting-to-input-port-2040"></a><a name="index-construction_002c-of-string-input-port-2041"></a>Returns a new string port that delivers characters from <var>string</var>. 
+The optional arguments <var>start</var> and <var>end</var> may be used to specify
+that the string port delivers characters from a substring of
+<var>string</var>; if not given, <var>start</var> defaults to <code>0</code> and
+<var>end</var> defaults to <code>(string-length </code><var>string</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>with-input-from-string</b><var> string thunk<a name="index-with_002dinput_002dfrom_002dstring-2042"></a></var><br>
+<blockquote><p><a name="index-current-input-port_002c-rebinding-2043"></a><var>Thunk</var> must be a procedure of no arguments. 
+<code>with-input-from-string</code> creates a new input port that reads from
+<var>string</var>, makes that port the current input port, and calls
+<var>thunk</var>.  When <var>thunk</var> returns, <code>with-input-from-string</code>
+restores the previous current input port and returns the result yielded
+by <var>thunk</var>.
+
+     <pre class="example">          (with-input-from-string "(a b c) (d e f)" read)  &rArr;  (a b c)
+</pre>
+        <p>Note: this procedure is equivalent to:
+
+     <pre class="example">          (with-input-from-port (open-input-string <var>string</var>) <var>thunk</var>)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>open-output-string</b><var><a name="index-open_002doutput_002dstring-2044"></a></var><br>
+&mdash; procedure: <b>get-output-string</b><var><a name="index-get_002doutput_002dstring-2045"></a></var><br>
+<blockquote><p><code>open-output-string</code> returns a new output port that accumulates in
+a buffer everything that is written to it.  The accumulated output can
+subsequently be obtained by calling <code>get-output-string</code> on the
+port. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>call-with-output-string</b><var> procedure<a name="index-call_002dwith_002doutput_002dstring-2046"></a></var><br>
+<blockquote><p><var>Procedure</var> is called with one argument, an output port.  The value
+yielded by <var>procedure</var> is ignored.  When <var>procedure</var> returns,
+<code>call-with-output-string</code> returns the port's accumulated output as
+a newly allocated string.  This is equivalent to:
+
+     <pre class="example">          (define (call-with-output-string procedure)
+            (let ((port (open-output-string)))
+              (procedure port)
+              (get-output-string port)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>with-output-to-string</b><var> thunk<a name="index-with_002doutput_002dto_002dstring-2047"></a></var><br>
+<blockquote><p><a name="index-current-output-port_002c-rebinding-2048"></a><a name="index-construction_002c-of-string-output-port-2049"></a><a name="index-current_002doutput_002dport-2050"></a><var>Thunk</var> must be a procedure of no arguments. 
+<code>with-output-to-string</code> creates a new output port that accumulates
+output, makes that port the default value returned by
+<code>current-output-port</code>, and calls <var>thunk</var> with no arguments. 
+When <var>thunk</var> returns, <code>with-output-to-string</code> restores the
+previous default and returns the accumulated output as a newly allocated
+string.
+
+     <pre class="example">          (with-output-to-string
+            (lambda ()
+              (write 'abc)))                    &rArr;  "abc"
+</pre>
+        <p>Note: this procedure is equivalent to:
+
+     <pre class="example">          (call-with-output-string
+           (lambda (port)
+             (with-output-to-port port <var>thunk</var>)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>with-output-to-truncated-string</b><var> k thunk<a name="index-with_002doutput_002dto_002dtruncated_002dstring-2051"></a></var><br>
+<blockquote><p>Similar to <code>with-output-to-string</code>, except that the output is
+limited to <var>k</var> characters.  If <var>thunk</var> attempts to write more
+than <var>k</var> characters, it will be aborted by invoking an escape
+procedure that returns from <code>with-output-to-truncated-string</code>.
+
+        <p>The value of this procedure is a pair; the car of the pair is <code>#t</code>
+if <var>thunk</var> attempted to write more than <var>k</var> characters, and
+<code>#f</code> otherwise.  The cdr of the pair is a newly allocated string
+containing the accumulated output.
+
+        <p>This procedure is helpful for displaying circular lists, as shown in this
+example:
+
+     <pre class="example">          (define inf (list 'inf))
+          (with-output-to-truncated-string 40
+            (lambda ()
+              (write inf)))                       &rArr;  (#f . "(inf)")
+          (set-cdr! inf inf)
+          (with-output-to-truncated-string 40
+            (lambda ()
+              (write inf)))
+                  &rArr;  (#t . "(inf inf inf inf inf inf inf inf inf inf")
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>write-to-string</b><var> object </var>[<var>k</var>]<var><a name="index-write_002dto_002dstring-2052"></a></var><br>
+<blockquote><p>Writes <var>object</var> to a string output port, and returns the resulting
+newly allocated string.  If <var>k</var> is supplied and not <code>#f</code>, this
+procedure is equivalent to
+
+     <pre class="example">          (with-output-to-truncated-string <var>k</var>
+            (lambda ()
+              (write <var>object</var>)))
+</pre>
+        <p>otherwise it is equivalent to
+
+     <pre class="example">          (with-output-to-string
+           (lambda ()
+             (write <var>object</var>)))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

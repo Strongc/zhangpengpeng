@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>ISO-8859-1 Characters - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Characters.html#Characters" title="Characters">
+<link rel="prev" href="Internal-Representation-of-Characters.html#Internal-Representation-of-Characters" title="Internal Representation of Characters">
+<link rel="next" href="Character-Sets.html#Character-Sets" title="Character Sets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ISO-8859-1-Characters"></a>
+<a name="ISO_002d8859_002d1-Characters"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Character-Sets.html#Character-Sets">Character Sets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Internal-Representation-of-Characters.html#Internal-Representation-of-Characters">Internal Representation of Characters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Characters.html#Characters">Characters</a>
+<hr>
+</div>
+
+<h3 class="section">5.5 ISO-8859-1 Characters</h3>
+
+<p>MIT/GNU Scheme internally uses <acronym>ISO-8859-1</acronym> codes for
+<acronym>I/O</acronym>, and stores character objects in a fashion that makes it
+convenient to convert between <acronym>ISO-8859-1</acronym> codes and
+characters.  Also, character strings are implemented as byte vectors
+whose elements are <acronym>ISO-8859-1</acronym> codes; these codes are
+converted to character objects when accessed.  For these reasons it is
+sometimes desirable to be able to convert between <acronym>ISO-8859-1</acronym>
+codes and characters.
+
+   <p><a name="index-ISO_002d8859_002d1-character-_0028defn_0029-756"></a><a name="index-character_002c-ISO_002d8859_002d1-_0028defn_0029-757"></a>Not all characters can be represented as <acronym>ISO-8859-1</acronym> codes.  A
+character that has an equivalent <acronym>ISO-8859-1</acronym> representation is
+called an <dfn>ISO-8859-1 character</dfn>.
+
+   <p>For historical reasons, the procedures that manipulate
+<acronym>ISO-8859-1</acronym> characters use the word &ldquo;<acronym>ASCII</acronym>&rdquo; rather
+than &ldquo;<acronym>ISO-8859-1</acronym>&rdquo;.
+
+<div class="defun">
+&mdash; procedure: <b>char-ascii?</b><var> char<a name="index-char_002dascii_003f-758"></a></var><br>
+<blockquote><p>Returns the <acronym>ISO-8859-1</acronym> code for <var>char</var> if <var>char</var> has an
+<acronym>ISO-8859-1</acronym> representation; otherwise returns <code>#f</code>.
+
+        <p>In the current implementation, the characters that satisfy this
+predicate are those in which the bucky bits are turned off, and for
+which the character code is less than 256. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-&gt;ascii</b><var> char<a name="index-char_002d_003eascii-759"></a></var><br>
+<blockquote><p>Returns the <acronym>ISO-8859-1</acronym> code for <var>char</var>.  An error
+<code>condition-type:bad-range-argument</code> is signalled if <var>char</var>
+doesn't have an <acronym>ISO-8859-1</acronym> representation. 
+<a name="index-condition_002dtype_003abad_002drange_002dargument-760"></a></p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>ascii-&gt;char</b><var> code<a name="index-ascii_002d_003echar-761"></a></var><br>
+<blockquote><p><var>Code</var> must be the exact integer representation of an
+<acronym>ISO-8859-1</acronym> code.  This procedure returns the character
+corresponding to <var>code</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+<title>Searching Lists - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lists.html#Lists" title="Lists">
+<link rel="prev" href="Filtering-Lists.html#Filtering-Lists" title="Filtering Lists">
+<link rel="next" href="Mapping-of-Lists.html#Mapping-of-Lists" title="Mapping of Lists">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Searching-Lists"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mapping-of-Lists.html#Mapping-of-Lists">Mapping of Lists</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Filtering-Lists.html#Filtering-Lists">Filtering Lists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
+<hr>
+</div>
+
+<h3 class="section">7.6 Searching Lists</h3>
+
+<p><a name="index-searching_002c-of-list-1264"></a>
+
+<div class="defun">
+&mdash; procedure: <b>find</b><var> predicate list<a name="index-find-1265"></a></var><br>
+<blockquote><p>(<acronym>SRFI</acronym> 1) Returns the first element in <var>list</var> for which
+<var>predicate</var> is true; returns <code>#f</code> if it doesn't find such an
+element.  <var>Predicate</var> must be a procedure of one argument.
+
+     <pre class="example">          (find even? '(3 1 4 1 5 9)) =&gt; 4
+</pre>
+        <p>Note that <code>find</code> has an ambiguity in its lookup semantics&mdash;if
+<code>find</code> returns <code>#f</code>, you cannot tell (in general) if it
+found a <code>#f</code> element that satisfied <var>predicate</var>, or if it did
+not find any element at all.  In many situations, this ambiguity
+cannot arise&mdash;either the list being searched is known not to contain
+any <code>#f</code> elements, or the list is guaranteed to have an element
+satisfying <var>predicate</var>.  However, in cases where this ambiguity
+can arise, you should use <code>find-tail</code> instead of
+<code>find</code>&mdash;<code>find-tail</code> has no such ambiguity:
+
+     <pre class="example">          (cond ((find-tail pred lis)
+                  =&gt; (lambda (pair) ...)) ; Handle (CAR PAIR)
+                (else ...)) ; Search failed.
+</pre>
+        <p><a name="index-find_002dmatching_002ditem-1266"></a><a name="index-list_002dsearch_002dpositive-1267"></a><a name="index-list_002dsearch_002dnegative-1268"></a>The non-standard <code>find-matching-item</code> procedure (and its alias
+<code>list-search-positive</code>) works identically except that its
+argument order is reversed.  <code>list-search-negative</code> is similar to
+<code>list-search-positive</code> but the sense of the predicate is
+reversed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>find-tail</b><var> predicate list<a name="index-find_002dtail-1269"></a></var><br>
+<blockquote><p>(<acronym>SRFI</acronym> 1) Returns the first pair of <var>list</var> whose car
+satisfies <var>predicate</var>; returns <code>#f</code> if there's no such pair. 
+<code>find-tail</code> can be viewed as a general-predicate variant of
+<var>memv</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>memq</b><var> object list<a name="index-memq-1270"></a></var><br>
+&mdash; procedure: <b>memv</b><var> object list<a name="index-memv-1271"></a></var><br>
+&mdash; procedure: <b>member</b><var> object list<a name="index-member-1272"></a></var><br>
+<blockquote><p><a name="index-eq_003f-1273"></a><a name="index-eqv_003f-1274"></a><a name="index-equal_003f-1275"></a>These procedures return the first pair of <var>list</var> whose car is
+<var>object</var>; the returned pair is always one from which <var>list</var> is
+composed.  If <var>object</var> does not occur in <var>list</var>, <code>#f</code>
+(n.b.: not the empty list) is returned.  <code>memq</code> uses <code>eq?</code> to
+compare <var>object</var> with the elements of <var>list</var>, while <code>memv</code>
+uses <code>eqv?</code> and <code>member</code> uses <code>equal?</code>.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+
+     <pre class="example">          (memq 'a '(a b c))                      &rArr; (a b c)
+          (memq 'b '(a b c))                      &rArr; (b c)
+          (memq 'a '(b c d))                      &rArr; #f
+          (memq (list 'a) '(b (a) c))             &rArr; #f
+          (member (list 'a) '(b (a) c))           &rArr; ((a) c)
+          (memq 101 '(100 101 102))               &rArr; <span class="roman">unspecified</span>
+          (memv 101 '(100 101 102))               &rArr; (101 102)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>member-procedure</b><var> predicate<a name="index-member_002dprocedure-1276"></a></var><br>
+<blockquote><p>Returns a procedure similar to <code>memq</code>, except that <var>predicate</var>,
+which must be an equivalence predicate, is used instead of <code>eq?</code>. 
+This could be used to define <code>memv</code> as follows:
+
+     <pre class="example">          (define memv (member-procedure eqv?))
+</pre>
+        </blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Although
+they are often used as predicates, <code>memq</code>, <code>memv</code>, and
+<code>member</code> do not have question marks in their names because they
+return useful values rather than just <code>#t</code> or <code>#f</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

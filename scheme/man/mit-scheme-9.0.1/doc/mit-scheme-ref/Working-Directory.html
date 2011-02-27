@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Working Directory - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Operating_002dSystem-Interface.html#Operating_002dSystem-Interface" title="Operating-System Interface">
+<link rel="prev" href="Pathnames.html#Pathnames" title="Pathnames">
+<link rel="next" href="File-Manipulation.html#File-Manipulation" title="File Manipulation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Working-Directory"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="File-Manipulation.html#File-Manipulation">File Manipulation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Pathnames.html#Pathnames">Pathnames</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Operating_002dSystem-Interface.html#Operating_002dSystem-Interface">Operating-System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">15.2 Working Directory</h3>
+
+<p><a name="index-absolute-pathname-_0028defn_0029-2565"></a><a name="index-pathname_002c-absolute-_0028defn_0029-2566"></a><a name="index-relative-pathname-_0028defn_0029-2567"></a><a name="index-pathname_002c-relative-_0028defn_0029-2568"></a><a name="index-directory_002c-current-working-_0028defn_0029-2569"></a><a name="index-current-working-directory-_0028defn_0029-2570"></a><a name="index-working-directory-_0028see-current-working-directory_0029-2571"></a>When MIT/GNU Scheme is started, the <dfn>current working directory</dfn> (or
+simply, <dfn>working directory</dfn>) is initialized in an operating-system
+dependent manner; usually, it is the directory in which Scheme was
+invoked.  The working directory can be determined from within Scheme by
+calling the <code>pwd</code> procedure, and changed by calling the <code>cd</code>
+procedure.  Each <acronym>REP</acronym> loop has its own working directory, and
+inferior <acronym>REP</acronym> loops initialize their working directory from the
+value in effect in their superior at the time they are created.
+
+<div class="defun">
+&mdash; procedure: <b>working-directory-pathname</b><var><a name="index-working_002ddirectory_002dpathname-2572"></a></var><br>
+&mdash; procedure: <b>pwd</b><var><a name="index-pwd-2573"></a></var><br>
+<blockquote><p>Returns the current working directory as a pathname that has no name,
+type, or version components, just host, device, and directory
+components.  <code>pwd</code> is an alias for
+<code>working-directory-pathname</code>; the long name is intended for
+programs and the short name for interactive use. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>set-working-directory-pathname!</b><var> filename<a name="index-set_002dworking_002ddirectory_002dpathname_0021-2574"></a></var><br>
+&mdash; procedure: <b>cd</b><var> filename<a name="index-cd-2575"></a></var><br>
+<blockquote><p><a name="index-g_t_002d_003epathname-2576"></a><a name="index-pathname_002das_002ddirectory-2577"></a>Makes <var>filename</var> the current working directory and returns the new
+current working directory as a pathname.  <var>Filename</var> is coerced to a
+pathname using <code>pathname-as-directory</code>.  <code>cd</code> is an alias for
+<code>set-working-directory-pathname!</code>; the long name is intended for
+programs and the short name for interactive use.
+
+        <p>Additionally, <code>set-working-directory-pathname!</code> modifies the value
+of<br> <code>*default-pathname-defaults*</code> by merging the new working
+directory into it.
+
+        <p>When this procedure is executed in the top-level <acronym>REP</acronym> loop, it
+changes the working directory of the running Scheme executable.
+
+     <pre class="example">          (set-working-directory-pathname! "/usr/morris/blisp")
+               &rArr;  #[pathname "/usr/morris/blisp/"]
+          (set-working-directory-pathname! "~")
+               &rArr;  #[pathname "/usr/morris/"]
+</pre>
+        <p>This procedure signals an error if <var>filename</var> does not refer to an
+existing directory.
+
+        <p>If <var>filename</var> describes a relative rather than absolute pathname,
+this procedure interprets it as relative to the current working
+directory, before changing the working directory.
+
+     <pre class="example">          (working-directory-pathname)
+               &rArr;  #[pathname "/usr/morris/"]
+          (set-working-directory-pathname! "foo")
+               &rArr;  #[pathname "/usr/morris/foo/"]
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>with-working-directory-pathname</b><var> filename thunk<a name="index-with_002dworking_002ddirectory_002dpathname-2578"></a></var><br>
+<blockquote><p>This procedure temporarily rebinds the current working directory to
+<var>filename</var>, invokes <var>thunk</var> (a procedure of no arguments), then
+restores the previous working directory and returns the value yielded by
+<var>thunk</var>.  <var>Filename</var> is coerced to a pathname using
+<code>pathname-as-directory</code>.  In addition to binding the working
+directory, <code>with-working-directory-pathname</code> also binds the
+variable <code>*default-pathname-defaults*</code>, merging the old value of
+that variable with the new working directory pathname.  Both bindings
+are performed in exactly the same way as dynamic binding of a variable
+(see <a href="Dynamic-Binding.html#Dynamic-Binding">Dynamic Binding</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

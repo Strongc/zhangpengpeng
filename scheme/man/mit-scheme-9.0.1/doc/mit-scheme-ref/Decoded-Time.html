@@ -1,0 +1,216 @@
+<html lang="en">
+<head>
+<title>Decoded Time - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Date-and-Time.html#Date-and-Time" title="Date and Time">
+<link rel="prev" href="Universal-Time.html#Universal-Time" title="Universal Time">
+<link rel="next" href="File-Time.html#File-Time" title="File Time">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Decoded-Time"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="File-Time.html#File-Time">File Time</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Universal-Time.html#Universal-Time">Universal Time</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Date-and-Time.html#Date-and-Time">Date and Time</a>
+<hr>
+</div>
+
+<h4 class="subsection">15.5.2 Decoded Time</h4>
+
+<p>Objects representing standard time components, such as seconds and
+minutes, are required to be exact non-negative integers.  Seconds and
+minutes must be inclusively between <code>0</code> and <code>59</code>; hours
+between <code>0</code> and <code>23</code>; days between <code>1</code> and <code>31</code>;
+months between <code>1</code> and <code>12</code>; years are represented in
+&ldquo;four-digit&rdquo; form, in which 1999 is represented as <code>1999</code> &mdash;
+<em>not</em> <code>99</code>.
+
+<div class="defun">
+&mdash; procedure: <b>local-decoded-time</b><var><a name="index-local_002ddecoded_002dtime-2670"></a></var><br>
+<blockquote><p>Return the current time in decoded format.  The decoded time is
+represented in the local time zone.
+
+     <pre class="example">          (pp (local-decoded-time))
+          -| #[decoded-time 76]
+          -| (second 2)
+          -| (minute 12)
+          -| (hour 11)
+          -| (day 27)
+          -| (month 4)
+          -| (year 1999)
+          -| (day-of-week 1)
+          -| (daylight-savings-time 1)
+          -| (zone 5)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>global-decoded-time</b><var><a name="index-global_002ddecoded_002dtime-2671"></a></var><br>
+<blockquote><p>Return the current time in decoded format.  The decoded time is
+represented in UTC.
+
+     <pre class="example">          (pp (global-decoded-time))
+          -| #[decoded-time 77]
+          -| (second 8)
+          -| (minute 12)
+          -| (hour 15)
+          -| (day 27)
+          -| (month 4)
+          -| (year 1999)
+          -| (day-of-week 1)
+          -| (daylight-savings-time 0)
+          -| (zone 0)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-decoded-time</b><var> second minute hour day month year </var>[<var>zone</var>]<var><a name="index-make_002ddecoded_002dtime-2672"></a></var><br>
+<blockquote><p>Return a new decoded-time object representing the given time.  The
+arguments must be valid components according to the above rules, and
+must form a valid date.
+
+        <p>If <var>zone</var> is not supplied or is <code>#f</code>, the resulting decoded
+time will be represented in the local time zone.  Otherwise, <var>zone</var>
+must be a valid time zone, and the result will be represented in that
+zone.
+
+        <p><strong>Warning</strong>: because this procedure depends on the operating
+system's runtime library, it is not capable of representing all dates. 
+In particular, on most unix systems, it is not possible to encode dates
+that occur prior to midnight, January 1, 1970 UTC.  Attempting to do
+this will signal an error.
+
+     <pre class="example">          (pp (make-decoded-time 0 9 11 26 3 1999))
+          -| #[decoded-time 19]
+          -| (second 0)
+          -| (minute 9)
+          -| (hour 11)
+          -| (day 26)
+          -| (month 3)
+          -| (year 1999)
+          -| (day-of-week 4)
+          -| (daylight-savings-time 0)
+          -| (zone 5)
+          
+          (pp (make-decoded-time 0 9 11 26 3 1999 3))
+          -| #[decoded-time 80]
+          -| (second 0)
+          -| (minute 9)
+          -| (hour 11)
+          -| (day 26)
+          -| (month 3)
+          -| (year 1999)
+          -| (day-of-week 4)
+          -| (daylight-savings-time 0)
+          -| (zone 3)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>decoded-time/second</b><var> decoded-time<a name="index-decoded_002dtime_002fsecond-2673"></a></var><br>
+&mdash; procedure: <b>decoded-time/minute</b><var> decoded-time<a name="index-decoded_002dtime_002fminute-2674"></a></var><br>
+&mdash; procedure: <b>decoded-time/hour</b><var> decoded-time<a name="index-decoded_002dtime_002fhour-2675"></a></var><br>
+&mdash; procedure: <b>decoded-time/day</b><var> decoded-time<a name="index-decoded_002dtime_002fday-2676"></a></var><br>
+&mdash; procedure: <b>decoded-time/month</b><var> decoded-time<a name="index-decoded_002dtime_002fmonth-2677"></a></var><br>
+&mdash; procedure: <b>decoded-time/year</b><var> decoded-time<a name="index-decoded_002dtime_002fyear-2678"></a></var><br>
+<blockquote><p>Return the corresponding component of <var>decoded-time</var>.
+
+     <pre class="example">          (decoded-time/second (local-decoded-time)) &rArr; 17
+          (decoded-time/year (local-decoded-time)) &rArr; 1999
+          (decoded-time/day (local-decoded-time)) &rArr; 26
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>decoded-time/day-of-week</b><var> decoded-time<a name="index-decoded_002dtime_002fday_002dof_002dweek-2679"></a></var><br>
+<blockquote><p>Return the day of the week on which <var>decoded-time</var> falls, encoded
+as an exact integer between <code>0</code> (Monday) and <code>6</code> (Sunday),
+inclusive.
+
+     <pre class="example">          (decoded-time/day-of-week (local-decoded-time)) &rArr; 4
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>decoded-time/daylight-savings-time?</b><var> decoded-time<a name="index-decoded_002dtime_002fdaylight_002dsavings_002dtime_003f-2680"></a></var><br>
+<blockquote><p>Return <code>#t</code> if <var>decoded-time</var> is represented using daylight
+savings time.  Otherwise return <code>#f</code>.
+
+     <pre class="example">          (decoded-time/daylight-savings-time? (local-decoded-time))
+                            &rArr; #f
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>decoded-time/zone</b><var> decoded-time<a name="index-decoded_002dtime_002fzone-2681"></a></var><br>
+<blockquote><p>Return the time zone in which <var>decoded-time</var> is represented.  This
+is an exact rational number between <code>-24</code> and <code>+24</code> inclusive,
+that when multiplied by <code>3600</code> is an integer.  The value is the
+number of hours west of UTC.
+
+     <pre class="example">          (decoded-time/zone (local-decoded-time)) &rArr; 5
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>time-zone?</b><var> object<a name="index-time_002dzone_003f-2682"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is an exact number between <code>-24</code>
+and <code>+24</code> inclusive, that when multiplied by <code>3600</code> is an
+integer.
+
+     <pre class="example">          (time-zone? -5)   &rArr; #t
+          (time-zone? 11/2) &rArr; #t
+          (time-zone? 11/7) &rArr; #f
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>month/max-days</b><var> month<a name="index-month_002fmax_002ddays-2683"></a></var><br>
+<blockquote><p>Returns the maximum number of days possible in <var>month</var>.  <var>Month</var>
+must be an exact integer between <code>1</code> and <code>12</code> inclusive.
+
+     <pre class="example">          (month/max-days 2) &rArr; 29
+          (month/max-days 3) &rArr; 31
+          (month/max-days 4) &rArr; 30
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Method Generators - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Generic-Dispatch.html#Generic-Dispatch" title="Generic Dispatch">
+<link rel="prev" href="Generic-Procedures.html#Generic-Procedures" title="Generic Procedures">
+<link rel="next" href="Dispatch-Tags.html#Dispatch-Tags" title="Dispatch Tags">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Method-Generators"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Dispatch-Tags.html#Dispatch-Tags">Dispatch Tags</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Generic-Procedures.html#Generic-Procedures">Generic Procedures</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Generic-Dispatch.html#Generic-Dispatch">Generic Dispatch</a>
+<hr>
+</div>
+
+<h4 class="subsection">12.6.2 Method Generators</h4>
+
+<p>Generic-procedure methods are dynamically chosen by <dfn>generators</dfn>,
+which are procedures of two arguments.  Each generic procedure has a
+set of associated generators.  Whenever the procedure is applied, each
+associated generator is applied to two arguments: the generic
+procedure and a list of the dispatch tags for the operands.  The
+return value from the generator is either a <dfn>method</dfn> (a procedure
+accepting that number of arguments) or &lsquo;<samp><span class="samp">#f</span></samp>&rsquo;.  In order for the
+application to succeed, exactly one of the generic procedure's
+generators must return a method.
+
+   <p>Once a method has been chosen, it is cached.  A subsequent call to the
+generic procedure with operands of the same types will reuse that
+cached method.  Consequently, it is important that generators be
+<dfn>functional</dfn>: they must always compute the same value from the
+same arguments.
+
+<div class="defun">
+&mdash; procedure: <b>add-generic-procedure-generator</b><var> generic generator<a name="index-add_002dgeneric_002dprocedure_002dgenerator-1884"></a></var><br>
+<blockquote><p>Adds <var>generator</var> to <var>generic</var>'s set of generators and returns
+an unspecified value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>remove-generic-procedure-generator</b><var> generic generator<a name="index-remove_002dgeneric_002dprocedure_002dgenerator-1885"></a></var><br>
+<blockquote><p>Removes <var>generator</var> from <var>generic</var>'s set of generators and
+returns an unspecified value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>remove-generic-procedure-generators</b><var> generic tags<a name="index-remove_002dgeneric_002dprocedure_002dgenerators-1886"></a></var><br>
+<blockquote><p>Calls each of <var>generic</var>'s set of generators on <var>tags</var> and
+removes each generator that returns a method.  Returns an unspecified
+value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>generic-procedure-generator-list</b><var> generic<a name="index-generic_002dprocedure_002dgenerator_002dlist-1887"></a></var><br>
+<blockquote><p>Returns a list of <var>generic</var>'s generators. 
+</p></blockquote></div>
+
+   <p>As a convenience, each generic procedure can have a <dfn>default
+generator</dfn>, which is called only when all of the other generators have
+returned &lsquo;<samp><span class="samp">#f</span></samp>&rsquo;.  When created, a generic procedure has no default
+generator.
+
+<div class="defun">
+&mdash; procedure: <b>generic-procedure-default-generator</b><var> generic<a name="index-generic_002dprocedure_002ddefault_002dgenerator-1888"></a></var><br>
+<blockquote><p>Returns <var>generic</var>'s default generator. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>set-generic-procedure-default-generator!</b><var> generic generator<a name="index-set_002dgeneric_002dprocedure_002ddefault_002dgenerator_0021-1889"></a></var><br>
+<blockquote><p>Sets <var>generic</var>'s default generator to <var>generator</var> and returns
+an unspecified value. 
+</p></blockquote></div>
+
+   </body></html>
+

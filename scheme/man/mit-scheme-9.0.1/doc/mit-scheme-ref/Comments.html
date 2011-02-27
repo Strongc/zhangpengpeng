@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Comments - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lexical-Conventions.html#Lexical-Conventions" title="Lexical Conventions">
+<link rel="prev" href="Naming-Conventions.html#Naming-Conventions" title="Naming Conventions">
+<link rel="next" href="Additional-Notations.html#Additional-Notations" title="Additional Notations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Comments"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Additional-Notations.html#Additional-Notations">Additional Notations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Naming-Conventions.html#Naming-Conventions">Naming Conventions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lexical-Conventions.html#Lexical-Conventions">Lexical Conventions</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.3.6 Comments</h4>
+
+<p><a name="index-comment_002c-in-programs-_0028defn_0029-140"></a><a name="index-semicolon_002c-as-external-representation-141"></a><a name="index-g_t_003b-as-external-representation-142"></a>The beginning of a comment is indicated with a semicolon (<code>;</code>). 
+Scheme ignores everything on a line in which a semicolon appears, from
+the semicolon until the end of the line.  The entire comment, including
+the newline character that terminates it, is treated as
+whitespace.
+
+   <p><a name="index-extended-comment_002c-in-programs-_0028defn_0029-143"></a><a name="index-comment_002c-extended_002c-in-programs-_0028defn_0029-144"></a><a name="index-g_t_0023_007c-as-external-representation-145"></a>An alternative form of comment (sometimes called an <dfn>extended
+comment</dfn>) begins with the characters &lsquo;<samp><span class="samp">#|</span></samp>&rsquo; and ends with the
+characters &lsquo;<samp><span class="samp">|#</span></samp>&rsquo;.  This alternative form is an MIT/GNU Scheme extension. 
+As with ordinary comments, all of the characters in an extended comment,
+including the leading &lsquo;<samp><span class="samp">#|</span></samp>&rsquo; and trailing &lsquo;<samp><span class="samp">|#</span></samp>&rsquo;, are treated as
+whitespace.  Comments of this form may extend over multiple lines, and
+additionally may be nested (unlike the comments of the programming
+language C, which have a similar syntax).
+
+<pre class="example">     ;;; This is a comment about the FACT procedure.  Scheme
+     ;;; ignores all of this comment.  The FACT procedure computes
+     ;;; the factorial of a non-negative integer.
+     
+     #|
+     This is an extended comment.
+     Such comments are useful for commenting out code fragments.
+     |#
+     
+     (define fact
+       (lambda (n)
+         (if (= n 0)                      ;This is another comment:
+             1                            ;Base case: return 1
+             (* n (fact (- n 1))))))
+</pre>
+   </body></html>
+

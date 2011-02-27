@@ -1,0 +1,179 @@
+<html lang="en">
+<head>
+<title>Garbage Collection - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Using-Scheme.html#Using-Scheme" title="Using Scheme">
+<link rel="prev" href="World-Images.html#World-Images" title="World Images">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Garbage-Collection"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="World-Images.html#World-Images">World Images</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Using-Scheme.html#Using-Scheme">Using Scheme</a>
+<hr>
+</div>
+
+<h3 class="section">3.4 Garbage Collection</h3>
+
+<p>This section describes procedures that control garbage collection. 
+See <a href="Memory-Usage.html#Memory-Usage">Memory Usage</a>, for a discussion of how MIT/GNU Scheme uses
+memory.
+
+<div class="defun">
+&mdash; procedure: <b>gc-flip</b> [<var>safety-margin</var>]<var><a name="index-gc_002dflip-131"></a></var><br>
+<blockquote><p>Forces a garbage collection to occur.  Returns the number of words of
+storage available after collection, an exact non-negative integer.
+
+        <p><var>Safety-margin</var> determines the number of words of storage available
+to system tasks after the need for a garbage collection is detected and
+before the garbage collector is started.  (An example of such a system
+task is changing the run-light to show &ldquo;gc&rdquo; when scheme is running
+under Emacs.)  <strong>Note well</strong> that you should not specify
+<var>safety-margin</var> unless you know what you are doing.  If you specify
+a value that is too small, you can put Scheme in an unusable state. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>purify</b><var> object </var>[<var>pure-space? </var>[<var>queue?</var>]]<var><a name="index-purify-132"></a></var><br>
+<blockquote><p>Moves <var>object</var> from the heap into constant space.  Has no effect if
+<var>object</var> is already stored in constant space.  <var>Object</var> is moved
+in its entirety; if it is a compound object such as a list, a vector, or
+a record, then all of the objects that <var>object</var> points to are also
+moved to constant space.
+
+        <p>There are three important effects associated with moving an object to
+constant space.  The first and most important effect is that the object
+takes up half as much space, because when in the heap, the system must
+reserve space for the object in both the active heap and the inactive
+heap; if the object is in constant space it is not copied and therefore
+no extra space is required.  The second effect is that garbage
+collection will take less time, because <var>object</var> will no longer be
+copied.  The third effect is that the space allocated to <var>object</var> is
+permanently allocated, because constant space is never cleaned; any
+unreachable objects in constant space remain there until the Scheme
+process is terminated.
+
+        <p>The optional argument <var>pure-space?</var> is obsolete; it defaults to
+<code>#t</code> and when explicitly specified should always be <code>#t</code>.
+
+        <p>The optional argument <var>queue?</var>, if <code>#f</code>, specifies that
+<var>object</var> should be moved to constant space immediately; otherwise
+<var>object</var> is queued to be moved during the next garbage collection. 
+This argument defaults to <code>#t</code>.  The reason for queuing these
+requests is that moving an object to constant space requires a garbage
+collection to occur, a relatively slow process.  By queuing the
+requests, this overhead is avoided, because moving an object during a
+garbage collection has no effect on the time of the garbage collection. 
+Furthermore, if several requests are queued, they can all be processed
+together in one garbage collection, while if done separately they would
+each require their own garbage collection. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>flush-purification-queue!</b><var><a name="index-flush_002dpurification_002dqueue_0021-133"></a></var><br>
+<blockquote><p>Forces any pending queued purification requests to be processed.  This
+examines the <code>purify</code> queue, and if it contains any requests,
+forces a garbage collection to process them.  If the queue is empty,
+does nothing. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>print-gc-statistics</b><var><a name="index-print_002dgc_002dstatistics-134"></a></var><br>
+<blockquote><p>Prints out information about memory allocation and the garbage
+collector.  The information is printed to the current output port. 
+Shows how much space is &ldquo;in use&rdquo; and how much is &ldquo;free&rdquo;, separately
+for the heap and constant space.  The amounts are shown in words, and
+also in 1024-word blocks; the block figures make it convenient to use
+these numbers to adjust the arguments given to the <samp><span class="option">--heap</span></samp> and
+<samp><span class="option">--constant</span></samp> command-line options.  Following the allocation
+figures, information about the most recent 8 garbage collections is
+shown, in the same format as a <acronym>GC</acronym> notification.
+
+        <p>Note that these numbers are accurate at the time that
+<code>print-gc-statistics</code> is called.  In the case of the heap, the &ldquo;in
+use&rdquo; figure shows how much memory has been used since the last garbage
+collection, and includes all live objects as well as any uncollected
+garbage that has accumulated since then.  The only accurate way to
+determine the size of live storage is to subtract the value of
+&lsquo;<samp><span class="samp">(gc-flip)</span></samp>&rsquo; from the size of the heap.  The size of the heap can be
+determined by adding the &ldquo;in use&rdquo; and &ldquo;free&rdquo; figures reported by
+<code>print-gc-statistics</code>. 
+</p></blockquote></div>
+
+<pre class="example">     (print-gc-statistics)
+     constant in use:   534121 words =   521 blocks +  617 words
+     constant free:        128 words =     0 blocks +  128 words
+     heap in use:        34845 words =    34 blocks +   29 words
+     heap free:         205530 words =   200 blocks +  730 words
+     GC #1: took: 0.13 (81%) CPU time, 0.15 (1%) real time; free: 207210
+     ;No value
+</pre>
+   <div class="defun">
+&mdash; procedure: <b>set-gc-notification!</b> [<var>on?</var>]<var><a name="index-set_002dgc_002dnotification_0021-135"></a></var><br>
+<blockquote><p>Controls whether the user is notified of garbage collections.  If
+<var>on?</var> is true, notification is enabled; otherwise notification is
+disabled.  If <var>on?</var> is not given, it defaults to <code>#t</code>.  When
+Scheme starts, notification is disabled.
+
+        <p>The notification appears as a single line like the following, showing
+how many garbage collections have occurred, the time taken to perform
+the garbage collection and the free storage remaining (in words) after
+collection.
+
+     <pre class="example">          GC #5: took: 0.50 (8%) CPU time, 0.70 (2%) real time; free: 364346
+</pre>
+        <p>To operate comfortably, the amount of free storage after garbage
+collection should be a substantial proportion of the heap size.  If the
+CPU time percentage is consistently high (over 20%), you should consider
+running with a larger heap.  A rough rule of thumb to halve the
+<acronym>GC</acronym> overhead is to take the amount of free storage, divide by
+1000, and add this figure to the current value used for the
+<samp><span class="option">--heap</span></samp> command-line option.  Unfortunately there is no way to
+adjust the heap size without restarting Scheme. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>toggle-gc-notification!</b><var><a name="index-toggle_002dgc_002dnotification_0021-136"></a></var><br>
+<blockquote><p>Toggles <acronym>GC</acronym> notification on and off.  If <acronym>GC</acronym>
+notification is turned on, turns it off; otherwise turns it on. 
+</p></blockquote></div>
+
+   </body></html>
+

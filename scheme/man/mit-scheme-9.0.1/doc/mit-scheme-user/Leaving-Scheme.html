@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Leaving Scheme - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Running-Scheme.html#Running-Scheme" title="Running Scheme">
+<link rel="prev" href="Starting-Scheme-from-Microsoft-Windows.html#Starting-Scheme-from-Microsoft-Windows" title="Starting Scheme from Microsoft Windows">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Leaving-Scheme"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Starting-Scheme-from-Microsoft-Windows.html#Starting-Scheme-from-Microsoft-Windows">Starting Scheme from Microsoft Windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Running-Scheme.html#Running-Scheme">Running Scheme</a>
+<hr>
+</div>
+
+<h3 class="section">2.8 Leaving Scheme</h3>
+
+<p>There are several ways that you can leave Scheme: there are two Scheme
+procedures that you can call; there are several Edwin commands that you
+can execute; and there are graphical-interface buttons (and their
+associated keyboard accelerators) that you can activate.
+
+     <ul>
+<li><em>Two Scheme procedures that you can call.</em>  The first is to
+evaluate
+
+     <p><a name="index-exit-83"></a>
+     <pre class="example">          (exit)
+</pre>
+     <p class="noindent">which will halt the Scheme system, after first requesting confirmation. 
+Any information that was in the environment is lost, so this should not
+be done lightly.
+
+     <p>The second procedure suspends Scheme; when this is done you may later
+restart where you left off.  Unfortunately this is not possible in all
+operating systems; currently it works under unix versions that support
+job control (i.e. all of the unix versions for which we distribute
+Scheme).  To suspend Scheme, evaluate
+
+     <p><a name="index-quit-84"></a>
+     <pre class="example">          (quit)
+</pre>
+     <p class="noindent">If your system supports suspension, this will cause Scheme to stop, and
+you will be returned to the shell.  Scheme remains stopped, and can be
+continued using the job-control commands of your shell.  If your system
+doesn't support suspension, this procedure does nothing.  (Calling the
+<code>quit</code> procedure is analogous to typing <kbd>C-z</kbd>, but it allows
+Scheme to respond by typing a prompt when it is unsuspended.)
+
+     <li><em>Several Edwin commands that you can execute,</em> including
+<code>save-buffers-kill-scheme</code>, normally bound to <kbd>C-x C-c</kbd>, and
+<code>suspend-scheme</code>, normally bound to <kbd>C-x C-z</kbd>.  These two
+commands correspond to the procedures <code>exit</code> and <code>quit</code>,
+respectively.
+
+     <li><em>Graphical-interface buttons that you can activate.</em>  Under
+Windows, closing the console window (Scheme's main window) causes
+Scheme to be terminated.  Under any operating system, closing an Edwin
+window causes that window to go away, and if it is the only Edwin
+window, it terminates Scheme as well. 
+</ul>
+
+   </body></html>
+

@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Macros - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Special-Forms.html#Special-Forms" title="Special Forms">
+<link rel="prev" href="Structure-Definitions.html#Structure-Definitions" title="Structure Definitions">
+<link rel="next" href="SRFI-syntax.html#SRFI-syntax" title="SRFI syntax">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Macros"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SRFI-syntax.html#SRFI-syntax">SRFI syntax</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Structure-Definitions.html#Structure-Definitions">Structure Definitions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Special-Forms.html#Special-Forms">Special Forms</a>
+<hr>
+</div>
+
+<h3 class="section">2.11 Macros</h3>
+
+<p>(This section is largely taken from the <cite>Revised^4 Report on the
+Algorithmic Language Scheme</cite>.  The section on Syntactic Closures is
+derived from a document written by Chris Hanson.  The section on
+Explicit Renaming is derived from a document written by William
+Clinger.)
+
+   <p><a name="index-macro-364"></a>Scheme programs can define and use new derived expression types, called
+<dfn>macros</dfn>.  Program-defined expression types have the syntax
+
+<pre class="example">     (<var>keyword</var> <var>datum</var> ...)
+</pre>
+   <p class="noindent"><a name="index-syntactic-keyword-365"></a><a name="index-keyword-366"></a><a name="index-macro-keyword-367"></a>where <var>keyword</var> is an identifier that uniquely determines the
+expression type.  This identifier is called the <dfn>syntactic keyword</dfn>,
+or simply <dfn>keyword</dfn>, of the macro.  The number of the <var>datum</var>s,
+and their syntax, depends on the expression type.
+
+   <p><a name="index-macro-use-368"></a><a name="index-macro-transformer-369"></a>Each instance of a macro is called a <dfn>use</dfn> of the macro.  The set of
+rules that specifies how a use of a macro is transcribed into a more
+primitive expression is called the <dfn>transformer</dfn> of the macro.
+
+   <p><a name="index-anonymous-syntactic-keyword-370"></a>MIT/GNU Scheme also supports <dfn>anonymous syntactic keywords</dfn>.  This means
+that it's not necessary to bind a macro transformer to a syntactic
+keyword before it is used.  Instead, any macro-transformer expression
+can appear as the first element of a form, and the form will be expanded
+by the transformer.
+
+   <p>The macro definition facility consists of these parts:
+
+     <ul>
+<li>A set of expressions used to establish that certain identifiers are
+macro keywords, associate them with macro transformers, and control the
+scope within which a macro is defined.
+
+     <li>A standard high-level pattern language for specifying macro
+transformers, introduced by the <code>syntax-rules</code> special form.
+
+     <li>Two non-standard low-level languages for specifying macro transformers,
+<dfn>syntactic closures</dfn> and <dfn>explicit renaming</dfn>. 
+</ul>
+
+   <p><a name="index-hygienic-371"></a><a name="index-referentially-transparent-372"></a>The syntactic keyword of a macro may shadow variable bindings, and local
+variable bindings may shadow keyword bindings.  All macros defined using
+the pattern language are &ldquo;hygienic&rdquo; and &ldquo;referentially transparent&rdquo;
+and thus preserve Scheme's lexical scoping:
+
+     <ul>
+<li>If a macro transformer inserts a binding for an identifier (variable or
+keyword), the identifier will in effect be renamed throughout its scope
+to avoid conflicts with other identifiers.
+
+     <li>If a macro transformer inserts a free reference to an identifier, the
+reference refers to the binding that was visible where the transformer
+was specified, regardless of any local bindings that may surround the
+use of the macro. 
+</ul>
+
+<ul class="menu">
+<li><a accesskey="1" href="Syntactic-Binding-Constructs.html#Syntactic-Binding-Constructs">Syntactic Binding Constructs</a>
+<li><a accesskey="2" href="Pattern-Language.html#Pattern-Language">Pattern Language</a>
+<li><a accesskey="3" href="Syntactic-Closures.html#Syntactic-Closures">Syntactic Closures</a>
+<li><a accesskey="4" href="Explicit-Renaming.html#Explicit-Renaming">Explicit Renaming</a>
+</ul>
+
+   </body></html>
+

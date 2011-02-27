@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Bit Strings - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Vectors.html#Vectors" title="Vectors">
+<link rel="next" href="Miscellaneous-Datatypes.html#Miscellaneous-Datatypes" title="Miscellaneous Datatypes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Bit-Strings"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Miscellaneous-Datatypes.html#Miscellaneous-Datatypes">Miscellaneous Datatypes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Vectors.html#Vectors">Vectors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">9 Bit Strings</h2>
+
+<p><a name="index-bit-string-_0028defn_0029-1371"></a><a name="index-string_002c-of-bits-_0028defn_0029-1372"></a>A <dfn>bit string</dfn> is a sequence of bits.  Bit strings can be used to
+represent sets or to manipulate binary data.  The elements of a bit
+string are numbered from zero up to the number of bits in the string
+less one, in <em>right to left order</em>, (the rightmost bit is numbered
+zero).  When you convert from a bit string to an integer, the zero-th
+bit is associated with the zero-th power of two, the first bit is
+associated with the first power, and so on.
+
+   <p>Bit strings are encoded very densely in memory.  Each bit occupies
+exactly one bit of storage, and the overhead for the entire bit string
+is bounded by a small constant.  However, accessing a bit in a bit
+string is slow compared to accessing an element of a vector or character
+string.  If performance is of overriding concern, it is better to use
+character strings to store sets of boolean values even though they
+occupy more space.
+
+   <p><a name="index-length_002c-of-bit-string-_0028defn_0029-1373"></a><a name="index-index_002c-of-bit-string-_0028defn_0029-1374"></a><a name="index-valid-index_002c-of-bit-string-_0028defn_0029-1375"></a><a name="index-bit-string-length-_0028defn_0029-1376"></a><a name="index-bit-string-index-_0028defn_0029-1377"></a>The <dfn>length</dfn> of a bit string is the number of bits that it contains. 
+This number is an exact non-negative integer that is fixed when the bit
+string is created.  The <dfn>valid indexes</dfn> of a bit string are the
+exact non-negative integers less than the length of the bit string.
+
+   <p><a name="index-external-representation_002c-for-bit-string-1378"></a><a name="index-g_t_0023_002a-as-external-representation-1379"></a><a name="index-asterisk_002c-as-external-representation-1380"></a>Bit strings may contain zero or more bits.  They are not limited by the
+length of a machine word.  In the printed representation of a bit
+string, the contents of the bit string are preceded by &lsquo;<samp><span class="samp">#*</span></samp>&rsquo;.  The
+contents are printed starting with the most significant bit (highest
+index).
+
+   <p>Note that the external representation of bit strings uses a bit ordering
+that is the reverse of the representation for bit strings in Common
+Lisp.  It is likely that MIT/GNU Scheme's representation will be
+changed in the future, to be compatible with Common Lisp.  For the time
+being this representation should be considered a convenience for viewing
+bit strings rather than a means of entering them as data.
+
+<pre class="example">     #*11111
+     #*1010
+     #*00000000
+     #*
+</pre>
+   <p>All of the bit-string procedures are MIT/GNU Scheme extensions.
+
+<ul class="menu">
+<li><a accesskey="1" href="Construction-of-Bit-Strings.html#Construction-of-Bit-Strings">Construction of Bit Strings</a>
+<li><a accesskey="2" href="Selecting-Bit-String-Components.html#Selecting-Bit-String-Components">Selecting Bit String Components</a>
+<li><a accesskey="3" href="Cutting-and-Pasting-Bit-Strings.html#Cutting-and-Pasting-Bit-Strings">Cutting and Pasting Bit Strings</a>
+<li><a accesskey="4" href="Bitwise-Operations-on-Bit-Strings.html#Bitwise-Operations-on-Bit-Strings">Bitwise Operations on Bit Strings</a>
+<li><a accesskey="5" href="Modification-of-Bit-Strings.html#Modification-of-Bit-Strings">Modification of Bit Strings</a>
+<li><a accesskey="6" href="Integer-Conversions-of-Bit-Strings.html#Integer-Conversions-of-Bit-Strings">Integer Conversions of Bit Strings</a>
+</ul>
+
+   </body></html>
+

@@ -1,0 +1,149 @@
+<html lang="en">
+<head>
+<title>define-record-type (SRFI 9) - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="SRFI-syntax.html#SRFI-syntax" title="SRFI syntax">
+<link rel="prev" href="and_002dlet_002a-_0028SRFI-2_0029.html#and_002dlet_002a-_0028SRFI-2_0029" title="and-let* (SRFI 2)">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="define-record-type-(SRFI-9)"></a>
+<a name="define_002drecord_002dtype-_0028SRFI-9_0029"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="and_002dlet_002a-_0028SRFI-2_0029.html#and_002dlet_002a-_0028SRFI-2_0029">and-let* (SRFI 2)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="SRFI-syntax.html#SRFI-syntax">SRFI syntax</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.12.4 define-record-type (SRFI 9)</h4>
+
+<p><a name="index-SRFI-9-413"></a>The &lsquo;<samp><span class="samp">define-record-type</span></samp>&rsquo; syntax described in
+<a href="http://srfi.schemers.org/srfi-9/srfi-9.html"><acronym>SRFI</acronym> 9</a> is a
+slight simplification of one written for Scheme 48 by Jonathan Rees. 
+Unlike many record-defining special forms, it does not create any new
+identifiers.  Instead, the names of the record type, predicate,
+constructor, and so on are all listed explicitly in the source.  This
+has the following advantages:
+
+     <ul>
+<li>It can be defined using a simple macro in Scheme implementations that
+provide a procedural interface for creating record types.
+
+     <li>It does not restrict users to a particular naming convention.
+
+     <li>Tools like <samp><span class="command">grep</span></samp> and the GNU Emacs tag facility will see the
+defining occurance of each identifier. 
+</ul>
+
+<div class="defun">
+&mdash; special form: <b>define-record-type</b><var> type-name </var>(<var>constructor-name field-tag <small class="dots">...</small></var>)<var> predicate-name field-spec <small class="dots">...</small><a name="index-define_002drecord_002dtype-414"></a></var><br>
+<blockquote><p><var>Type-name</var>, <var>contructor-name</var>, <var>field-tag</var>, and
+<var>predicate-name</var> are identifiers.  <var>Field-spec</var> has one of these
+two forms:
+
+     <pre class="example">          (<var>field-tag</var> <var>accessor-name</var>)
+          (<var>field-tag</var> <var>accessor-name</var> <var>modifier-name</var>)
+</pre>
+        <p class="noindent">where <var>field-tag</var>, <var>accessor-name</var>, and <var>modifier-name</var> are
+each identifiers.
+
+        <p><code>define-record-type</code> is generative: each use creates a new record
+type that is distinct from all existing types, including other record
+types and Scheme's predefined types.  Record-type definitions may only
+occur at top-level (there are two possible semantics for &ldquo;internal&rdquo;
+record-type definitions, generative and nongenerative, and no consensus
+as to which is better).
+
+        <p>An instance of <code>define-record-type</code> is equivalent to the following
+definitions:
+
+          <ul>
+<li><var>Type-name</var> is bound to a representation of the record type itself. 
+Operations on record types, such as defining print methods, reflection,
+etc. are left to other SRFIs.
+
+          <li><var>constructor-name</var> is bound to a procedure that takes as many
+arguments as there are <var>field-tag</var>s in the (<var>constructor-name</var>
+<small class="dots">...</small>) subform and returns a new <var>type-name</var> record.  Fields whose
+tags are listed with <var>constructor-name</var> have the corresponding
+argument as their initial value.  The initial values of all other fields
+are unspecified.
+
+          <li><var>predicate-name</var> is a predicate that returns <code>#t</code> when given a
+value returned by <var>constructor-name</var> and <code>#f</code> for everything
+else.
+
+          <li>Each <var>accessor-name</var> is a procedure that takes a record of type
+<var>type-name</var> and returns the current value of the corresponding
+field.  It is an error to pass an accessor a value which is not a record
+of the appropriate type.
+
+          <li>Each <var>modifier-name</var> is a procedure that takes a record of type
+<var>type-name</var> and a value which becomes the new value of the
+corresponding field; an unspecified value is returned.  It is an error
+to pass a modifier a first argument which is not a record of the
+appropriate type. 
+</ul>
+
+        <p>Assigning the value of any of these identifiers has no effect on the
+behavior of any of their original values. 
+</p></blockquote></div>
+
+   <p>The following
+
+<pre class="example">     (define-record-type :pare
+       (kons x y)
+       pare?
+       (x kar set-kar!)
+       (y kdr))
+</pre>
+   <p class="noindent">defines &lsquo;<samp><span class="samp">kons</span></samp>&rsquo; to be a constructor, &lsquo;<samp><span class="samp">kar</span></samp>&rsquo; and &lsquo;<samp><span class="samp">kdr</span></samp>&rsquo; to be
+accessors, &lsquo;<samp><span class="samp">set-kar!</span></samp>&rsquo; to be a modifier, and &lsquo;<samp><span class="samp">pare?</span></samp>&rsquo; to be a
+predicate for objects of type &lsquo;<samp><span class="samp">:pare</span></samp>&rsquo;.
+
+<pre class="example">     (pare? (kons 1 2))        &rArr; #t
+     (pare? (cons 1 2))        &rArr; #f
+     (kar (kons 1 2))          &rArr; 1
+     (kdr (kons 1 2))          &rArr; 2
+     (let ((k (kons 1 2)))
+       (set-kar! k 3)
+       (kar k))                &rArr; 3
+</pre>
+   </body></html>
+

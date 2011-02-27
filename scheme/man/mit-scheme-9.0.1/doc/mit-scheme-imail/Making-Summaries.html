@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+<title>Making Summaries - IMAIL 1.19</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IMAIL 1.19">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Summaries.html#Summaries" title="Summaries">
+<link rel="prev" href="Summaries.html#Summaries" title="Summaries">
+<link rel="next" href="Editing-in-Summaries.html#Editing-in-Summaries" title="Editing in Summaries">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents IMAIL 1.19.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Making-Summaries"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Editing-in-Summaries.html#Editing-in-Summaries">Editing in Summaries</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Summaries.html#Summaries">Summaries</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Summaries.html#Summaries">Summaries</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.8.1 Making Summaries</h4>
+
+<p>Here are the commands to create a summary for the current
+<acronym>IMAIL</acronym> folder.  Once the <acronym>IMAIL</acronym> folder has a summary
+buffer, changes in the <acronym>IMAIL</acronym> folder (such as deleting or
+expunging messages, and getting new mail) automatically update the
+summary.
+
+     <dl>
+<dt><kbd>h</kbd><dt><kbd>C-M-h</kbd><dd>Summarize all messages (<code>imail-summary</code>). 
+<br><dt><kbd>l </kbd><var>flags</var><kbd> &lt;RET&gt;</kbd><dt><kbd>C-M-l </kbd><var>flags</var><kbd> &lt;RET&gt;</kbd><dd>Summarize messages that have one or more of the specified flags
+(<code>imail-summary-by-flags</code>). 
+<br><dt><kbd>C-M-r </kbd><var>rcpts</var><kbd> &lt;RET&gt;</kbd><dd>Summarize messages that have one or more of the specified recipients
+(<code>imail-summary-by-recipients</code>). 
+<br><dt><kbd>C-M-t </kbd><var>topic</var><kbd> &lt;RET&gt;</kbd><dd>Summarize messages that have a match for the specified regexp
+<var>topic</var> in their subjects (<code>imail-summary-by-topic</code>). 
+<br><dt><kbd>C-M-s </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>Summarize messages that have a match for the specified regexp
+anywhere in their header (<code>imail-summary-by-regexp</code>). 
+</dl>
+
+   <p><a name="index-h-202"></a><a name="index-imail_002dsummary-203"></a>The <kbd>h</kbd> or <kbd>C-M-h</kbd> (<code>imail-summary</code>) command fills the
+summary buffer for the current <acronym>IMAIL</acronym> folder with a summary of
+all the messages in the folder.  It then displays and selects the
+summary buffer in another window.
+
+   <p><a name="index-l-204"></a><a name="index-C_002dM_002dl-205"></a><a name="index-imail_002dsummary_002dby_002dflags-206"></a><kbd>C-M-l </kbd><var>flags</var><kbd> &lt;RET&gt;</kbd> (<code>imail-summary-by-flags</code>) makes
+a partial summary mentioning only the messages that have one or more of
+the flags <var>flags</var>.  <var>flags</var> should contain flag names separated
+by commas.
+
+   <p><a name="index-C_002dM_002dr-207"></a><a name="index-imail_002dsummary_002dby_002drecipients-208"></a><kbd>C-M-r </kbd><var>rcpts</var><kbd> &lt;RET&gt;</kbd> (<code>imail-summary-by-recipients</code>)
+makes a partial summary mentioning only the messages that have one or
+more of the recipients <var>rcpts</var>.  <var>rcpts</var> should contain mailing
+addresses separated by commas.
+
+   <p><a name="index-C_002dM_002dt-209"></a><a name="index-imail_002dsummary_002dby_002dtopic-210"></a><kbd>C-M-t </kbd><var>topic</var><kbd> &lt;RET&gt;</kbd> (<code>imail-summary-by-topic</code>) makes
+a partial summary mentioning only the messages whose subjects have a
+match for the regular expression <var>topic</var>.
+
+   <p><a name="index-C_002dM_002ds-211"></a><a name="index-imail_002dsummary_002dby_002dregexp-212"></a><kbd>C-M-s </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd> (<code>imail-summary-by-regexp</code>)
+makes a partial summary mentioning only the messages whose headers
+contain a match for the regular expression <var>regexp</var>.  This match
+includes all lines in the header, including for example the date and
+from lines.
+
+   <p>Note that there is only one summary buffer for any <acronym>IMAIL</acronym>
+folder; making one kind of summary discards any previously made summary.
+
+   <p><a name="index-imail_002dsummary_002dheight-213"></a>There are several variables that affect how summaries are displayed. 
+<code>imail-summary-height</code> controls the height of the summary window. 
+If it is an exact positive integer, the summary window is that many
+lines high.  Alternatively, if it is a real number between 0 and 1
+exclusive, the height of the summary window is computed by multiplying
+the number of lines in the message window by <code>imail-summary-height</code>
+and rounding to the nearest integer.
+
+   <p><a name="index-imail_002dsummary_002dfixed_002dlayout-214"></a>If the variable <code>imail-summary-fixed-layout</code> is set to <code>#t</code>,
+then an <acronym>IMAIL</acronym> message buffer and its associated summary buffer
+are always shown in a fixed window layout (provided the summary buffer
+exists).  Selecting either buffer causes all other windows in the
+current editor frame to be deleted, then splits the frame into two
+windows showing the summary buffer and message buffer.  Selecting any
+other buffer when this layout is displayed causes both windows to be
+deleted, and the other buffer displayed in a single window filling the
+editor frame.  Basically, this causes the message and summary buffers to
+be treated as a unit most of the time.  Currently, the default for
+<code>imail-summary-fixed-layout</code> is <code>#f</code>, but the feature has been
+very popular and the default may be changed to <code>#t</code> in a future
+release.
+
+   <p><a name="index-imail_002dsummary_002dpop_002dup_002dmessage-215"></a>When fixed layout is not used, the variable
+<code>imail-summary-pop-up-message</code> provides a different kind of window
+splitting for message and summary buffers.  If this is set to <code>#t</code>
+(the default), then selecting a new message in the summary buffer causes
+the message buffer to be popped up in a new window if it isn't already
+visible.
+
+   <p><a name="index-imail_002dsummary_002dhighlight_002dmessage-216"></a>If the variable <code>imail-summary-highlight-message</code> is <code>#t</code>, the
+message currently selected in the message buffer is highlighted in the
+summary buffer.  This aids navigation in the summary buffer and is thus
+the default.  Set it to <code>#f</code> if you don't like the highlighting.
+
+   <p><a name="index-imail_002dsummary_002dshow_002ddate-217"></a>By default, the summary buffer has five columns: flags, message number,
+message length, subject, and author.  If <code>imail-summary-show-date</code>
+is set to <code>#t</code>, a sixth column containing an abbreviated date
+appears between the message number and the subject.
+
+   <p><a name="index-imail_002dsummary_002dsubject_002dwidth-218"></a>The width of the subject column is specified by the value of
+<code>imail-summary-subject-width</code>; subject fields longer than this
+number of characters are truncated.
+
+   </body></html>
+

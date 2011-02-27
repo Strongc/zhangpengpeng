@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Restarting - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="REPL.html#REPL" title="REPL">
+<link rel="prev" href="Interrupting.html#Interrupting" title="Interrupting">
+<link rel="next" href="The-Current-REPL-Environment.html#The-Current-REPL-Environment" title="The Current REPL Environment">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Restarting"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="The-Current-REPL-Environment.html#The-Current-REPL-Environment">The Current REPL Environment</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Interrupting.html#Interrupting">Interrupting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="REPL.html#REPL">REPL</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.1.3 Restarting</h4>
+
+<p>Another way to exit a <acronym>REPL</acronym> is to use the <code>restart</code>
+procedure:
+
+<div class="defun">
+&mdash; procedure: <b>restart</b> [<var>k</var>]<var><a name="index-restart-109"></a></var><br>
+<blockquote><p><a name="index-REPL_002c-restarting-from-110"></a>This procedure selects and invokes a <dfn>restart method</dfn>.  The list of
+restart methods is different for each <acronym>REPL</acronym> and for each error;
+in the case of an error <acronym>REPL</acronym>, this list is printed when the
+<acronym>REPL</acronym> is started:
+
+     <pre class="example">          ;Unbound variable: foo
+          ;To continue, call RESTART with an option number:
+          ; (RESTART 3) =&gt; Specify a value to use instead of foo.
+          ; (RESTART 2) =&gt; Define foo to a given value.
+          ; (RESTART 1) =&gt; Return to read-eval-print level 1.
+          
+          2 error&gt;
+</pre>
+        <p>If the <var>k</var> argument is given, it must be a positive integer index
+into the list (in the example it must be between one and three
+inclusive).  The integer <var>k</var> selects an item from the list and
+invokes it.  If <var>k</var> is not given, <code>restart</code> prints the list and
+prompts for the integer index:
+
+     <pre class="example">          2 error&gt; (restart)
+          ;Choose an option by number:
+          ;  3: Specify a value to use instead of foo.
+          ;  2: Define foo to a given value.
+          ;  1: Return to read-eval-print level 1.
+          
+          Option number:
+</pre>
+        <p>The simplest restart methods just perform their actions.  For example:
+
+     <pre class="example">          2 error&gt; (restart 1)
+          ;Abort!
+          
+          1 ]=&gt;
+</pre>
+        <p>Other methods will prompt for more input before continuing:
+
+     <pre class="example">          2 error&gt; (restart)
+          ;Choose an option by number:
+          ;  3: Specify a value to use instead of foo.
+          ;  2: Define foo to a given value.
+          ;  1: Return to read-eval-print level 1.
+          
+          Option number: 3
+          
+          Value to use instead of foo: '(a b)
+          ;Value: (a b)
+          
+          1 ]=&gt;
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

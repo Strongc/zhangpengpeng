@@ -1,0 +1,133 @@
+<html lang="en">
+<head>
+<title>Blocking Mode - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Port-Primitives.html#Port-Primitives" title="Port Primitives">
+<link rel="prev" href="Output-Port-Operations.html#Output-Port-Operations" title="Output Port Operations">
+<link rel="next" href="Terminal-Mode.html#Terminal-Mode" title="Terminal Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Blocking-Mode"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Terminal-Mode.html#Terminal-Mode">Terminal Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Output-Port-Operations.html#Output-Port-Operations">Output Port Operations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Port-Primitives.html#Port-Primitives">Port Primitives</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.9.5 Blocking Mode</h4>
+
+<p><a name="index-blocking-mode_002c-of-port-2211"></a>An interactive port is always in one of two modes: <dfn>blocking</dfn> or
+<dfn>non-blocking</dfn>.  This mode is independent of the terminal mode:
+each can be changed independent of the other.  Furthermore, if it is
+an interactive <acronym>I/O</acronym> port, there are separate blocking modes
+for input and for output.
+
+   <p>If an input port is in blocking mode, attempting to read from it when no
+input is available will cause Scheme to &ldquo;block&rdquo;, i.e. suspend
+itself, until input is available.  If an input port is in non-blocking
+mode, attempting to read from it when no input is available will cause
+the reading procedure to return immediately, indicating the lack of
+input in some way (exactly how this situation is indicated is separately
+specified for each procedure or operation).
+
+   <p>An output port in blocking mode will block if the output device is not
+ready to accept output.  In non-blocking mode it will return immediately
+after performing as much output as the device will allow (again, each
+procedure or operation reports this situation in its own way).
+
+   <p>Interactive ports are initially in blocking mode; this can be changed at
+any time with the procedures defined in this section.
+
+   <p>These procedures represent blocking mode by the symbol <code>blocking</code>,
+and non-blocking mode by the symbol <code>nonblocking</code>.  An argument
+called <var>mode</var> must be one of these symbols.  A <var>port</var> argument
+to any of these procedures may be any port, even if that port does not
+support blocking mode; in that case, the port is not modified in any
+way.
+
+<div class="defun">
+&mdash; procedure: <b>port/input-blocking-mode</b><var> port<a name="index-port_002finput_002dblocking_002dmode-2212"></a></var><br>
+<blockquote><p>Returns the input blocking mode of <var>port</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port/set-input-blocking-mode</b><var> port mode<a name="index-port_002fset_002dinput_002dblocking_002dmode-2213"></a></var><br>
+<blockquote><p>Changes the input blocking mode of <var>port</var> to be <var>mode</var>.  Returns
+an unspecified value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port/with-input-blocking-mode</b><var> port mode thunk<a name="index-port_002fwith_002dinput_002dblocking_002dmode-2214"></a></var><br>
+<blockquote><p><var>Thunk</var> must be a procedure of no arguments. 
+<code>port/with-input-blocking-mode</code>
+binds the input blocking mode of <var>port</var> to be <var>mode</var>, executes
+<var>thunk</var>, restores the input blocking mode of <var>port</var> to what it
+was when <code>port/with-input-blocking-mode</code> was called, and returns
+the value that was yielded by <var>thunk</var>.  This binding is performed
+by <code>dynamic-wind</code>, which guarantees that the input blocking mode is
+restored if <var>thunk</var> escapes from its continuation. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port/output-blocking-mode</b><var> port<a name="index-port_002foutput_002dblocking_002dmode-2215"></a></var><br>
+<blockquote><p>Returns the output blocking mode of <var>port</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port/set-output-blocking-mode</b><var> port mode<a name="index-port_002fset_002doutput_002dblocking_002dmode-2216"></a></var><br>
+<blockquote><p>Changes the output blocking mode of <var>port</var> to be <var>mode</var>. 
+Returns an unspecified value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port/with-output-blocking-mode</b><var> port mode thunk<a name="index-port_002fwith_002doutput_002dblocking_002dmode-2217"></a></var><br>
+<blockquote><p><var>Thunk</var> must be a procedure of no arguments. 
+<code>port/with-output-blocking-mode</code>
+binds the output blocking mode of <var>port</var> to be <var>mode</var>, executes
+<var>thunk</var>, restores the output blocking mode of <var>port</var> to what it
+was when <code>port/with-output-blocking-mode</code> was called, and returns
+the value that was yielded by <var>thunk</var>.  This binding is performed
+by <code>dynamic-wind</code>, which guarantees that the output blocking mode
+is restored if <var>thunk</var> escapes from its continuation. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Address Hashing - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hash-Tables.html#Hash-Tables" title="Hash Tables">
+<link rel="prev" href="Resizing-of-Hash-Tables.html#Resizing-of-Hash-Tables" title="Resizing of Hash Tables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Address-Hashing"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Resizing-of-Hash-Tables.html#Resizing-of-Hash-Tables">Resizing of Hash Tables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hash-Tables.html#Hash-Tables">Hash Tables</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.4.4 Address Hashing</h4>
+
+<p><a name="index-address-hashing-1696"></a>
+The procedures described in this section may be used to make very
+efficient key-hashing procedures for arbitrary objects.  All of these
+procedures are based on <dfn>address hashing</dfn>, which uses the address of
+an object as its hash number.  The great advantage of address hashing is
+that converting an arbitrary object to a hash number is extremely fast
+and takes the same amount of time for any object.
+
+   <p>The disadvantage of address hashing is that the garbage collector
+changes the addresses of most objects.  The hash-table implementation
+compensates for this disadvantage by automatically rehashing tables that
+use address hashing when garbage collections occur.  Thus, in order to
+use these procedures for key hashing, it is necessary to tell the
+hash-table implementation (by means of the <var>rehash-after-gc?</var>
+argument to the &ldquo;constructor-constructor&rdquo; procedure) that the hash
+numbers computed by your key-hashing procedure must be recomputed after
+a garbage collection.
+
+<div class="defun">
+&mdash; procedure: <b>eq-hash</b><var> object<a name="index-eq_002dhash-1697"></a></var><br>
+&mdash; procedure: <b>eqv-hash</b><var> object<a name="index-eqv_002dhash-1698"></a></var><br>
+&mdash; procedure: <b>equal-hash</b><var> object<a name="index-equal_002dhash-1699"></a></var><br>
+<blockquote><p>These procedures return a hash number for <var>object</var>.  The result is
+always a non-negative integer, and in the case of <code>eq-hash</code>, a
+non-negative fixnum.  Two objects that are equivalent according to
+<code>eq?</code>, <code>eqv?</code>, or <code>equal?</code>, respectively, will produce the
+same hash number when passed as arguments to these procedures, provided
+that the garbage collector does not run during or between the two calls. 
+</p></blockquote></div>
+
+   <p>The following procedures are the key-hashing procedures used by the
+standard address-hash-based hash tables.
+
+<div class="defun">
+&mdash; procedure: <b>eq-hash-mod</b><var> object modulus<a name="index-eq_002dhash_002dmod-1700"></a></var><br>
+<blockquote><p>This procedure is the key-hashing procedure used by
+<code>make-strong-eq-hash-table</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>eqv-hash-mod</b><var> object modulus<a name="index-eqv_002dhash_002dmod-1701"></a></var><br>
+<blockquote><p>This procedure is the key-hashing procedure used by
+<code>make-strong-eqv-hash-table</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>equal-hash-mod</b><var> object modulus<a name="index-equal_002dhash_002dmod-1702"></a></var><br>
+<blockquote><p>This procedure is the key-hashing procedure used by
+<code>make-equal-hash-table</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,166 @@
+<html lang="en">
+<head>
+<title>Streams - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Miscellaneous-Datatypes.html#Miscellaneous-Datatypes" title="Miscellaneous Datatypes">
+<link rel="prev" href="Promises.html#Promises" title="Promises">
+<link rel="next" href="Weak-Pairs.html#Weak-Pairs" title="Weak Pairs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Streams"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Weak-Pairs.html#Weak-Pairs">Weak Pairs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Promises.html#Promises">Promises</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Miscellaneous-Datatypes.html#Miscellaneous-Datatypes">Miscellaneous Datatypes</a>
+<hr>
+</div>
+
+<h3 class="section">10.6 Streams</h3>
+
+<p><a name="index-stream-_0028defn_0029-1539"></a>In addition to promises, MIT/GNU Scheme supports a higher-level abstraction
+called <dfn>streams</dfn>.  Streams are similar to lists, except that the
+tail of a stream is not computed until it is referred to. 
+This allows streams to be used to represent infinitely long lists.
+
+<div class="defun">
+&mdash; procedure: <b>stream</b><var> object <small class="dots">...</small><a name="index-stream-1540"></a></var><br>
+<blockquote><p><a name="index-construction_002c-of-stream-1541"></a>Returns a newly allocated stream whose elements are the arguments.  Note
+that the expression <code>(stream)</code> returns the empty stream, or
+end-of-stream marker. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>list-&gt;stream</b><var> list<a name="index-list_002d_003estream-1542"></a></var><br>
+<blockquote><p><a name="index-list_002c-converting-to-stream-1543"></a>Returns a newly allocated stream whose elements are the elements of
+<var>list</var>.  Equivalent to <code>(apply stream </code><var>list</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>stream-&gt;list</b><var> stream<a name="index-stream_002d_003elist-1544"></a></var><br>
+<blockquote><p><a name="index-stream_002c-converting-to-list-1545"></a>Returns a newly allocated list whose elements are the elements of
+<var>stream</var>.  If <var>stream</var> has infinite length this procedure will
+not terminate.  This could have been defined by
+
+     <pre class="example">          (define (stream-&gt;list stream)
+            (if (stream-null? stream)
+                '()
+                (cons (stream-car stream)
+                      (stream-&gt;list (stream-cdr stream)))))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; special form: <b>cons-stream</b><var> object expression<a name="index-cons_002dstream-1546"></a></var><br>
+<blockquote><p>Returns a newly allocated stream pair.  Equivalent to <code>(cons
+</code><var>object</var><code> (delay </code><var>expression</var><code>))</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>stream-pair?</b><var> object<a name="index-stream_002dpair_003f-1547"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-stream-pair-1548"></a>Returns <code>#t</code> if <var>object</var> is a pair whose cdr contains a
+promise.  Otherwise returns <code>#f</code>.  This could have been defined by
+
+     <pre class="example">          (define (stream-pair? object)
+            (and (pair? object)
+                 (promise? (cdr object))))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>stream-car</b><var> stream<a name="index-stream_002dcar-1549"></a></var><br>
+&mdash; procedure: <b>stream-first</b><var> stream<a name="index-stream_002dfirst-1550"></a></var><br>
+<blockquote><p><a name="index-car-1551"></a>Returns the first element in <var>stream</var>.  <code>stream-car</code> is
+equivalent to <code>car</code>.  <code>stream-first</code> is a synonym for
+<code>stream-car</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>stream-cdr</b><var> stream<a name="index-stream_002dcdr-1552"></a></var><br>
+&mdash; procedure: <b>stream-rest</b><var> stream<a name="index-stream_002drest-1553"></a></var><br>
+<blockquote><p><a name="index-force-1554"></a><a name="index-cdr-1555"></a>Returns the first tail of <var>stream</var>.  Equivalent to <code>(force (cdr
+</code><var>stream</var><code>))</code>.  <code>stream-rest</code> is a synonym for <code>stream-cdr</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>stream-null?</b><var> stream<a name="index-stream_002dnull_003f-1556"></a></var><br>
+<blockquote><p><a name="index-empty-stream_002c-predicate-for-1557"></a><a name="index-null_003f-1558"></a>Returns <code>#t</code> if <var>stream</var> is the end-of-stream marker; otherwise
+returns <code>#f</code>.  This is equivalent to <code>null?</code>, but should be
+used whenever testing for the end of a stream. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>stream-length</b><var> stream<a name="index-stream_002dlength-1559"></a></var><br>
+<blockquote><p><a name="index-length_002c-of-stream-1560"></a>Returns the number of elements in <var>stream</var>.  If <var>stream</var> has an
+infinite number of elements this procedure will not terminate.  Note
+that this procedure forces all of the promises that comprise
+<var>stream</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>stream-ref</b><var> stream k<a name="index-stream_002dref-1561"></a></var><br>
+<blockquote><p><a name="index-selecting_002c-of-stream-component-1562"></a><a name="index-component-selection_002c-of-stream-1563"></a>Returns the element of <var>stream</var> that is indexed by <var>k</var>; that is,
+the <var>k</var>th element.  <var>K</var> must be an exact non-negative integer
+strictly less than the length of <var>stream</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>stream-head</b><var> stream k<a name="index-stream_002dhead-1564"></a></var><br>
+<blockquote><p>Returns the first <var>k</var> elements of <var>stream</var> as a list.  <var>K</var>
+must be an exact non-negative integer strictly less than the length of
+<var>stream</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>stream-tail</b><var> stream k<a name="index-stream_002dtail-1565"></a></var><br>
+<blockquote><p>Returns the tail of <var>stream</var> that is indexed by <var>k</var>; that is,
+the <var>k</var>th tail.  This is equivalent to performing <code>stream-cdr</code>
+<var>k</var> times.  <var>K</var> must be an exact non-negative integer strictly
+less than the length of <var>stream</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>stream-map</b><var> procedure stream stream <small class="dots">...</small><a name="index-stream_002dmap-1566"></a></var><br>
+<blockquote><p><a name="index-mapping_002c-of-stream-1567"></a>Returns a newly allocated stream, each element being the result of
+invoking <var>procedure</var> with the corresponding elements of the
+<var>stream</var>s as its arguments. 
+</p></blockquote></div>
+
+   </body></html>
+

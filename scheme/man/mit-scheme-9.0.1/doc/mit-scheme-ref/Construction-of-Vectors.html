@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Construction of Vectors - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Vectors.html#Vectors" title="Vectors">
+<link rel="prev" href="Vectors.html#Vectors" title="Vectors">
+<link rel="next" href="Selecting-Vector-Components.html#Selecting-Vector-Components" title="Selecting Vector Components">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Construction-of-Vectors"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Selecting-Vector-Components.html#Selecting-Vector-Components">Selecting Vector Components</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Vectors.html#Vectors">Vectors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Vectors.html#Vectors">Vectors</a>
+<hr>
+</div>
+
+<h3 class="section">8.1 Construction of Vectors</h3>
+
+<p><a name="index-construction_002c-of-vector-1326"></a>
+
+<div class="defun">
+&mdash; procedure: <b>make-vector</b><var> k </var>[<var>object</var>]<var><a name="index-make_002dvector-1327"></a></var><br>
+<blockquote><p>Returns a newly allocated vector of <var>k</var> elements.  If <var>object</var>
+is specified, <code>make-vector</code> initializes each element of the vector
+to <var>object</var>.  Otherwise the initial elements of the result are
+unspecified. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>vector</b><var> object <small class="dots">...</small><a name="index-vector-1328"></a></var><br>
+<blockquote><p><a name="index-list-1329"></a>Returns a newly allocated vector whose elements are the given arguments. 
+<code>vector</code> is analogous to <code>list</code>.
+
+     <pre class="example">          (vector 'a 'b 'c)                       &rArr;  #(a b c)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>vector-copy</b><var> vector<a name="index-vector_002dcopy-1330"></a></var><br>
+<blockquote><p><a name="index-copying_002c-of-vector-1331"></a>Returns a newly allocated vector that is a copy of <var>vector</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>list-&gt;vector</b><var> list<a name="index-list_002d_003evector-1332"></a></var><br>
+<blockquote><p><a name="index-list_002c-converting-to-vector-1333"></a><a name="index-vector_002d_003elist-1334"></a>Returns a newly allocated vector initialized to the elements of
+<var>list</var>.  The inverse of <code>list-&gt;vector</code> is <code>vector-&gt;list</code>.
+
+     <pre class="example">          (list-&gt;vector '(dididit dah))           &rArr;  #(dididit dah)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-initialized-vector</b><var> k initialization<a name="index-make_002dinitialized_002dvector-1335"></a></var><br>
+<blockquote><p>Similar to <code>make-vector</code>, except that the elements of the result
+are determined by calling the procedure <var>initialization</var> on the
+indices.  For example:
+
+     <pre class="example">          (make-initialized-vector 5 (lambda (x) (* x x)))
+               &rArr;  #(0 1 4 9 16)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>vector-grow</b><var> vector k<a name="index-vector_002dgrow-1336"></a></var><br>
+<blockquote><p><a name="index-growing_002c-of-vector-1337"></a><var>K</var> must be greater than or equal to the length of <var>vector</var>. 
+Returns a newly allocated vector of length <var>k</var>.  The first
+<code>(vector-length </code><var>vector</var><code>)</code> elements of the result are
+initialized from the corresponding elements of <var>vector</var>.  The
+remaining elements of the result are unspecified. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>vector-map</b><var> procedure vector<a name="index-vector_002dmap-1338"></a></var><br>
+<blockquote><p><a name="index-mapping_002c-of-vector-1339"></a><var>Procedure</var> must be a procedure of one argument.  <code>vector-map</code>
+applies <var>procedure</var> element-wise to the elements of <var>vector</var> and
+returns a newly allocated vector of the results, in order from left to
+right.  The dynamic order in which <var>procedure</var> is applied to the
+elements of <var>vector</var> is unspecified.
+
+     <pre class="example">          (vector-map cadr '#((a b) (d e) (g h)))     &rArr;  #(b e h)
+          (vector-map (lambda (n) (expt n n)) '#(1 2 3 4))
+                                                      &rArr;  #(1 4 27 256)
+          (vector-map + '#(5 7 9))                    &rArr;  #(5 7 9)
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

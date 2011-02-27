@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>File URLs - IMAIL 1.19</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IMAIL 1.19">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="URLs.html#URLs" title="URLs">
+<link rel="prev" href="IMAP-URLs.html#IMAP-URLs" title="IMAP URLs">
+<link rel="next" href="Container-URLs.html#Container-URLs" title="Container URLs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents IMAIL 1.19.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="File-URLs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Container-URLs.html#Container-URLs">Container URLs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="IMAP-URLs.html#IMAP-URLs">IMAP URLs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="URLs.html#URLs">URLs</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.4.2 File URLs</h4>
+
+<p><a name="index-file-URL-39"></a><a name="index-URL_002c-file-40"></a>There is one other <acronym>URL</acronym> type supported by <acronym>IMAIL</acronym>: file
+<acronym>URL</acronym>s.  This uses the &lsquo;<samp><span class="samp">file:</span></samp>&rsquo; <acronym>URL</acronym>
+syntax,<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> as
+follows:
+
+<pre class="example">     file://<var>hostname</var>/<var>pathname</var>
+</pre>
+   <p class="noindent">Here <var>hostname</var> refers to the host on which the file (folder)
+resides.  Since <acronym>IMAIL</acronym> supports only files on the local file
+system, <var>hostname</var> must be &lsquo;<samp><span class="samp">localhost</span></samp>&rsquo;; it may also be omitted,
+as in
+
+<pre class="example">     file:///<var>pathname</var>
+</pre>
+   <p class="noindent"><acronym>IMAIL</acronym> also supports a non-standard abbreviation:
+
+<pre class="example">     file:/<var>pathname</var>
+</pre>
+   <p>As specified by the <acronym>URL</acronym> standard, <var>pathname</var> is a
+slash-separated sequence of path components, where unusual characters
+appearing in the components, such as the space character, are specially
+encoded.  However, <acronym>IMAIL</acronym> will accept nearly any character in a
+component, and encode it if required; with few exceptions you can type
+any pathname without encoding.  <acronym>IMAIL</acronym> always displays
+<acronym>URL</acronym>s with proper encoding.
+
+   <p>In practice, this means that most unix filenames are written verbatim,
+with exceptions for special characters, and with the leading slash
+omitted.  However, <acronym>DOS</acronym>-style filenames, as used by Windows and
+OS/2, must be specially rewritten to conform to this style.
+
+   <p>The rewriting rules for <acronym>DOS</acronym> file <acronym>URL</acronym>s are not
+specified by the standard, so consequently <acronym>IMAIL</acronym> defines its
+own rules for this encoding, as follows.  A <acronym>DOS</acronym> filename is
+encoded by replacing all of the backslash characters with forward-slash
+characters, and by encoding unusual characters in the path components. 
+Finally, the drive letter is prefixed to the path with an additional
+forward-slash separator.  So for, example, the filename
+
+<pre class="example">     C:\My Documents\Mail\My Mail.rmail
+</pre>
+   <p class="noindent">becomes the <acronym>URL</acronym>
+
+<pre class="example">     file://localhost/C:/My%20Documents/Mail/My%20Mail.rmail
+</pre>
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> File <acronym>URL</acronym>s are defined in
+<a href="http://www.ietf.org/rfc/rfc1738.txt"><acronym>RFC</acronym> 1738</a>.</p>
+
+   <hr></div>
+
+   </body></html>
+

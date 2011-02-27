@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Unix Installation - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Installation.html#Installation" title="Installation">
+<link rel="prev" href="Installation.html#Installation" title="Installation">
+<link rel="next" href="Windows-Installation.html#Windows-Installation" title="Windows Installation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Unix-Installation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Windows-Installation.html#Windows-Installation">Windows Installation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Installation.html#Installation">Installation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Installation.html#Installation">Installation</a>
+<hr>
+</div>
+
+<h3 class="section">1.1 Unix Installation</h3>
+
+<p>We will use as an example the installation for GNU/Linux.  The
+installation for other unix systems is similar.  There are several
+references to <var>ARCH</var> below; these refer to the computer
+architecture that Scheme is compiled for, either &lsquo;<samp><span class="samp">i386</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">x86-64</span></samp>&rsquo;.
+
+   <p>MIT/GNU Scheme is distributed as a compressed `tar' file.  The tar
+file contains both source and binary files; the binary files are
+pre-compiled Scheme code for a particular computer architecture.
+
+   <p>In order to install the software, it's necessary to configure and
+compile the C code, then to install the combined C and Scheme
+binaries.  This is done in the following steps:
+
+     <ol type=1 start=1>
+<li>Unpack the tar file,
+<samp><span class="file">mit-scheme-</span><var>VERSION</var><span class="file">-</span><var>ARCH</var><span class="file">.tar.gz</span></samp>, into the directory
+<samp><span class="file">mit-scheme-</span><var>VERSION</var></samp>.  For example,
+
+     <pre class="example">          tar xzf mit-scheme-9.0-i386.tar.gz
+</pre>
+     <p>will create a new directory <samp><span class="file">mit-scheme-9.0</span></samp>.
+
+     <li>Move into the new directory:
+
+     <pre class="example">          cd mit-scheme-<var>VERSION</var>/src
+</pre>
+     <li>Configure the software:
+
+     <pre class="example">          ./configure
+</pre>
+     <li>Build the software:
+
+     <pre class="example">          make compile-microcode
+</pre>
+     <li>Install the software:
+
+     <pre class="example">          make install
+</pre>
+     </ol>
+
+   <p>After installing the software, you can delete the unpacked directory:
+
+<pre class="example">     cd ../..
+     rm -rf mit-scheme-<var>VERSION</var>
+</pre>
+   <p>By default, the software will be installed in <samp><span class="file">/usr/local</span></samp>, in
+the subdirectories <samp><span class="file">bin</span></samp> and <samp><span class="file">lib</span></samp>.  If you want it
+installed somewhere else, for example <samp><span class="file">/opt/mit-scheme</span></samp>, pass the
+<samp><span class="option">--prefix</span></samp> option to the configure script, as in
+<kbd>./configure --prefix=/opt/mit-scheme</kbd>.
+
+   <p>The configure script accepts all the normal arguments for such
+scripts, and additionally accepts some that are specific to MIT/GNU
+Scheme.  To see all the possible arguments and their meanings, run the
+command <kbd>./configure --help</kbd>.
+
+   </body></html>
+

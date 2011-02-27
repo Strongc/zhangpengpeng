@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Dispatch Tags - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Generic-Dispatch.html#Generic-Dispatch" title="Generic Dispatch">
+<link rel="prev" href="Method-Generators.html#Method-Generators" title="Method Generators">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Dispatch-Tags"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Method-Generators.html#Method-Generators">Method Generators</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Generic-Dispatch.html#Generic-Dispatch">Generic Dispatch</a>
+<hr>
+</div>
+
+<h4 class="subsection">12.6.3 Dispatch Tags</h4>
+
+<p><a name="index-dispatch-tag-1890"></a><a name="index-tag_002c-dispatch-1891"></a>A dispatch tag is an object that represents the &ldquo;type&rdquo; of an
+object, for the purposes of generic dispatch.  Every object has an
+associated dispatch tag.  Built-in objects like pairs or booleans have
+predefined tags, while dynamically typed objects like records have
+tags that are created as needed.
+
+<div class="defun">
+&mdash; procedure: <b>dispatch-tag</b><var> object<a name="index-dispatch_002dtag-1892"></a></var><br>
+<blockquote><p>Returns the dispatch tag for <var>object</var>.
+
+     <pre class="example">          (dispatch-tag #f)       &rArr; #[dispatch-tag 17 (boolean)]
+          (dispatch-tag #t)       &rArr; #[dispatch-tag 17 (boolean)]
+          (dispatch-tag (list))   &rArr; #[dispatch-tag 18 (null)]
+          (dispatch-tag (list 3)) &rArr; #[dispatch-tag 19 (pair list)]
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>built-in-dispatch-tag</b><var> name<a name="index-built_002din_002ddispatch_002dtag-1893"></a></var><br>
+<blockquote><p>Returns the built-in dispatch tag called <var>name</var>.  <var>Name</var> must
+be a symbol that is the name of a known built-in dispatch tag.
+
+     <pre class="example">          (built-in-dispatch-tag 'boolean) &rArr; #[dispatch-tag 17 (boolean)]
+          (built-in-dispatch-tag 'null)    &rArr; #[dispatch-tag 18 (null)]
+          (built-in-dispatch-tag 'pair)    &rArr; #[dispatch-tag 19 (pair list)]
+          (built-in-dispatch-tag 'list)    &rArr; #[dispatch-tag 19 (pair list)]
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>built-in-dispatch-tags</b><var><a name="index-built_002din_002ddispatch_002dtags-1894"></a></var><br>
+<blockquote><p>Returns a list of the built-in dispatch tags. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>record-type-dispatch-tag</b><var> record-type<a name="index-record_002dtype_002ddispatch_002dtag-1895"></a></var><br>
+<blockquote><p>Returns the dispatch tag associate with <var>record-type</var>.  See
+See <a href="Records.html#Records">Records</a>, for more information about record types. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>dispatch-tag?</b><var> object<a name="index-dispatch_002dtag_003f-1896"></a></var><br>
+<blockquote><p>Returns &lsquo;<samp><span class="samp">#t</span></samp>&rsquo; if <var>object</var> is a dispatch tag, and &lsquo;<samp><span class="samp">#f</span></samp>&rsquo;
+otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>guarantee-dispatch-tag</b><var> object caller<a name="index-guarantee_002ddispatch_002dtag-1897"></a></var><br>
+<blockquote><p>Signals an error if <var>object</var> is not a dispatch tag.  <var>Caller</var>
+is a symbol that is printed as part of the error message and is
+intended to be the name of the procedure where the error occurs. 
+</p></blockquote></div>
+
+   </body></html>
+

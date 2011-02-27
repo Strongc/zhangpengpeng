@@ -1,0 +1,197 @@
+<html lang="en">
+<head>
+<title>Internal Representation of Characters - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Characters.html#Characters" title="Characters">
+<link rel="prev" href="Miscellaneous-Character-Operations.html#Miscellaneous-Character-Operations" title="Miscellaneous Character Operations">
+<link rel="next" href="ISO_002d8859_002d1-Characters.html#ISO_002d8859_002d1-Characters" title="ISO-8859-1 Characters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Internal-Representation-of-Characters"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ISO_002d8859_002d1-Characters.html#ISO_002d8859_002d1-Characters">ISO-8859-1 Characters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Miscellaneous-Character-Operations.html#Miscellaneous-Character-Operations">Miscellaneous Character Operations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Characters.html#Characters">Characters</a>
+<hr>
+</div>
+
+<h3 class="section">5.4 Internal Representation of Characters</h3>
+
+<p><a name="index-internal-representation_002c-for-character-735"></a>
+<a name="index-character-code-_0028defn_0029-736"></a><a name="index-character-bits-_0028defn_0029-737"></a><a name="index-code_002c-of-character-_0028defn_0029-738"></a><a name="index-bucky-bit_002c-of-character-_0028defn_0029-739"></a><a name="index-ASCII-character-740"></a>An MIT/GNU Scheme character consists of a <dfn>code</dfn> part and a
+<dfn>bucky bits</dfn> part.  The MIT/GNU Scheme set of characters can
+represent more characters than <acronym>ASCII</acronym> can; it includes
+characters with Super and Hyper bucky bits, as well as Control and Meta. 
+Every <acronym>ASCII</acronym> character corresponds to some MIT/GNU Scheme
+character, but not vice versa.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+
+   <p>MIT/GNU Scheme uses a 21-bit character code with 4 bucky bits.  The
+character code contains the Unicode scalar value for the character.  This
+is a change from earlier versions of the system, which used the
+<acronym>ISO-8859-1</acronym> scalar value, but it is upwards compatible with
+previous usage, since <acronym>ISO-8859-1</acronym> is a proper subset of
+Unicode.
+
+<div class="defun">
+&mdash; procedure: <b>make-char</b><var> code bucky-bits<a name="index-make_002dchar-741"></a></var><br>
+<blockquote><p><a name="index-construction_002c-of-character-742"></a>Builds a character from <var>code</var> and <var>bucky-bits</var>.  Both
+<var>code</var> and <var>bucky-bits</var> must be exact non-negative integers in
+the appropriate range.  Use <code>char-code</code> and <code>char-bits</code> to
+extract the code and bucky bits from the character.  If <code>0</code> is
+specified for <var>bucky-bits</var>, <code>make-char</code> produces an ordinary
+character; otherwise, the appropriate bits are turned on as follows:
+
+     <pre class="example">          1               Meta
+          2               Control
+          4               Super
+          8               Hyper
+</pre>
+        <p>For example,
+
+     <pre class="example">          (make-char 97 0)                        &rArr;  #\a
+          (make-char 97 1)                        &rArr;  #\M-a
+          (make-char 97 2)                        &rArr;  #\C-a
+          (make-char 97 3)                        &rArr;  #\C-M-a
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-bits</b><var> char<a name="index-char_002dbits-743"></a></var><br>
+<blockquote><p><a name="index-selection_002c-of-character-component-744"></a><a name="index-component-selection_002c-of-character-745"></a>Returns the exact integer representation of <var>char</var>'s bucky bits. 
+For example,
+
+     <pre class="example">          (char-bits #\a)                         &rArr;  0
+          (char-bits #\m-a)                       &rArr;  1
+          (char-bits #\c-a)                       &rArr;  2
+          (char-bits #\c-m-a)                     &rArr;  3
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-code</b><var> char<a name="index-char_002dcode-746"></a></var><br>
+<blockquote><p>Returns the character code of <var>char</var>, an exact integer.  For
+example,
+
+     <pre class="example">          (char-code #\a)                         &rArr;  97
+          (char-code #\c-a)                       &rArr;  97
+</pre>
+        <p>Note that in MIT/GNU Scheme, the value of <code>char-code</code> is the
+Unicode scalar value for <var>char</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>char-code-limit</b><var><a name="index-char_002dcode_002dlimit-747"></a></var><br>
+&mdash; variable: <b>char-bits-limit</b><var><a name="index-char_002dbits_002dlimit-748"></a></var><br>
+<blockquote><p>These variables define the (exclusive) upper limits for the character
+code and bucky bits (respectively).  The character code and bucky bits
+are always exact non-negative integers, and are strictly less than the
+value of their respective limit variable. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-&gt;integer</b><var> char<a name="index-char_002d_003einteger-749"></a></var><br>
+&mdash; procedure: <b>integer-&gt;char</b><var> k<a name="index-integer_002d_003echar-750"></a></var><br>
+<blockquote><p><code>char-&gt;integer</code> returns the character code representation for
+<var>char</var>.  <code>integer-&gt;char</code> returns the character whose character
+code representation is <var>k</var>.
+
+        <p><a name="index-char_002dascii_003f-751"></a><a name="index-char_002d_003eascii-752"></a>In MIT/GNU Scheme, if <code>(char-ascii? </code><var>char</var><code>)</code> is true, then
+
+     <pre class="example">          (eqv? (char-&gt;ascii <var>char</var>) (char-&gt;integer <var>char</var>))
+</pre>
+        <p class="noindent">However, this behavior is not required by the Scheme standard, and
+code that depends on it is not portable to other implementations.
+
+        <p><a name="index-char_003c_003d_003f-753"></a><a name="index-g_t_003c_003d-754"></a>These procedures implement order isomorphisms between the set of
+characters under the <code>char&lt;=?</code> ordering and some subset of the
+integers under the <code>&lt;=</code> ordering.  That is, if
+
+     <pre class="example">          (char&lt;=? a b)  &rArr;  #t    <span class="roman">and</span>    (&lt;= x y)  &rArr;  #t
+</pre>
+        <p>and <code>x</code> and <code>y</code> are in the range of <code>char-&gt;integer</code>,
+then
+
+     <pre class="example">          (&lt;= (char-&gt;integer a)
+              (char-&gt;integer b))                  &rArr;  #t
+          (char&lt;=? (integer-&gt;char x)
+                   (integer-&gt;char y))             &rArr;  #t
+</pre>
+        <p>In MIT/GNU Scheme, the specific relationship implemented by these
+procedures is as follows:
+
+     <pre class="example">          (define (char-&gt;integer c)
+            (+ (* (char-bits c) #x200000)
+               (char-code c)))
+          
+          (define (integer-&gt;char n)
+            (make-char (remainder n #x200000)
+                       (quotient n #x200000)))
+</pre>
+        <p>This implies that <code>char-&gt;integer</code> and <code>char-code</code> produce
+identical results for characters that have no bucky bits set, and that
+characters are ordered according to their Unicode scalar values.
+
+        <p>Note: If the argument to <code>char-&gt;integer</code> or <code>integer-&gt;char</code> is
+a constant, the compiler will constant-fold the call, replacing it with
+the corresponding result.  This is a very useful way to denote unusual
+character constants or <acronym>ASCII</acronym> codes. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>char-integer-limit</b><var><a name="index-char_002dinteger_002dlimit-755"></a></var><br>
+<blockquote><p>The range of <code>char-&gt;integer</code> is defined to be the exact
+non-negative integers that are less than the value of this variable
+(exclusive).  Note, however, that there are some holes in this range,
+because the character code must be a valid Unicode scalar value. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Note that the Control bucky bit
+is different from the <acronym>ASCII</acronym> control key.  This means that
+<code>#\SOH</code> (<acronym>ASCII</acronym> ctrl-A) is different from <code>#\C-A</code>. 
+In fact, the Control bucky bit is completely orthogonal to the
+<acronym>ASCII</acronym> control key, making possible such characters as
+<code>#\C-SOH</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

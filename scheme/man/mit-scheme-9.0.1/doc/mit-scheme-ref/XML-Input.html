@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+<title>XML Input - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="XML-Support.html#XML-Support" title="XML Support">
+<link rel="prev" href="XML-Support.html#XML-Support" title="XML Support">
+<link rel="next" href="XML-Output.html#XML-Output" title="XML Output">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="XML-Input"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="XML-Output.html#XML-Output">XML Output</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="XML-Support.html#XML-Support">XML Support</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="XML-Support.html#XML-Support">XML Support</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.12.1 XML Input</h4>
+
+<p><a name="index-XML-parser-2319"></a><a name="index-parser_002c-XML-2320"></a><a name="index-XML-input-2321"></a><a name="index-input_002c-XML-2322"></a>The primary entry point for the <acronym>XML</acronym> parser is <code>read-xml</code>,
+which reads characters from a port and returns an <acronym>XML</acronym> document
+record.  The character coding of the input is determined by reading some
+of the input stream and looking for a byte order mark and/or an encoding
+in the <acronym>XML</acronym> declaration.  We support all <acronym>ISO</acronym> 8859
+codings, as well as <acronym>UTF-8</acronym>, <acronym>UTF-16</acronym>, and
+<acronym>UTF-32</acronym>.
+
+   <p>When an <acronym>XHTML</acronym> document is read, the parser provides entity
+definitions for all of the named <acronym>XHTML</acronym> characters; for
+example, it defines &lsquo;<samp><span class="samp">&amp;nbsp;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">&amp;copy;</span></samp>&rsquo;.  In order for a
+document to be recognized as <acronym>XHTML</acronym>, it must contain an
+<acronym>XHTML</acronym> <acronym>DTD</acronym>, such as this:
+
+<pre class="example">     &lt;!DOCTYPE html
+               PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+</pre>
+   <p class="noindent">At present the parser recognizes <acronym>XHTML</acronym> Strict 1.0 and
+<acronym>XHTML</acronym> 1.1 documents.
+
+<div class="defun">
+&mdash; procedure: <b>read-xml</b><var> port </var>[<var>pi-handlers</var>]<var><a name="index-read_002dxml-2323"></a></var><br>
+<blockquote><p>Read an <acronym>XML</acronym> document from <var>port</var> and return the
+corresponding <acronym>XML</acronym> document record.
+
+        <p><var>Pi-handlers</var>, if specified, must be an association list.  Each
+element of <var>pi-handlers</var> must be a list of two elements: a symbol
+and a procedure.  When the parser encounters processing instructions
+with a name that appears in <var>pi-handlers</var>, the procedure is called
+with one argument, which is the text of the processing instructions. 
+The procedure must return a list of <acronym>XML</acronym> structure records that
+are legal for the context of the processing instructions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>read-xml-file</b><var> pathname </var>[<var>pi-handlers</var>]<var><a name="index-read_002dxml_002dfile-2324"></a></var><br>
+<blockquote><p>This convenience procedure simplifies reading <acronym>XML</acronym> from a file. 
+It is roughly equivalent to
+
+     <pre class="example">          (define (read-xml-file pathname #!optional pi-handlers)
+            (call-with-input-file pathname
+              (lambda (port)
+                (read-xml port pi-handlers))))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>string-&gt;xml</b><var> string </var>[<var>start </var>[<var>end </var>[<var>pi-handlers</var>]]]<var><a name="index-string_002d_003exml-2325"></a></var><br>
+<blockquote><p>This convenience procedure simplifies reading <acronym>XML</acronym> from a
+string.  The <var>string</var> argument may be a string or a wide string. 
+It is roughly equivalent to
+
+     <pre class="example">          (define (string-&gt;xml string #!optional start end pi-handlers)
+            (read-xml (open-input-string string start end)
+                      pi-handlers))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

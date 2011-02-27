@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Coordinates for Graphics - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Graphics.html#Graphics" title="Graphics">
+<link rel="prev" href="Opening-and-Closing-of-Graphics-Devices.html#Opening-and-Closing-of-Graphics-Devices" title="Opening and Closing of Graphics Devices">
+<link rel="next" href="Drawing-Graphics.html#Drawing-Graphics" title="Drawing Graphics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Coordinates-for-Graphics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Drawing-Graphics.html#Drawing-Graphics">Drawing Graphics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Opening-and-Closing-of-Graphics-Devices.html#Opening-and-Closing-of-Graphics-Devices">Opening and Closing of Graphics Devices</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Graphics.html#Graphics">Graphics</a>
+<hr>
+</div>
+
+<h3 class="section">17.2 Coordinates for Graphics</h3>
+
+<p><a name="index-graphics_002c-coordinate-systems-2981"></a>
+<a name="index-coordinates_002c-graphics-2982"></a><a name="index-device-coordinates_002c-graphics-_0028defn_0029-2983"></a><a name="index-graphics_002c-device-coordinates-_0028defn_0029-2984"></a><a name="index-virtual-coordinates_002c-graphics-_0028defn_0029-2985"></a><a name="index-graphics_002c-virtual-coordinates-_0028defn_0029-2986"></a>Each graphics device has two different coordinate systems associated
+with it: <dfn>device coordinates</dfn> and <dfn>virtual coordinates</dfn>.  Device
+coordinates are generally defined by low-level characteristics of the
+device itself, and often cannot be changed.  Most device coordinate
+systems are defined in terms of pixels, and usually the upper-left-hand
+corner is the origin of the coordinate system, with <var>x</var> coordinates
+increasing to the right and <var>y</var> coordinates increasing downwards.
+
+   <p>In contrast, virtual coordinates are more flexible in the units
+employed, the position of the origin, and even the direction in which
+the coordinates increase.  A virtual coordinate system is defined by
+assigning coordinates to the edges of a device.  Because these edge
+coordinates are arbitrary real numbers, any Cartesian coordinate system
+can be defined.
+
+   <p>All graphics procedures that use coordinates are defined on virtual
+coordinates.  For example, to draw a line at a particular place on a
+device, the virtual coordinates for the endpoints of that line are
+given.
+
+   <p>When a graphics device is initialized, its virtual coordinate system is
+reset so that the left edge corresponds to an x-coordinate of <code>-1</code>,
+the right edge to x-coordinate <code>1</code>, the bottom edge to y-coordinate
+<code>-1</code>, and the top edge to y-coordinate <code>1</code>.
+
+<div class="defun">
+&mdash; procedure: <b>graphics-device-coordinate-limits</b><var> graphics-device<a name="index-graphics_002ddevice_002dcoordinate_002dlimits-2987"></a></var><br>
+<blockquote><p>Returns (as multiple values) the device coordinate limits for
+<var>graphics-device</var>.  The values, which are exact non-negative
+integers, are: <var>x-left</var>, <var>y-bottom</var>, <var>x-right</var>, and
+<var>y-top</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>graphics-coordinate-limits</b><var> graphics-device<a name="index-graphics_002dcoordinate_002dlimits-2988"></a></var><br>
+<blockquote><p>Returns (as multiple values) the virtual coordinate limits for
+<var>graphics-device</var>.  The values, which are real numbers, are:
+<var>x-left</var>, <var>y-bottom</var>, <var>x-right</var>, and <var>y-top</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>graphics-set-coordinate-limits</b><var> graphics-device x-left y-bottom x-right y-top<a name="index-graphics_002dset_002dcoordinate_002dlimits-2989"></a></var><br>
+<blockquote><p>Changes the virtual coordinate limits of <var>graphics-device</var> to the
+given arguments.  <var>X-left</var>, <var>y-bottom</var>, <var>x-right</var>, and
+<var>y-top</var> must be real numbers.  Subsequent calls to
+<code>graphics-coordinate-limits</code> will return the new limits.  This
+operation has no effect on the device's displayed contents.
+
+        <p>Note: This operation usually resets the clip rectangle, although it is
+not guaranteed to do so.  If a clip rectangle is in effect when this
+procedure is called, it is necessary to redefine the clip rectangle
+afterwards. 
+</p></blockquote></div>
+
+   </body></html>
+

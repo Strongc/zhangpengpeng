@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Storage Model - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Scheme-Concepts.html#Scheme-Concepts" title="Scheme Concepts">
+<link rel="prev" href="Disjointness-of-Types.html#Disjointness-of-Types" title="Disjointness of Types">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Storage-Model"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Disjointness-of-Types.html#Disjointness-of-Types">Disjointness of Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Scheme-Concepts.html#Scheme-Concepts">Scheme Concepts</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.2.8 Storage Model</h4>
+
+<p>This section describes a model that can be used to understand Scheme's
+use of storage.
+
+   <p><a name="index-location-109"></a><a name="index-string_002dset_0021-110"></a>Variables and objects such as pairs, vectors, and strings implicitly
+denote locations or sequences of locations.  A string, for example,
+denotes as many locations as there are characters in the string.  (These
+locations need not correspond to a full machine word.)  A new value may
+be stored into one of these locations using the <code>string-set!</code>
+procedure, but the string continues to denote the same locations as
+before.
+
+   <p><a name="index-car-111"></a><a name="index-vector_002dref-112"></a><a name="index-string_002dref-113"></a><a name="index-eqv_003f-114"></a>An object fetched from a location, by a variable reference or by a
+procedure such as <code>car</code>, <code>vector-ref</code>, or <code>string-ref</code>,
+is equivalent in the sense of <code>eqv?</code> to the object last stored in
+the location before the fetch.
+
+   <p>Every location is marked to show whether it is in use.  No variable or
+object ever refers to a location that is not in use.  Whenever this
+document speaks of storage being allocated for a variable or object,
+what is meant is that an appropriate number of locations are chosen from
+the set of locations that are not in use, and the chosen locations are
+marked to indicate that they are now in use before the variable or
+object is made to denote them.
+
+   <p><a name="index-constant-115"></a><a name="index-mutable-116"></a><a name="index-immutable-117"></a><a name="index-symbol_002d_003estring-118"></a>In many systems it is desirable for constants (i.e. the values of
+literal expressions) to reside in read-only memory.  To express this, it
+is convenient to imagine that every object that denotes locations is
+associated with a flag telling whether that object is mutable or
+immutable.  The constants and the strings returned by
+<code>symbol-&gt;string</code> are then the immutable objects, while all objects
+created by other procedures are mutable.  It is an error to attempt to
+store a new value into a location that is denoted by an immutable
+object.  Note that the MIT/GNU Scheme compiler takes advantage of this
+property to share constants, but that these constants are not immutable. 
+Instead, two constants that are <code>equal?</code> may be <code>eq?</code> in
+compiled code.
+
+   </body></html>
+

@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Miscellaneous Character Operations - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Characters.html#Characters" title="Characters">
+<link rel="prev" href="Comparison-of-Characters.html#Comparison-of-Characters" title="Comparison of Characters">
+<link rel="next" href="Internal-Representation-of-Characters.html#Internal-Representation-of-Characters" title="Internal Representation of Characters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Miscellaneous-Character-Operations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Internal-Representation-of-Characters.html#Internal-Representation-of-Characters">Internal Representation of Characters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Comparison-of-Characters.html#Comparison-of-Characters">Comparison of Characters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Characters.html#Characters">Characters</a>
+<hr>
+</div>
+
+<h3 class="section">5.3 Miscellaneous Character Operations</h3>
+
+<div class="defun">
+&mdash; procedure: <b>char?</b><var> object<a name="index-char_003f-725"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-character-726"></a>Returns <code>#t</code> if <var>object</var> is a character; otherwise returns
+<code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-upcase</b><var> char<a name="index-char_002dupcase-727"></a></var><br>
+&mdash; procedure: <b>char-downcase</b><var> char<a name="index-char_002ddowncase-728"></a></var><br>
+<blockquote><p><a name="index-uppercase_002c-character-conversion-729"></a><a name="index-lowercase_002c-character-conversion-730"></a><a name="index-case-conversion_002c-of-character-731"></a><a name="index-char_002dci_003d_003f-732"></a>Returns the uppercase or lowercase equivalent of <var>char</var> if
+<var>char</var> is a letter; otherwise returns <var>char</var>.  These procedures
+return a character <var>char2</var> such that <code>(char-ci=? </code><var>char</var>
+<var>char2</var><code>)</code>.
+
+        <p><strong>Note</strong>: Although character objects can represent all of Unicode,
+the model of alphabetic case used covers only <acronym>ASCII</acronym> letters,
+which means that case-insensitive comparisons and case conversions are
+incorrect for non-<acronym>ASCII</acronym> letters.  This will eventually be
+fixed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-&gt;digit</b><var> char </var>[<var>radix</var>]<var><a name="index-char_002d_003edigit-733"></a></var><br>
+<blockquote><p>If <var>char</var> is a character representing a digit in the given
+<var>radix</var>, returns the corresponding integer value.  If you specify
+<var>radix</var> (which must be an exact integer between 2 and 36 inclusive),
+the conversion is done in that base, otherwise it is done in base 10. 
+If <var>char</var> doesn't represent a digit in base <var>radix</var>,
+<code>char-&gt;digit</code> returns <code>#f</code>.
+
+        <p>Note that this procedure is insensitive to the alphabetic case of
+<var>char</var>.
+
+     <pre class="example">          (char-&gt;digit #\8)                       &rArr;  8
+          (char-&gt;digit #\e 16)                    &rArr;  14
+          (char-&gt;digit #\e)                       &rArr;  #f
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>digit-&gt;char</b><var> digit </var>[<var>radix</var>]<var><a name="index-digit_002d_003echar-734"></a></var><br>
+<blockquote><p>Returns a character that represents <var>digit</var> in the radix given by
+<var>radix</var>.  <var>Radix</var> must be an exact integer between 2 and 36
+(inclusive), and defaults to 10.  <var>Digit</var>, which must be an
+exact non-negative integer, should be less than <var>radix</var>; if
+<var>digit</var> is greater than or equal to <var>radix</var>, <code>digit-&gt;char</code>
+returns <code>#f</code>.
+
+     <pre class="example">          (digit-&gt;char 8)                         &rArr;  #\8
+          (digit-&gt;char 14 16)                     &rArr;  #\E
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

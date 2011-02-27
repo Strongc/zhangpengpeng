@@ -1,0 +1,190 @@
+<html lang="en">
+<head>
+<title>Construction of Hash Tables - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hash-Tables.html#Hash-Tables" title="Hash Tables">
+<link rel="prev" href="Hash-Tables.html#Hash-Tables" title="Hash Tables">
+<link rel="next" href="Basic-Hash-Table-Operations.html#Basic-Hash-Table-Operations" title="Basic Hash Table Operations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Construction-of-Hash-Tables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Basic-Hash-Table-Operations.html#Basic-Hash-Table-Operations">Basic Hash Table Operations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Hash-Tables.html#Hash-Tables">Hash Tables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hash-Tables.html#Hash-Tables">Hash Tables</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.4.1 Construction of Hash Tables</h4>
+
+<p><a name="index-construction_002c-of-hash-table-1641"></a>The next few procedures are hash-table constructors.  All hash table
+constructors are procedures that accept one optional argument,
+<var>initial-size</var>, and return a newly allocated hash table.  If
+<var>initial-size</var> is given, it must be an exact non-negative integer or
+<code>#f</code>.  The meaning of <var>initial-size</var> is discussed below
+(see <a href="Resizing-of-Hash-Tables.html#Resizing-of-Hash-Tables">Resizing of Hash Tables</a>).
+
+   <p><a name="index-equivalence-predicate_002c-of-hash-table-1642"></a><a name="index-strongly-held-keys_002c-of-hash-table-1643"></a><a name="index-weakly-held-keys_002c-of-hash-table-1644"></a>Hash tables are normally characterized by two things: the equivalence
+predicate that is used to compare keys, and whether or not the table
+allows its keys to be reclaimed by the garbage collector.  If a table
+prevents its keys from being reclaimed by the garbage collector, it is
+said to hold its keys <dfn>strongly</dfn>; otherwise it holds its keys
+<dfn>weakly</dfn> (see <a href="Weak-Pairs.html#Weak-Pairs">Weak Pairs</a>).
+
+<div class="defun">
+&mdash; procedure: <b>make-strong-eq-hash-table</b> [<var>initial-size</var>]<var><a name="index-make_002dstrong_002deq_002dhash_002dtable-1645"></a></var><br>
+<blockquote><p><a name="index-eq_003f-1646"></a>Returns a newly allocated hash table that accepts arbitrary objects as
+keys, and compares those keys with <code>eq?</code>.  The keys are held
+strongly.  These are the fastest of the standard hash tables. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-weak-eq-hash-table</b> [<var>initial-size</var>]<var><a name="index-make_002dweak_002deq_002dhash_002dtable-1647"></a></var><br>
+<blockquote><p><a name="index-eq_003f-1648"></a>Returns a newly allocated hash table that accepts arbitrary objects as
+keys, and compares those keys with <code>eq?</code>.  The keys are held
+weakly. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-eq-hash-table</b> [<var>initial-size</var>]<var><a name="index-make_002deq_002dhash_002dtable-1649"></a></var><br>
+<blockquote><p><a name="index-eq_003f-1650"></a>This is an alias for <code>make-weak-eq-hash-table</code>.
+
+        <p><strong>Warning</strong>:  This become an alias
+<code>make-strong-eq-hash-table</code> instead.  We recommend that you use
+<code>make-weak-eq-hash-table</code> explicitly for weak hash tables. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-strong-eqv-hash-table</b> [<var>initial-size</var>]<var><a name="index-make_002dstrong_002deqv_002dhash_002dtable-1651"></a></var><br>
+<blockquote><p><a name="index-eqv_003f-1652"></a>Returns a newly allocated hash table that accepts arbitrary objects as
+keys, and compares those keys with <code>eqv?</code>.  The keys are held
+strongly.  These hash tables are a little slower than those made by
+<code>make-strong-eq-hash-table</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-weak-eqv-hash-table</b> [<var>initial-size</var>]<var><a name="index-make_002dweak_002deqv_002dhash_002dtable-1653"></a></var><br>
+<blockquote><p><a name="index-eqv_003f-1654"></a>Returns a newly allocated hash table that accepts arbitrary objects as
+keys, and compares those keys with <code>eqv?</code>.  The keys are held
+weakly, except that booleans, characters, numbers, and interned symbols
+are held strongly. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-eqv-hash-table</b> [<var>initial-size</var>]<var><a name="index-make_002deqv_002dhash_002dtable-1655"></a></var><br>
+<blockquote><p><a name="index-eqv_003f-1656"></a>This is an alias for <code>make-weak-eqv-hash-table</code>.
+
+        <p><strong>Warning</strong>:  This become an alias for
+<code>make-strong-eqv-hash-table</code> instead.  We recommend that you use
+<code>make-weak-eqv-hash-table</code> explicitly for weak hash tables. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-equal-hash-table</b> [<var>initial-size</var>]<var><a name="index-make_002dequal_002dhash_002dtable-1657"></a></var><br>
+<blockquote><p><a name="index-equal_003f-1658"></a>Returns a newly allocated hash table that accepts arbitrary objects as
+keys, and compares those keys with <code>equal?</code>.  The keys are held
+strongly.  These hash tables are quite a bit slower than those made by
+<code>make-strong-eq-hash-table</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>make-string-hash-table</b> [<var>initial-size</var>]<var><a name="index-make_002dstring_002dhash_002dtable-1659"></a></var><br>
+<blockquote><p><a name="index-string_003d_003f-1660"></a>Returns a newly allocated hash table that accepts character strings as
+keys, and compares them with <code>string=?</code>.  The keys are held
+strongly. 
+</p></blockquote></div>
+
+   <p>The next two procedures are used to create new hash-table constructors. 
+All of the above hash table constructors, with the exception of
+<code>make-eqv-hash-table</code>, could have been created by calls to these
+&ldquo;constructor-constructors&rdquo;; see the examples below.
+
+<div class="defun">
+&mdash; procedure: <b>strong-hash-table/constructor</b><var> key-hash key=? </var>[<var>rehash-after-gc?</var>]<var><a name="index-strong_002dhash_002dtable_002fconstructor-1661"></a></var><br>
+&mdash; procedure: <b>weak-hash-table/constructor</b><var> key-hash key=? </var>[<var>rehash-after-gc?</var>]<var><a name="index-weak_002dhash_002dtable_002fconstructor-1662"></a></var><br>
+<blockquote><p><a name="index-hashing_002c-of-key-in-hash-table-1663"></a><a name="index-modulus_002c-of-hashing-procedure-1664"></a>Each of these procedures accepts two arguments and returns a hash-table
+constructor.  The <var>key=?</var> argument is an equivalence predicate for
+the keys of the hash table.  The <var>key-hash</var> argument is a procedure
+that computes a hash number.  Specifically, <var>key-hash</var> accepts two
+arguments, a key and an exact positive integer (the <dfn>modulus</dfn>), and
+returns an exact non-negative integer that is less than the modulus.
+
+        <p>The optional argument <var>rehash-after-gc?</var>, if true, says that the
+values returned by <var>key-hash</var> might change after a garbage
+collection.  If so, the hash-table implementation arranges for the table
+to be rehashed when necessary.  (See <a href="Address-Hashing.html#Address-Hashing">Address Hashing</a>, for
+information about hash procedures that have this property.)  Otherwise,
+it is assumed that <var>key-hash</var> always returns the same value for the
+same arguments.  The default value of this argument is <code>#f</code>.
+
+        <p>The constructors returned by <code>strong-hash-table/constructor</code> make
+hash tables that hold their keys strongly.  The constructors returned by
+<code>weak-hash-table/constructor</code> make hash tables that hold their keys
+weakly. 
+</p></blockquote></div>
+
+   <p>Some examples showing how some standard hash-table constructors could have
+been defined:
+
+   <p><a name="index-eq_002dhash_002dmod-1665"></a><a name="index-eq_003f-1666"></a><a name="index-equal_002dhash_002dmod-1667"></a><a name="index-equal_003f-1668"></a><a name="index-string_002dhash_002dmod-1669"></a><a name="index-string_003d_003f-1670"></a>
+<pre class="example">     (define make-weak-eq-hash-table
+       (weak-hash-table/constructor eq-hash-mod eq? #t))
+     
+     (define make-equal-hash-table
+       (strong-hash-table/constructor equal-hash-mod equal? #t))
+     
+     (define make-string-hash-table
+       (strong-hash-table/constructor string-hash-mod string=? #f))
+</pre>
+   <p>The following procedure is sometimes useful in conjunction with weak
+hash tables.  Normally it is not needed, because such hash tables clean
+themselves automatically as they are used.
+
+<div class="defun">
+&mdash; procedure: <b>hash-table/clean!</b><var> hash-table<a name="index-hash_002dtable_002fclean_0021-1671"></a></var><br>
+<blockquote><p>If <var>hash-table</var> is a type of hash table that holds its <var>key</var>s
+weakly, this procedure recovers any space that was being used to record
+associations for objects that have been reclaimed by the garbage
+collector.  Otherwise, this procedure does nothing.  In either case, it
+returns an unspecified result. 
+</p></blockquote></div>
+
+   </body></html>
+

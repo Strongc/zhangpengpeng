@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Environment Concepts - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Scheme-Concepts.html#Scheme-Concepts" title="Scheme Concepts">
+<link rel="prev" href="Variable-Bindings.html#Variable-Bindings" title="Variable Bindings">
+<link rel="next" href="Initial-and-Current-Environments.html#Initial-and-Current-Environments" title="Initial and Current Environments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Environment-Concepts"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Initial-and-Current-Environments.html#Initial-and-Current-Environments">Initial and Current Environments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Variable-Bindings.html#Variable-Bindings">Variable Bindings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Scheme-Concepts.html#Scheme-Concepts">Scheme Concepts</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.2.2 Environment Concepts</h4>
+
+<p><a name="index-environment-_0028defn_0029-67"></a><a name="index-unbound-variable-_0028defn_0029-68"></a><a name="index-error_002c-unbound-variable-_0028defn_0029-69"></a>An <dfn>environment</dfn> is a set of variable bindings.  If an environment
+has no binding for a variable, that variable is said to be <dfn>unbound</dfn>
+in that environment.  Referencing an unbound variable signals a
+condition of type <code>condition-type:unbound-variable</code>. 
+<a name="index-condition_002dtype_003aunbound_002dvariable-70"></a>
+<a name="index-extension_002c-of-environment-_0028defn_0029-71"></a><a name="index-environment_002c-extension-_0028defn_0029-72"></a><a name="index-shadowing_002c-of-variable-binding-_0028defn_0029-73"></a><a name="index-parent_002c-of-environment-_0028defn_0029-74"></a><a name="index-child_002c-of-environment-_0028defn_0029-75"></a><a name="index-inheritance_002c-of-environment-bindings-_0028defn_0029-76"></a>A new environment can be created by <dfn>extending</dfn> an existing
+environment with a set of new bindings.  Note that &ldquo;extending an
+environment&rdquo; does <strong>not</strong> modify the environment; rather, it
+creates a new environment that contains the new bindings and the old
+ones.  The new bindings <dfn>shadow</dfn> the old ones; that is, if an
+environment that contains a binding for <code>x</code> is extended with a new
+binding for <code>x</code>, then only the new binding is seen when <code>x</code> is
+looked up in the extended environment.  Sometimes we say that the
+original environment is the <dfn>parent</dfn> of the new one, or that the new
+environment is a <dfn>child</dfn> of the old one, or that the new environment
+<dfn>inherits</dfn> the bindings in the old one.
+
+   <p><a name="index-let-77"></a><a name="index-let_002a-78"></a><a name="index-letrec-79"></a><a name="index-do-80"></a><a name="index-define-81"></a>Procedure calls extend an environment, as do <code>let</code>, <code>let*</code>,
+<code>letrec</code>, and <code>do</code> expressions.  Internal definitions
+(see <a href="Internal-Definitions.html#Internal-Definitions">Internal Definitions</a>) also extend an environment.  (Actually,
+all the constructs that extend environments can be expressed in terms of
+procedure calls, so there is really just one fundamental mechanism for
+environment extension.)  A top-level definition (see <a href="Top_002dLevel-Definitions.html#Top_002dLevel-Definitions">Top-Level Definitions</a>) may add a binding to an existing environment.
+
+   </body></html>
+

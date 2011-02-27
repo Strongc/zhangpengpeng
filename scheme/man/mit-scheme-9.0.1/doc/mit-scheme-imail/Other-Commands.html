@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Other Commands - IMAIL 1.19</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IMAIL 1.19">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Sorting-Messages.html#Sorting-Messages" title="Sorting Messages">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents IMAIL 1.19.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Other-Commands"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sorting-Messages.html#Sorting-Messages">Sorting Messages</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">4.10 Other Commands</h3>
+
+<p>This section documents a handful of commands and variables that don't
+fit into any of the other documentation categories.
+
+     <dl>
+<dt><kbd>q</kbd><dd>Quit out of <acronym>IMAIL</acronym> (<code>imail-quit</code>).  This closes all open
+<acronym>IMAP</acronym> connections and buries all <acronym>IMAIL</acronym> buffers.  With
+prefix argument, only affects the current <acronym>IMAIL</acronym> buffer,
+leaving any other <acronym>IMAIL</acronym> buffers alone.
+
+     <br><dt><kbd>M-d</kbd><dd>Disconnect from the <acronym>IMAP</acronym> server (<code>imail-disconnect</code>).
+
+     <br><dt><kbd>b</kbd><dd>Bury the <acronym>IMAIL</acronym> buffer (<code>imail-bury</code>).
+
+     <br><dt><kbd>s</kbd><dd>Save changes in the current folder to disk (<code>imail-save-folder</code>). 
+</dl>
+
+   <p><a name="index-q-233"></a><a name="index-imail_002dquit-234"></a><a name="index-close-folder-235"></a><a name="index-folder_002c-close-236"></a>When you are finished reading mail in a folder, use the <kbd>q</kbd> command
+(<code>imail-quit</code>).  This command <dfn>closes</dfn> the folder, then buries
+the buffer.  Closing a folder has different effects, depending on the
+type of folder.  Closing an <acronym>IMAP</acronym> folder causes <acronym>IMAIL</acronym>
+to disconnect from the <acronym>IMAP</acronym> server (go offline).  Closing a
+file folder saves any changes out to the corresponding file.  In both
+cases, internal data structures may be dropped, requiring them to be
+rebuilt, should the folder later be re-opened.  In no case are any
+changes made to the folder's contents; in particular, deleted messages
+are <em>not</em> expunged.
+
+   <p>On <acronym>IMAP</acronym> folders, the <kbd>q</kbd> command is equivalent to <kbd>M-d
+b</kbd>.  On file folders, the <kbd>q</kbd> command is equivalent to <kbd>s b</kbd>.
+
+   <p><a name="index-M_002dd-237"></a><a name="index-imail_002ddisconnect-238"></a>The <kbd>M-d</kbd> command (<code>imail-disconnect</code>) disconnects
+<acronym>IMAIL</acronym> from the <acronym>IMAP</acronym> server (goes offline).  This has
+no effect on file folders.
+
+   <p><a name="index-b-239"></a><a name="index-imail_002dbury-240"></a>The <kbd>b</kbd> command (<code>imail-bury</code>) buries the selected
+<acronym>IMAIL</acronym> buffer.  <dfn>Burying</dfn> a buffer means moving it to the
+bottom of the buffer list and selecting another buffer from the top of
+the list.  This is similar to the command <code>bury-buffer</code>, except
+that any summary buffer associated with this buffer is also buried, and
+if a window was created to hold the summary buffer, it is deleted.
+
+   <p><a name="index-s-241"></a><a name="index-imail_002dsave_002dfolder-242"></a>The <kbd>s</kbd> command (<code>imail-save-folder</code>) saves out any changes to
+the selected <acronym>IMAIL</acronym> folder.  For file folders, this means
+writing the folder back out to its file.  For <acronym>IMAP</acronym> folders,
+this no effect.  In no case are any changes made to the folder's
+contents; in particular, deleted messages are <em>not</em> expunged.
+
+   <p><a name="index-imail_002dbody_002dcache_002dlimit-243"></a><acronym>IMAIL</acronym> normally caches <acronym>IMAP</acronym> message bodies in memory
+in order to increase performance.  The variable
+<code>imail-body-cache-limit</code> gives you some control over how this
+caching is done.  <code>imail-body-cache-limit</code> is normally set to a
+positive integer, meaning that any message body or in-line
+<acronym>MIME</acronym> entity whose size in bytes is less than this number is
+cached.  However, caching can be entirely disabled by setting
+<code>imail-body-cache-limit</code> to <code>#f</code>, or made unconditional by
+setting it to <code>#t</code>.
+
+   <p><a name="index-imail_002dpass_002dphrase_002dretention_002dtime-244"></a>Another thing that <acronym>IMAIL</acronym> caches is <acronym>IMAP</acronym> passwords. 
+This is done so that you don't have to keep typing your password
+whenever you connect to a new <acronym>IMAP</acronym> folder.  However, this is
+also a security risk, because the password is kept in Scheme's memory. 
+The variable <code>imail-pass-phrase-retention-time</code> says how long
+passwords are cached, in minutes.  Normally this is set to 30 minutes,
+but if you are paranoid you can set it to zero to disable password
+caching altogether.  Scheme keeps track of the use of each password,
+and deletes its copy of the password when it has expired.  Additionally,
+Scheme stores passwords in an obscured form, to prevent them being seen
+during casual browsing through memory structures, but this does
+<em>not</em> provide any protection against a deliberate attempt to find
+the password.
+
+   </body></html>
+

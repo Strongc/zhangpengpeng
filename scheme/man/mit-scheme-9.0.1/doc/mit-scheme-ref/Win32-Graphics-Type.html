@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>Win32 Graphics Type - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Win32-Graphics.html#Win32-Graphics" title="Win32 Graphics">
+<link rel="prev" href="Win32-Graphics.html#Win32-Graphics" title="Win32 Graphics">
+<link rel="next" href="Custom-Operations-for-Win32-Graphics.html#Custom-Operations-for-Win32-Graphics" title="Custom Operations for Win32 Graphics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Win32-Graphics-Type"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Custom-Operations-for-Win32-Graphics.html#Custom-Operations-for-Win32-Graphics">Custom Operations for Win32 Graphics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Win32-Graphics.html#Win32-Graphics">Win32 Graphics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Win32-Graphics.html#Win32-Graphics">Win32 Graphics</a>
+<hr>
+</div>
+
+<h4 class="subsection">17.10.1 Win32 Graphics Type</h4>
+
+<p>Win32 graphics devices are created by specifying the symbol <code>win32</code>
+as the <var>graphics-device-type</var> argument to
+<code>make-graphics-device</code>.  The Win32 graphics device type is
+implemented as a top-level window and supports color drawing in addition
+to the standard Scheme graphics operations.
+
+   <p>Graphics devices are opened as follows:
+
+<pre class="example">     (make-graphics-device 'win32 #!optional <var>width</var> <var>height</var> <var>palette</var>)
+</pre>
+   <p class="noindent">where <var>width</var> and <var>height</var> specify the size, in pixels, of the
+drawing area in the graphics window (i.e. excluding the frame). 
+<var>Palette</var> determines the colors available for drawing in the window.
+
+   <p>When a color is specified for drawing, the nearest color available in
+the palette is used.  Permitted values for <var>palette</var> are
+
+     <dl>
+<dt><code>'grayscale</code><dd>The window allocates colors from a grayscale palette
+of approximately 236 shades of gray.
+
+     <br><dt><code>'grayscale-128</code><dd>The window allocates colors from a grayscale palette of 128 shades of
+gray.
+
+     <br><dt><code>'standard</code><dd>The standard palette has good selection of colors and grays.
+
+     <br><dt><code>#f</code> or <code>'system</code><dd>The colors available are those in the system palette.  There are usually
+16 to 20 colors in the system palette and these are usually sufficent
+for simple applications like line drawings and x-vs-y graphs of
+mathematical functions.  Drawing with the system palette can be more
+efficient.
+
+   </dl>
+   If <var>palette</var> is not specified then the <code>standard</code> palette is
+used.
+
+   </body></html>
+

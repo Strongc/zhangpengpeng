@@ -1,0 +1,169 @@
+<html lang="en">
+<head>
+<title>Selecting List Components - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lists.html#Lists" title="Lists">
+<link rel="prev" href="Construction-of-Lists.html#Construction-of-Lists" title="Construction of Lists">
+<link rel="next" href="Cutting-and-Pasting-Lists.html#Cutting-and-Pasting-Lists" title="Cutting and Pasting Lists">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Selecting-List-Components"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Cutting-and-Pasting-Lists.html#Cutting-and-Pasting-Lists">Cutting and Pasting Lists</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Construction-of-Lists.html#Construction-of-Lists">Construction of Lists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
+<hr>
+</div>
+
+<h3 class="section">7.3 Selecting List Components</h3>
+
+<p><a name="index-selection_002c-of-list-component-1191"></a><a name="index-component-selection_002c-of-list-1192"></a>
+
+<div class="defun">
+&mdash; procedure: <b>list?</b><var> object<a name="index-list_003f-1193"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-list-1194"></a><a name="index-circular-list-1195"></a>Returns <code>#t</code> if <var>object</var> is a list, otherwise returns
+<code>#f</code>.  By definition, all lists have finite length and are
+terminated by the empty list.  This procedure returns an answer even for
+circular structures.
+
+        <p><a name="index-pair_003f-1196"></a><a name="index-null_003f-1197"></a>Any <var>object</var> satisfying this predicate will also satisfy exactly one
+of <code>pair?</code> or <code>null?</code>.
+
+     <pre class="example">          (list? '(a b c))                        &rArr; #t
+          (list? '())                             &rArr; #t
+          (list? '(a . b))                        &rArr; #f
+          (let ((x (list 'a)))
+            (set-cdr! x x)
+            (list? x))                            &rArr; #f
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>circular-list?</b><var> object<a name="index-circular_002dlist_003f-1198"></a></var><br>
+<blockquote><p>(<acronym>SRFI</acronym> 1) Returns <code>#t</code> if <var>object</var> is a circular
+list, otherwise returns <code>#f</code>.
+
+     <pre class="example">          (dotted-list? (list 'a 'b 'c))          &rArr; #f
+          (dotted-list? (cons* 'a 'b 'c))         &rArr; #t
+          (dotted-list? (circular-list 'a 'b 'c)) &rArr; #f
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>dotted-list?</b><var> object<a name="index-dotted_002dlist_003f-1199"></a></var><br>
+<blockquote><p>(<acronym>SRFI</acronym> 1) Returns <code>#t</code> if <var>object</var> is an improper
+list, otherwise returns <code>#f</code>.
+
+     <pre class="example">          (circular-list? (list 'a 'b 'c))        &rArr; #f
+          (circular-list? (cons* 'a 'b 'c))       &rArr; #f
+          (circular-list? (circular-list 'a 'b 'c)) &rArr; #t
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>length</b><var> list<a name="index-length-1200"></a></var><br>
+<blockquote><p>Returns the length of <var>list</var>.  Signals an error if <var>list</var> isn't
+a proper list.
+
+     <pre class="example">          (length '(a b c))                       &rArr; 3
+          (length '(a (b) (c d e)))               &rArr; 3
+          (length '())                            &rArr; 0
+          (length (circular-list 'a 'b 'c))       error--&gt;
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>length+</b><var> clist<a name="index-length_002b-1201"></a></var><br>
+<blockquote><p>(<acronym>SRFI</acronym> 1) Returns the length of <var>clist</var>, if it is a proper
+list.  Returns <code>#f</code> if <var>clist</var> is a circular list.  Otherwise
+signals an error.
+
+     <pre class="example">          (length+ (list 'a 'b 'c))               &rArr; 3
+          (length+ (cons* 'a 'b 'c))              error--&gt;
+          (length+ (circular-list 'a 'b 'c))      &rArr; #f
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>null?</b><var> object<a name="index-null_003f-1202"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-empty-list-1203"></a><a name="index-empty-list_002c-predicate-for-1204"></a>Returns <code>#t</code> if <var>object</var> is the empty list; otherwise returns
+<code>#f</code>.
+
+     <pre class="example">          (null? '(a . b))                        &rArr; #f
+          (null? '(a b c))                        &rArr; #f
+          (null? '())                             &rArr; #t
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>list-ref</b><var> list k<a name="index-list_002dref-1205"></a></var><br>
+<blockquote><p><a name="index-index_002c-of-list-_0028defn_0029-1206"></a><a name="index-valid-index_002c-of-list-_0028defn_0029-1207"></a><a name="index-list-index-_0028defn_0029-1208"></a>Returns the <var>k</var>th element of <var>list</var>, using zero-origin indexing. 
+The <dfn>valid indexes</dfn> of a list are the exact non-negative integers
+less than the length of the list.  The first element of a list has index
+<code>0</code>, the second has index <code>1</code>, and so on.
+
+     <pre class="example">          (list-ref '(a b c d) 2)                 &rArr; c
+          (list-ref '(a b c d)
+                    (inexact-&gt;exact (round 1.8)))
+               &rArr; c
+</pre>
+        <p><a name="index-list_002dtail-1209"></a><code>(list-ref </code><var>list</var> <var>k</var><code>)</code> is equivalent to <code>(car
+(list-tail </code><var>list</var> <var>k</var><code>))</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>first</b><var> list<a name="index-first-1210"></a></var><br>
+&mdash; procedure: <b>second</b><var> list<a name="index-second-1211"></a></var><br>
+&mdash; procedure: <b>third</b><var> list<a name="index-third-1212"></a></var><br>
+&mdash; procedure: <b>fourth</b><var> list<a name="index-fourth-1213"></a></var><br>
+&mdash; procedure: <b>fifth</b><var> list<a name="index-fifth-1214"></a></var><br>
+&mdash; procedure: <b>sixth</b><var> list<a name="index-sixth-1215"></a></var><br>
+&mdash; procedure: <b>seventh</b><var> list<a name="index-seventh-1216"></a></var><br>
+&mdash; procedure: <b>eighth</b><var> list<a name="index-eighth-1217"></a></var><br>
+&mdash; procedure: <b>ninth</b><var> list<a name="index-ninth-1218"></a></var><br>
+&mdash; procedure: <b>tenth</b><var> list<a name="index-tenth-1219"></a></var><br>
+<blockquote><p>Returns the specified element of <var>list</var>.  It is an error if
+<var>list</var> is not long enough to contain the specified element (for
+example, if the argument to <code>seventh</code> is a list that contains only
+six elements). 
+</p></blockquote></div>
+
+   </body></html>
+

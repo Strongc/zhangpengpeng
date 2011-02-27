@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+<title>Parser-language Macros - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Parser-Language.html#Parser-Language" title="Parser Language">
+<link rel="prev" href="_002aParser.html#g_t_002aParser" title="*Parser">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Parser-language-Macros"></a>
+<a name="Parser_002dlanguage-Macros"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="_002aParser.html#g_t_002aParser">*Parser</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Parser-Language.html#Parser-Language">Parser Language</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.11.3 Parser-language Macros</h4>
+
+<p>The parser and matcher languages provide a macro facility so that
+common patterns can be abstracted.  The macro facility allows new
+expression types to be independently defined in the two languages. 
+The macros are defined in hierarchically organized tables, so that
+different applications can have private macro bindings.
+
+<div class="defun">
+&mdash; special form: <b>define-*matcher-macro</b><var> formals expression<a name="index-define_002d_002amatcher_002dmacro-2306"></a></var><br>
+&mdash; special form: <b>define-*parser-macro</b><var> formals expression<a name="index-define_002d_002aparser_002dmacro-2307"></a></var><br>
+<blockquote><p>These special forms are used to define macros in the matcher and
+parser language, respectively.  <var>Formals</var> is like the
+<var>formals</var> list of a <code>define</code> special form, and
+<var>expression</var> is a Scheme expression.
+
+        <p>If <var>formals</var> is a list (or improper list) of symbols, the first
+symbol in the list is the name of the macro, and the remaining symbols
+are interpreted as the <var>formals</var> of a lambda expression.  A lambda
+expression is formed by combining the latter <var>formals</var> with the
+<var>expression</var>, and this lambda expression, when evaluated, becomes
+the <dfn>expander</dfn>.  The defined macro accepts the same number of
+operands as the expander.  A macro instance is expanded by applying
+the expander to the list of operands; the result of the application is
+interpreted as a replacement expression for the macro instance.
+
+        <p>If <var>formals</var> is a symbol, it is the name of the macro.  In this
+case, the expander is a procedure of no arguments whose body is
+<var>expression</var>.  When the <var>formals</var> symbol appears by itself as
+an expression in the language, the expander is called with no
+arguments, and the result is interpreted as a replacement expression
+for the symbol. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>define-*matcher-expander</b><var> identifier expander<a name="index-define_002d_002amatcher_002dexpander-2308"></a></var><br>
+&mdash; procedure: <b>define-*parser-expander</b><var> identifier expander<a name="index-define_002d_002aparser_002dexpander-2309"></a></var><br>
+<blockquote><p>These procedures provide a procedural interface to the
+macro-definition mechanism.  <var>Identifier</var> must be a symbol, and
+<var>expander</var> must be an expander procedure, as defined above. 
+Instances of the <code>define-*matcher-macro</code> and
+<code>define-*parser-macro</code> special forms expand into calls to these
+procedures. 
+</p></blockquote></div>
+
+   <p>The remaining procedures define the interface to the parser-macros
+table abstraction.  Each parser-macro table has a separate binding
+space for macros in the matcher and parser languages.  However, the
+table inherits bindings from one specified table; it's not possible to
+inherit matcher-language bindings from one table and parser-language
+bindings from another.
+
+<div class="defun">
+&mdash; procedure: <b>make-parser-macros</b><var> parent-table<a name="index-make_002dparser_002dmacros-2310"></a></var><br>
+<blockquote><p>Create and return a new parser-macro table that inherits from
+<var>parent-table</var>.  <var>Parent-table</var> must be either a parser-macro
+table, or <code>#f</code>; usually it is specified as the value of
+<code>global-parser-macros</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>parser-macros?</b><var> object<a name="index-parser_002dmacros_003f-2311"></a></var><br>
+<blockquote><p>This is a predicate for parser-macro tables. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>global-parser-macros</b><var><a name="index-global_002dparser_002dmacros-2312"></a></var><br>
+<blockquote><p>Return the global parser-macro table.  This table is predefined and
+contains all of the bindings documented here. 
+</p></blockquote></div>
+
+   <p>There is a &ldquo;current&rdquo; table at all times, and macro definitions are
+always placed in this table.  By default, the current table is the
+global macro table, but the following procedures allow this to be
+changed.
+
+<div class="defun">
+&mdash; procedure: <b>current-parser-macros</b><var><a name="index-current_002dparser_002dmacros-2313"></a></var><br>
+<blockquote><p>Return the current parser-macro table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>set-current-parser-macros!</b><var> table<a name="index-set_002dcurrent_002dparser_002dmacros_0021-2314"></a></var><br>
+<blockquote><p>Change the current parser-macro table to <var>table</var>, which must
+satisfy <code>parser-macros?</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>with-current-parser-macros</b><var> table thunk<a name="index-with_002dcurrent_002dparser_002dmacros-2315"></a></var><br>
+<blockquote><p>Bind the current parser-macro table to <var>table</var>, call <var>thunk</var>
+with no arguments, then restore the original table binding.  The value
+returned by <var>thunk</var> is the returned as the value of this
+procedure.  <var>Table</var> must satisfy <code>parser-macros?</code>, and
+<var>thunk</var> must be a procedure of no arguments. 
+</p></blockquote></div>
+
+   </body></html>
+

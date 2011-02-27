@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Slot Access Constructors - SOS 1.9</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="SOS 1.9">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Slots.html#Slots" title="Slots">
+<link rel="prev" href="Slot-Access-Methods.html#Slot-Access-Methods" title="Slot Access Methods">
+<link rel="next" href="Slot-Access-Procedures.html#Slot-Access-Procedures" title="Slot Access Procedures">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents SOS 1.9.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Slot-Access-Constructors"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Slot-Access-Procedures.html#Slot-Access-Procedures">Slot Access Procedures</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Slot-Access-Methods.html#Slot-Access-Methods">Slot Access Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Slots.html#Slots">Slots</a>
+<hr>
+</div>
+
+<h3 class="section">3.3 Slot Access Constructors</h3>
+
+<p>For convenience, and for consistency with the record-accessor procedures
+<code>record-accessor</code> and <code>record-modifier</code>, each of the above
+method-generating procedures has a corresponding accessor-generator. 
+Each of these procedures creates a generic procedure, adds an
+appropriate method to it by calling the corresponding method-generating
+procedure, and returns the generic procedure.  Thus, for example, the
+following are equivalent:
+
+<pre class="lisp">     (slot-accessor &lt;foo&gt; 'bar)
+     
+     (let ((g (make-generic-procedure 1)))
+       (add-method g (slot-accessor-method &lt;foo&gt; 'bar))
+       g)
+</pre>
+   <div class="defun">
+&mdash; Procedure: <b>slot-accessor</b><var> class name<a name="index-slot_002daccessor-106"></a></var><br>
+<blockquote><p>Returns a generic procedure of one argument that is an accessor for the
+slot <var>name</var> in <var>class</var>.  The argument to the returned procedure
+must be an instance of <var>class</var>.  When the procedure is called, it
+returns the contents of the slot <var>name</var> in that instance; if the
+slot is uninitialized, an error of type
+<code>condition-type:uninitialized-slot</code> is signalled. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>slot-modifier</b><var> class name<a name="index-slot_002dmodifier-107"></a></var><br>
+<blockquote><p>Returns a generic procedure of two arguments that is a modifier for the
+slot <var>name</var> in <var>class</var>.  The first argument to the returned
+procedure must be an instance of <var>class</var>, and the second argument
+may be any object.  When the procedure is called, it modifies the slot
+<var>name</var> in the instance to contain the second argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>slot-initpred</b><var> class name<a name="index-slot_002dinitpred-108"></a></var><br>
+<blockquote><p>Returns a generic procedure of one argument that is an
+&ldquo;initialized?&rdquo; predicate for the slot <var>name</var> in <var>class</var>. 
+The argument to the returned procedure must be an instance of
+<var>class</var>.  When the procedure is called, it returns <code>#t</code> if the
+slot <var>name</var> in that instance is initialized, otherwise it returns
+<code>#f</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+<title>receive (SRFI 8) - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="SRFI-syntax.html#SRFI-syntax" title="SRFI syntax">
+<link rel="prev" href="cond_002dexpand-_0028SRFI-0_0029.html#cond_002dexpand-_0028SRFI-0_0029" title="cond-expand (SRFI 0)">
+<link rel="next" href="and_002dlet_002a-_0028SRFI-2_0029.html#and_002dlet_002a-_0028SRFI-2_0029" title="and-let* (SRFI 2)">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="receive-(SRFI-8)"></a>
+<a name="receive-_0028SRFI-8_0029"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="and_002dlet_002a-_0028SRFI-2_0029.html#and_002dlet_002a-_0028SRFI-2_0029">and-let* (SRFI 2)</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="cond_002dexpand-_0028SRFI-0_0029.html#cond_002dexpand-_0028SRFI-0_0029">cond-expand (SRFI 0)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="SRFI-syntax.html#SRFI-syntax">SRFI syntax</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.12.2 receive (SRFI 8)</h4>
+
+<p><a name="index-SRFI-8-409"></a><a href="http://srfi.schemers.org/srfi-8/srfi-8.html"><acronym>SRFI</acronym> 8</a>
+defines a convenient syntax to bind an identifier to each of the values
+of a multiple-valued expression and then evaluate an expression in the
+scope of the bindings.  As an instance of this pattern, consider the
+following excerpt from a &lsquo;<samp><span class="samp">quicksort</span></samp>&rsquo; procedure:
+
+<pre class="example">     (call-with-values
+       (lambda ()
+         (partition (precedes pivot) others))
+       (lambda (fore aft)
+         (append (qsort fore) (cons pivot (qsort aft)))))
+</pre>
+   <p>Here &lsquo;<samp><span class="samp">partition</span></samp>&rsquo; is a multiple-valued procedure that takes two
+arguments, a predicate and a list, and returns two lists, one comprising
+the list elements that satisfy the predicate, the other those that do
+not.  The purpose of the expression shown is to partition the list
+&lsquo;<samp><span class="samp">others</span></samp>&rsquo;, sort each of the sublists, and recombine the results into
+a sorted list.
+
+   <p>For our purposes, the important step is the binding of the identifiers
+&lsquo;<samp><span class="samp">fore</span></samp>&rsquo; and &lsquo;<samp><span class="samp">aft</span></samp>&rsquo; to the values returned by &lsquo;<samp><span class="samp">partition</span></samp>&rsquo;. 
+Expressing the construction and use of these bindings with the
+call-by-values primitive is cumbersome: One must explicitly embed the
+expression that provides the values for the bindings in a parameterless
+procedure, and one must explicitly embed the expression to be evaluated
+in the scope of those bindings in another procedure, writing as its
+parameters the identifiers that are to be bound to the values received.
+
+   <p>These embeddings are boilerplate, exposing the underlying binding
+mechanism but not revealing anything relevant to the particular program
+in which it occurs.  So the use of a syntactic abstraction that exposes
+only the interesting parts &ndash; the identifiers to be bound, the
+multiple-valued expression that supplies the values, and the body of the
+receiving procedure &ndash; makes the code more concise and more readable:
+
+<pre class="example">     (receive (fore aft) (partition (precedes pivot) others)
+       (append (qsort fore) (cons pivot (qsort aft))))
+</pre>
+   <p>The advantages are similar to those of a &lsquo;<samp><span class="samp">let</span></samp>&rsquo; expression over a
+procedure call with a &lsquo;<samp><span class="samp">lambda</span></samp>&rsquo; expression as its operator.  In both
+cases, cleanly separating a &ldquo;header&rdquo; in which the bindings are
+established from a &ldquo;body&rdquo; in which they are used makes it easier to
+follow the code.
+
+<div class="defun">
+&mdash; special form: <b>receive</b><var> formals expression body<a name="index-receive-410"></a></var><br>
+<blockquote><p><var>Formals</var> and <var>body</var> are defined as for &lsquo;<samp><span class="samp">lambda</span></samp>&rsquo;
+(see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>).  Specifically, <var>formals</var> can have the
+following forms (the use of &lsquo;<samp><span class="samp">#!optional</span></samp>&rsquo; and &lsquo;<samp><span class="samp">#!rest</span></samp>&rsquo; is also
+allowed in <var>formals</var> but is omitted for brevity):
+
+          <dl>
+<dt>&lsquo;<samp><span class="samp">(</span><var>ident1</var><span class="samp"> ... </span><var>identN</var><span class="samp">)</span></samp>&rsquo;<dd>The environment in which the &lsquo;<samp><span class="samp">receive</span></samp>&rsquo; expression is evaluated is
+extended by binding <var>ident1</var>, <small class="dots">...</small>, <var>identN</var> to fresh
+locations.  The <var>expression</var> is evaluated, and its values are stored
+into those locations.  (It is an error if <var>expression</var> does not have
+exactly <var>N</var> values.)
+
+          <br><dt>&lsquo;<samp><var>ident</var></samp>&rsquo;<dd>The environment in which the &lsquo;<samp><span class="samp">receive</span></samp>&rsquo; expression is evaluated is
+extended by binding <var>ident</var> to a fresh location.  The
+<var>expression</var> is evaluated, its values are converted into a newly
+allocated list, and the list is stored in the location bound to
+<var>ident</var>.
+
+          <br><dt>&lsquo;<samp><span class="samp">(</span><var>ident1</var><span class="samp"> ... </span><var>identN</var><span class="samp"> . </span><var>identN+1</var><span class="samp">)</span></samp>&rsquo;<dd>The environment in which the &lsquo;<samp><span class="samp">receive</span></samp>&rsquo; expression is evaluated is
+extended by binding <var>ident1</var>, <small class="dots">...</small>, <var>identN+1</var> to fresh
+locations.  The <var>expression</var> is evaluated.  Its first <var>N</var> values
+are stored into the locations bound to <var>ident1</var> <small class="dots">...</small> <var>identN</var>. 
+Any remaining values are converted into a newly allocated list, which is
+stored into the location bound to <var>identN+1</var>.  (It is an error if
+<var>expression</var> does not have at least <var>N</var> values.) 
+</dl>
+
+        <p>In any case, the expressions in <var>body</var> are evaluated sequentially in
+the extended environment.  The results of the last expression in the
+body are the values of the &lsquo;<samp><span class="samp">receive</span></samp>&rsquo; expression. 
+</p></blockquote></div>
+
+   </body></html>
+

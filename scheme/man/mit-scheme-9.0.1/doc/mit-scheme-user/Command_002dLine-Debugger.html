@@ -1,0 +1,226 @@
+<html lang="en">
+<head>
+<title>Command-Line Debugger - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugging.html#Debugging" title="Debugging">
+<link rel="prev" href="Subproblems-and-Reductions.html#Subproblems-and-Reductions" title="Subproblems and Reductions">
+<link rel="next" href="Debugging-Aids.html#Debugging-Aids" title="Debugging Aids">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Command-Line-Debugger"></a>
+<a name="Command_002dLine-Debugger"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Debugging-Aids.html#Debugging-Aids">Debugging Aids</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Subproblems-and-Reductions.html#Subproblems-and-Reductions">Subproblems and Reductions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugging.html#Debugging">Debugging</a>
+<hr>
+</div>
+
+<h3 class="section">5.2 The Command-Line Debugger</h3>
+
+<p><a name="index-debugger-179"></a><a name="index-continuation-Browser-180"></a><a name="index-browser_002c-Continuation-181"></a><a name="index-debug-182"></a>There are two debuggers available with MIT/GNU Scheme.  One of
+them runs under Edwin, and is described in that section of this document
+(see <a href="Edwin-Debugger.html#Edwin-Debugger">Edwin Debugger</a>).  The other is command-line oriented, does not
+require Edwin, and is described here.
+
+   <p><a name="index-command_002dline-debugger-183"></a>The <dfn>command-line debugger</dfn>, called <code>debug</code>, is the tool you
+should use when Scheme signals an error and you want to find out what
+caused the error.  When Scheme signals an error, it records all the
+information necessary to continue running the Scheme program that caused
+the error; the debugger provides you with the means to inspect this
+information.  For this reason, the debugger is sometimes called a
+<dfn>continuation browser</dfn>.
+
+   <p>Here is the transcript of a typical Scheme session, showing a user
+evaluating the expression &lsquo;<samp><span class="samp">(fib 10)</span></samp>&rsquo;, Scheme responding with an
+unbound variable error for the variable <code>fob</code>, and the user
+starting the debugger:
+
+<pre class="example">     1 ]=&gt; (fib 10)
+     
+     ;Unbound variable: fob
+     ;To continue, call RESTART with an option number:
+     ; (RESTART 3) =&gt; Specify a value to use instead of fob.
+     ; (RESTART 2) =&gt; Define fob to a given value.
+     ; (RESTART 1) =&gt; Return to read-eval-print level 1.
+     
+     2 error&gt; (debug)
+     
+     There are 6 subproblems on the stack.
+     
+     Subproblem level: 0 (this is the lowest subproblem level)
+     Expression (from stack):
+         fob
+     Environment created by the procedure: FIB
+      applied to: (10)
+     The execution history for this subproblem contains 1 reduction.
+     You are now in the debugger.  Type q to quit, ? for commands.
+     
+     3 debug&gt;
+</pre>
+   <p class="noindent"><a name="index-execution-history-184"></a>This tells us that the error occurred while trying to evaluate the
+expression &lsquo;<samp><span class="samp">fob</span></samp>&rsquo; while running &lsquo;<samp><span class="samp">(fib 10)</span></samp>&rsquo;.  It also tells us
+this is subproblem level 0, the first of 6 subproblems that are
+available for us to examine.  The expression shown is marked &lsquo;<samp><span class="samp">(from
+stack)</span></samp>&rsquo;, which tells us that this expression was reconstructed from the
+interpreter's internal data structures.  Another source of information
+is the <dfn>execution history</dfn>, which keeps a record of expressions
+evaluated by the interpreter.  The debugger informs us that the
+execution history has recorded some information for this subproblem,
+specifically a description of one reduction.
+
+   <p>What follows is a description of the commands available in the debugger. 
+To understand how the debugger works, you need to understand that the
+debugger has an implicit state that is examined and modified by
+commands.  The state consists of three pieces of information: a
+<dfn>subproblem</dfn>, a <dfn>reduction</dfn>, and an <dfn>environment frame</dfn>. 
+Each of these parts of the implicit state is said to be <dfn>selected</dfn>;
+thus one refers to the <dfn>selected subproblem</dfn>, and so forth.  The
+debugger provides commands that examine the selected state, and allow
+you to select different states.
+
+   <p>Here are the debugger commands.  Each of these commands consists of a
+single letter, which is to be typed by itself at the debugger prompt. 
+It is not necessary to type &lt;RET&gt; after these commands.
+
+     <dl>
+<dt>Traversing subproblems<dd><a name="index-Debugger-command-u-185"></a><a name="index-Debugger-command-d-186"></a><a name="index-Debugger-command-g-187"></a><a name="index-Debugger-command-h-188"></a>The debugger has several commands for traversing the structure of the
+continuation.  It is useful to think of the continuation as a
+two-dimensional structure: a backbone consisting of subproblems, and
+associated ribs consisting of reductions.  The bottom of the backbone is
+the most recent point in time; that is where the debugger is positioned
+when it starts.  Each subproblem is numbered, with <code>0</code> representing
+the most recent time point, and ascending integers numbering older time
+points.  The <kbd>u</kbd> command moves up to older points in time, and the
+<kbd>d</kbd> command moves down to newer points in time.  The <kbd>g</kbd>
+command allows you to select a subproblem by number, and the <kbd>h</kbd>
+command will show you a brief summary of all of the subproblems.
+
+     <br><dt>Traversing reductions<dd><a name="index-Debugger-command-r-189"></a><a name="index-Debugger-command-b-190"></a><a name="index-Debugger-command-f-191"></a>If the subproblem description says that &lsquo;<samp><span class="samp">The execution history for
+this subproblem contains </span><var>N</var><span class="samp"> reductions</span></samp>&rsquo;, then there is a &ldquo;rib&rdquo; of
+reductions for this subproblem.  You can see a summary of the reductions
+for this subproblem using the <kbd>r</kbd> command.  You can move to the next
+reduction using the <kbd>b</kbd> command; this moves you to the next older
+reduction.  The <kbd>f</kbd> command moves in the opposite direction, to
+newer reductions.  If you are at the oldest reduction for a given
+subproblem and use the <kbd>b</kbd> command, you will move to the next older
+subproblem.  Likewise, if you are at the newest reduction and use
+<kbd>f</kbd>, you'll move to the next newer subproblem.
+
+     <br><dt>Examining subproblems and reductions<dd><a name="index-Debugger-command-t-192"></a><a name="index-Debugger-command-l-193"></a>The following commands will show you additional information about the
+currently selected subproblem or reduction.  The <kbd>t</kbd> command will
+reprint the standard description (in case it has scrolled off the
+screen).  The <kbd>l</kbd> command will pretty-print (using <code>pp</code>) the
+subproblem's expression.
+
+     <br><dt>Traversing environments<dd>Nearly all subproblems and all reductions have associated environments. 
+Selecting a subproblem or reduction also selects the associated
+environment.  However, environments are structured as a sequence of
+frames, where each frame corresponds to a block of environment
+variables, as bound by <code>lambda</code> or <code>let</code>.  These frames
+collectively represent the block structure of a given environment.
+
+     <p><a name="index-Debugger-command-p-194"></a><a name="index-Debugger-command-s-195"></a>Once an environment frame is selected by the debugger, it is possible to
+select the parent frame of that frame (in other words, the enclosing
+block) using the <kbd>p</kbd> command.  You can subsequently return to the
+original child frame using the <kbd>s</kbd> command.  The <kbd>s</kbd> command
+works because the <kbd>p</kbd> command keeps track of the frames that you
+step through as you move up the environment hierarchy; the <kbd>s</kbd>
+command just retraces the path of saved frames.  Note that selecting a
+frame using <kbd>p</kbd> or <kbd>s</kbd> will print the bindings of the newly
+selected frame.
+
+     <br><dt>Examining environments<dd><a name="index-Debugger-command-a-196"></a><a name="index-Debugger-command-c-197"></a><a name="index-Debugger-command-e-198"></a><a name="index-Debugger-command-o-199"></a><a name="index-Debugger-command-v-200"></a><a name="index-Debugger-command-w-201"></a>The following commands allow you to examine the contents of the selected
+frame.  The <kbd>c</kbd> command prints the bindings of the current frame. 
+The <kbd>a</kbd> command prints the bindings of the current frame and each of
+its ancestor frames.  The <kbd>e</kbd> command enters a read-eval-print loop
+in the selected environment frame; expressions typed at that
+<acronym>REPL</acronym> will be evaluated in the selected environment.  To exit
+the <acronym>REPL</acronym> and return to the debugger, evaluate
+&lsquo;<samp><span class="samp">(abort-&gt;previous)</span></samp>&rsquo; or use <code>restart</code>.  The <kbd>v</kbd> command
+prompts for a single expression and evaluates it in the selected
+environment.  The <kbd>w</kbd> command invokes the environment inspector
+(<code>where</code>); quitting the environment inspector returns to the
+debugger.  Finally, the <kbd>o</kbd> command pretty-prints the procedure that
+was called to create the selected environment frame.
+
+     <br><dt>Continuing the computation<dd><a name="index-Debugger-command-k-202"></a>There are three commands that can be used to restart the computation
+that you are examining.  The first is the <kbd>k</kbd> command, which shows
+the currently active restarts, prompts you to select one, and passes
+control to the it.  It is very similar to evaluating &lsquo;<samp><span class="samp">(restart)</span></samp>&rsquo;.
+
+     <p>The other two commands allow you to invoke internal continuations.  This
+should not be done lightly; invoking an internal continuation can
+violate assumptions that the programmer made and cause unexpected
+results.  Each of these commands works in the same way: it prompts you
+for an expression, which is evaluated in the selected environment to
+produce a value.  The appropriate internal continuation is then invoked
+with that value as its sole argument.  The two commands differ only in
+which internal continuation is to be invoked.
+
+     <p><a name="index-Debugger-command-j-203"></a>The <kbd>j</kbd> command invokes the continuation associated with
+the selected subproblem.  What this means is as follows: when the
+description of a subproblem is printed, it consists of two parts, and
+&ldquo;expression&rdquo; and a &ldquo;subproblem being executed&rdquo;.  The latter is
+usually marked in the former by the specific character sequence
+&lsquo;<samp><span class="samp">###</span></samp>&rsquo;.  The internal continuation of the subproblem is the code
+that is waiting for the &ldquo;subproblem being executed&rdquo; to return a
+value.  So, in effect, you are telling the program what the &ldquo;subproblem
+being executed&rdquo; will evaluate to, and bypassing further execution of
+that code.
+
+     <p><a name="index-Debugger-command-z-204"></a>The <kbd>z</kbd> command is slightly different.  It instead invokes the
+continuation that is waiting for the outer &ldquo;expression&rdquo; to finish.  In
+other words, it is the same as invoking the <kbd>j</kbd> command in the next
+frame up.  So you can think of this as an abbreviation for the <kbd>u</kbd>
+command followed by the <kbd>j</kbd> command.
+
+     <br><dt>Wizard commands<dd><a name="index-Debugger-command-m-205"></a><a name="index-Debugger-command-x-206"></a><a name="index-Debugger-command-y-207"></a>The <kbd>m</kbd>, <kbd>x</kbd>, and <kbd>y</kbd> commands are for Scheme wizards.  They
+are used to debug the MIT/GNU Scheme implementation.  If you want
+to find out what they do, read the source code.
+
+     <br><dt>Miscellaneous commands<dd><a name="index-Debugger-command-i-208"></a><a name="index-Debugger-command-q-209"></a><a name="index-Debugger-command-_003f-210"></a>The <kbd>i</kbd> command will reprint the error message for the error that
+was in effect immediately before the debugger started.  The <kbd>q</kbd>
+command quits the debugger, returning to the caller.  And the <kbd>?</kbd>
+command prints a brief summary of the debugger's commands. 
+</dl>
+
+   </body></html>
+

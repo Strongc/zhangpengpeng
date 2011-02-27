@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Top-level Environments - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Environments.html#Environments" title="Environments">
+<link rel="prev" href="REPL-Environment.html#REPL-Environment" title="REPL Environment">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Top-level-Environments"></a>
+<a name="Top_002dlevel-Environments"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="REPL-Environment.html#REPL-Environment">REPL Environment</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Environments.html#Environments">Environments</a>
+<hr>
+</div>
+
+<h3 class="section">13.4 Top-level Environments</h3>
+
+<p><a name="index-top_002dlevel-environment-1933"></a><a name="index-interpreter-environment-1934"></a><a name="index-environment_002c-top_002dlevel-1935"></a><a name="index-environment_002c-interpreter-1936"></a>The operations in this section manipulate <dfn>top-level environments</dfn>,
+as opposed to environments created by the application of procedures. 
+For historical reasons, top-level environments are referred to as
+<dfn>interpreter environments</dfn>.
+
+<div class="defun">
+&mdash; special form: <b>the-environment</b><var><a name="index-the_002denvironment-1937"></a></var><br>
+<blockquote><p><a name="index-current-environment-1938"></a><a name="index-environment_002c-current-1939"></a>Returns the current environment.  This form may only be evaluated in a
+top-level environment.  An error is signalled if it appears elsewhere. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>top-level-environment?</b><var> object<a name="index-top_002dlevel_002denvironment_003f-1940"></a></var><br>
+&mdash; procedure: <b>interpreter-environment?</b><var> object<a name="index-interpreter_002denvironment_003f-1941"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-top_002dlevel-environment-1942"></a>Returns <code>#t</code> if <var>object</var> is an top-level environment; otherwise
+returns <code>#f</code>.
+
+        <p><code>interpreter-environment?</code> is an alias for
+<code>top-level-environment?</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>extend-top-level-environment</b><var> environment </var>[<var>names </var>[<var>values</var>]]<var><a name="index-extend_002dtop_002dlevel_002denvironment-1943"></a></var><br>
+&mdash; procedure: <b>make-top-level-environment</b> [<var>names </var>[<var>values</var>]]<var><a name="index-make_002dtop_002dlevel_002denvironment-1944"></a></var><br>
+&mdash; procedure: <b>make-root-top-level-environment</b> [<var>names </var>[<var>values</var>]]<var><a name="index-make_002droot_002dtop_002dlevel_002denvironment-1945"></a></var><br>
+<blockquote><p>Returns a newly allocated top-level environment. 
+<code>extend-top-level-environment</code> creates an environment that has
+parent <var>environment</var>, <code>make-top-level-environment</code> creates an
+environment that has parent <code>system-global-environment</code>, and
+<code>make-root-top-level-environment</code> creates an environment that has
+no parent.
+
+        <p>The optional arguments <var>names</var> and <var>values</var> are used to specify
+initial bindings in the new environment.  If specified, <var>names</var> must
+be a list of symbols, and <var>values</var> must be a list of objects.  If
+only <var>names</var> is specified, each name in <var>names</var> will be bound in
+the environment, but unassigned.  If <var>names</var> and <var>values</var> are
+both specified, they must be the same length, and each name in
+<var>names</var> will be bound to the corresponding value in <var>values</var>. 
+If neither <var>names</var> nor <var>values</var> is specified, the environment
+will have no initial bindings. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>link-variables</b><var> environment1 symbol1 environment2 symbol2<a name="index-link_002dvariables-1946"></a></var><br>
+<blockquote><p>Defines <var>symbol1</var> in <var>environment1</var> to have the same binding as
+<var>symbol2</var> in <var>environment2</var>, and returns an unspecified value. 
+Prior to the call, <var>symbol2</var> must be bound in <var>environment2</var>,
+but the type of binding is irrelevant; it may be a normal binding, an
+unassigned binding, or a keyword binding.  Signals an error if
+<var>symbol1</var> isn't definable in <var>environment1</var>, or if <var>symbol2</var>
+is unbound in <var>environment2</var>.
+
+        <p>By &ldquo;the same binding&rdquo;, we mean that the value cell is shared between
+the two environments.  If a value is assigned to <var>symbol1</var> in
+<var>environment1</var>, a subsequent reference to <var>symbol2</var> in
+<var>environment2</var> will see that value, and vice versa. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>unbind-variable</b><var> environment symbol<a name="index-unbind_002dvariable-1947"></a></var><br>
+<blockquote><p>If <var>symbol</var> is bound in <var>environment</var> or one of its ancestor
+environments, removes the binding, so that subsequent accesses to that
+symbol behave as if the binding never existed.  Returns <code>#t</code> if there
+was a binding prior to the call, and <code>#f</code> if there wasn't. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,166 @@
+<html lang="en">
+<head>
+<title>SC Identifiers - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntactic-Closures.html#Syntactic-Closures" title="Syntactic Closures">
+<link rel="prev" href="SC-Transformer-Definition.html#SC-Transformer-Definition" title="SC Transformer Definition">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="SC-Identifiers"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="SC-Transformer-Definition.html#SC-Transformer-Definition">SC Transformer Definition</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntactic-Closures.html#Syntactic-Closures">Syntactic Closures</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">2.11.3.3 Identifiers</h5>
+
+<p>This section describes the procedures that create and manipulate
+identifiers.  The identifier data type extends the syntactic closures
+facility to be compatible with the high-level <code>syntax-rules</code>
+facility.
+
+   <p><a name="index-alias-396"></a>As discussed earlier, an identifier is either a symbol or an
+<dfn>alias</dfn>.  An alias is implemented as a syntactic closure whose
+<var>form</var> is an identifier:
+
+<pre class="example">     (make-syntactic-closure env '() 'a) &rArr; <span class="roman">an alias</span>
+</pre>
+   <p class="noindent">Aliases are implemented as syntactic closures because they behave just
+like syntactic closures most of the time.  The difference is that an
+alias may be bound to a new value (for example by <code>lambda</code> or
+<code>let-syntax</code>); other syntactic closures may not be used this way. 
+If an alias is bound, then within the scope of that binding it is looked
+up in the syntactic environment just like any other identifier.
+
+   <p>Aliases are used in the implementation of the high-level facility
+<code>syntax-rules</code>.  A macro transformer created by <code>syntax-rules</code>
+uses a template to generate its output form, substituting subforms of
+the input form into the template.  In a syntactic closures
+implementation, all of the symbols in the template are replaced by
+aliases closed in the transformer environment, while the output form
+itself is closed in the usage environment.  This guarantees that the
+macro transformation is hygienic, without requiring the transformer to
+know the syntactic roles of the substituted input subforms.
+
+<div class="defun">
+&mdash; procedure: <b>identifier?</b><var> object<a name="index-identifier_003f-397"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is an identifier, otherwise returns
+<code>#f</code>.  Examples:
+
+     <pre class="example">          (identifier? 'a)        &rArr; #t
+          (identifier? (make-syntactic-closure env '() 'a))
+                                  &rArr; #t
+          
+          (identifier? "a")       &rArr; #f
+          (identifier? #\a)       &rArr; #f
+          (identifier? 97)        &rArr; #f
+          (identifier? #f)        &rArr; #f
+          (identifier? '(a))      &rArr; #f
+          (identifier? '#(a))     &rArr; #f
+</pre>
+        </blockquote></div>
+
+   <p>The predicate <code>eq?</code> is used to determine if two identifers are
+&ldquo;the same&rdquo;.  Thus <code>eq?</code> can be used to compare identifiers
+exactly as it would be used to compare symbols.  Often, though, it is
+useful to know whether two identifiers &ldquo;mean the same thing&rdquo;.  For
+example, the <code>cond</code> macro uses the symbol <code>else</code> to identify
+the final clause in the conditional.  A macro transformer for
+<code>cond</code> cannot just look for the symbol <code>else</code>, because the
+<code>cond</code> form might be the output of another macro transformer that
+replaced the symbol <code>else</code> with an alias.  Instead the transformer
+must look for an identifier that &ldquo;means the same thing&rdquo; in the usage
+environment as the symbol <code>else</code> means in the transformer
+environment.
+
+<div class="defun">
+&mdash; procedure: <b>identifier=?</b><var> environment1 identifier1 environment2 identifier2<a name="index-identifier_003d_003f-398"></a></var><br>
+<blockquote><p><var>Environment1</var> and <var>environment2</var> must be syntactic
+environments, and <var>identifier1</var> and <var>identifier2</var> must be
+identifiers.  <code>identifier=?</code> returns <code>#t</code> if the meaning of
+<var>identifier1</var> in <var>environment1</var> is the same as that of
+<var>identifier2</var> in <var>environment2</var>, otherwise it returns <code>#f</code>. 
+Examples:
+
+     <pre class="example">          (let-syntax
+              ((foo
+                (sc-macro-transformer
+                 (lambda (form env)
+                   (capture-syntactic-environment
+                    (lambda (transformer-env)
+                      (identifier=? transformer-env 'x env 'x)))))))
+            (list (foo)
+                  (let ((x 3))
+                    (foo))))
+                                  &rArr; (#t #f)
+          
+          (let-syntax ((bar foo))
+            (let-syntax
+                ((foo
+                  (sc-macro-transformer
+                   (lambda (form env)
+                     (capture-syntactic-environment
+                      (lambda (transformer-env)
+                        (identifier=? transformer-env 'foo
+                                      env (cadr form))))))))
+              (list (foo foo)
+                    (foo bar))))
+                                  &rArr; (#f #t)
+</pre>
+        </blockquote></div>
+
+   <p>Sometimes it is useful to be able to introduce a new identifier that is
+guaranteed to be different from any existing identifier, similarly to
+the way that <code>generate-uninterned-symbol</code> is used.
+
+<div class="defun">
+&mdash; procedure: <b>make-synthetic-identifier</b><var> identifier<a name="index-make_002dsynthetic_002didentifier-399"></a></var><br>
+<blockquote><p>Creates and returns and new synthetic identifier (alias) that is
+guaranteed to be different from all existing identifiers. 
+<var>Identifier</var> is any existing identifier, which is used in deriving
+the name of the new identifier.
+
+        <p>This is implemented by syntactically closing <var>identifier</var> in a
+special empty environment. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,319 @@
+<html lang="en">
+<head>
+<title>SC Transformer Definition - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntactic-Closures.html#Syntactic-Closures" title="Syntactic Closures">
+<link rel="prev" href="Syntax-Terminology.html#Syntax-Terminology" title="Syntax Terminology">
+<link rel="next" href="SC-Identifiers.html#SC-Identifiers" title="SC Identifiers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="SC-Transformer-Definition"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SC-Identifiers.html#SC-Identifiers">SC Identifiers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax-Terminology.html#Syntax-Terminology">Syntax Terminology</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntactic-Closures.html#Syntactic-Closures">Syntactic Closures</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">2.11.3.2 Transformer Definition</h5>
+
+<p>This section describes the special forms for defining syntactic-closures
+macro transformers, and the associated procedures for manipulating
+syntactic closures and syntactic environments.
+
+<div class="defun">
+&mdash; special form: <b>sc-macro-transformer</b><var> expression<a name="index-sc_002dmacro_002dtransformer-386"></a></var><br>
+<blockquote><p>The <var>expression</var> is expanded in the syntactic environment of the
+<code>sc-macro-transformer</code> expression, and the expanded expression is
+evaluated in the transformer environment to yield a macro transformer as
+described below.  This macro transformer is bound to a macro keyword by
+the special form in which the <code>transformer</code> expression appears (for
+example, <code>let-syntax</code>).
+
+        <p><a name="index-macro-transformer-387"></a><a name="index-input-form-388"></a><a name="index-usage-environment-389"></a><a name="index-output-form-390"></a><a name="index-transformer-environment-391"></a>In the syntactic closures facility, a <dfn>macro transformer</dfn> is a
+procedure that takes two arguments, a form and a syntactic environment,
+and returns a new form.  The first argument, the <dfn>input form</dfn>, is
+the form in which the macro keyword occurred.  The second argument, the
+<dfn>usage environment</dfn>, is the syntactic environment in which the input
+form occurred.  The result of the transformer, the <dfn>output form</dfn>, is
+automatically closed in the <dfn>transformer environment</dfn>, which is the
+syntactic environment in which the <code>transformer</code> expression
+occurred.
+
+        <p>For example, here is a definition of a <code>push</code> macro using
+<code>syntax-rules</code>:
+
+     <pre class="example">          (define-syntax push
+            (syntax-rules ()
+              ((push item list)
+               (set! list (cons item list)))))
+</pre>
+        <p class="noindent">Here is an equivalent definition using <code>sc-macro-transformer</code>:
+
+     <pre class="example">          (define-syntax push
+            (sc-macro-transformer
+             (lambda (exp env)
+               (let ((item (make-syntactic-closure env '() (cadr exp)))
+                     (list (make-syntactic-closure env '() (caddr exp))))
+                 `(set! ,list (cons ,item ,list))))))
+</pre>
+        <p class="noindent">In this example, the identifiers <code>set!</code> and <code>cons</code> are closed
+in the transformer environment, and thus will not be affected by the
+meanings of those identifiers in the usage environment <code>env</code>.
+
+        <p>Some macros may be non-hygienic by design.  For example, the following
+defines a <code>loop</code> macro that implicitly binds <code>exit</code> to an
+escape procedure.  The binding of <code>exit</code> is intended to capture
+free references to <code>exit</code> in the body of the loop, so <code>exit</code>
+must be left free when the body is closed:
+
+     <pre class="example">          (define-syntax loop
+            (sc-macro-transformer
+             (lambda (exp env)
+               (let ((body (cdr exp)))
+                 `(call-with-current-continuation
+                   (lambda (exit)
+                     (let f ()
+                       ,@(map (lambda (exp)
+                                (make-syntactic-closure env '(exit)
+                                  exp))
+                              body)
+                       (f))))))))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; special form: <b>rsc-macro-transformer</b><var> expression<a name="index-rsc_002dmacro_002dtransformer-392"></a></var><br>
+<blockquote><p>This form is an alternative way to define a syntactic-closures macro
+transformer.  Its syntax and usage are identical to
+<code>sc-macro-transformer</code>, except that the roles of the usage
+environment and transformer environment are reversed.  (Hence
+<acronym>RSC</acronym> stands for <dfn>Reversed Syntactic Closures</dfn>.)  In other
+words, the procedure specified by <var>expression</var> still accepts two
+arguments, but its second argument will be the transformer environment
+rather than the usage environment, and the returned expression is closed
+in the usage environment rather than the transformer environment.
+
+        <p>The advantage of this arrangement is that it allows a simpler definition
+style in some situations.  For example, here is the <code>push</code> macro
+from above, rewritten in this style:
+
+     <pre class="example">          (define-syntax push
+            (rsc-macro-transformer
+             (lambda (exp env)
+               `(,(make-syntactic-closure env '() 'SET!)
+                 ,(caddr exp)
+                 (,(make-syntactic-closure env '() 'CONS)
+                  ,(cadr exp)
+                  ,(caddr exp))))))
+</pre>
+        <p class="noindent">In this style only the introduced keywords are closed, while everything
+else remains open.
+
+        <p>Note that <code>rsc-macro-transformer</code> and <code>sc-macro-transformer</code>
+are easily interchangeable.  Here is how to emulate
+<code>rsc-macro-transformer</code> using <code>sc-macro-transformer</code>.  (This
+technique can be used to effect the opposite emulation as well.)
+
+     <pre class="example">          (define-syntax push
+            (sc-macro-transformer
+             (lambda (exp usage-env)
+               (capture-syntactic-environment
+                (lambda (env)
+                  (make-syntactic-closure usage-env '()
+                    `(,(make-syntactic-closure env '() 'SET!)
+                      ,(caddr exp)
+                      (,(make-syntactic-closure env '() 'CONS)
+                       ,(cadr exp)
+                       ,(caddr exp)))))))))
+</pre>
+        </blockquote></div>
+
+   <p>To assign meanings to the identifiers in a form, use
+<code>make-syntactic-closure</code> to close the form in a syntactic
+environment.
+
+<div class="defun">
+&mdash; procedure: <b>make-syntactic-closure</b><var> environment free-names form<a name="index-make_002dsyntactic_002dclosure-393"></a></var><br>
+<blockquote><p><var>Environment</var> must be a syntactic environment, <var>free-names</var>
+must be a list of identifiers, and <var>form</var> must be a form. 
+<code>make-syntactic-closure</code> constructs and returns a syntactic
+closure of <var>form</var> in <var>environment</var>, which can be used anywhere
+that <var>form</var> could have been used.  All the identifiers used in
+<var>form</var>, except those explicitly excepted by <var>free-names</var>,
+obtain their meanings from <var>environment</var>.
+
+        <p>Here is an example where <var>free-names</var> is something other than the
+empty list.  It is instructive to compare the use of <var>free-names</var>
+in this example with its use in the <code>loop</code> example above: the
+examples are similar except for the source of the identifier being left
+free.
+
+     <pre class="example">          (define-syntax let1
+            (sc-macro-transformer
+             (lambda (exp env)
+               (let ((id (cadr exp))
+                     (init (caddr exp))
+                     (exp (cadddr exp)))
+                 `((lambda (,id)
+                     ,(make-syntactic-closure env (list id) exp))
+                   ,(make-syntactic-closure env '() init))))))
+</pre>
+        <p class="noindent"><code>let1</code> is a simplified version of <code>let</code> that only binds a
+single identifier, and whose body consists of a single expression. 
+When the body expression is syntactically closed in its original
+syntactic environment, the identifier that is to be bound by
+<code>let1</code> must be left free, so that it can be properly captured by
+the <code>lambda</code> in the output form. 
+</p></blockquote></div>
+
+   <p>In most situations, the <var>free-names</var> argument to
+<code>make-syntactic-closure</code> is the empty list.  In those cases, the
+more succinct <code>close-syntax</code> can be used:
+
+<div class="defun">
+&mdash; procedure: <b>close-syntax</b><var> form environment<a name="index-close_002dsyntax-394"></a></var><br>
+<blockquote><p><var>Environment</var> must be a syntactic environment and <var>form</var> must be
+a form.  Returns a new syntactic closure of <var>form</var> in
+<var>environment</var>, with no free names.  Entirely equivalent to
+
+     <pre class="example">          (make-syntactic-closure <var>environment</var> '() <var>form</var>)
+</pre>
+        </blockquote></div>
+
+   <p>To obtain a syntactic environment other than the usage environment,
+use <code>capture-syntactic-environment</code>.
+
+<div class="defun">
+&mdash; procedure: <b>capture-syntactic-environment</b><var> procedure<a name="index-capture_002dsyntactic_002denvironment-395"></a></var><br>
+<blockquote><p><code>capture-syntactic-environment</code> returns a form that will, when
+transformed, call <var>procedure</var> on the current syntactic environment. 
+<var>Procedure</var> should compute and return a new form to be transformed,
+in that same syntactic environment, in place of the form.
+
+        <p>An example will make this clear.  Suppose we wanted to define a simple
+<code>loop-until</code> keyword equivalent to
+
+     <pre class="example">          (define-syntax loop-until
+            (syntax-rules ()
+              ((loop-until id init test return step)
+               (letrec ((loop
+                         (lambda (id)
+                           (if test return (loop step)))))
+                 (loop init)))))
+</pre>
+        <p class="noindent">The following attempt at defining <code>loop-until</code> has a subtle
+bug:
+
+     <pre class="example">          (define-syntax loop-until
+            (sc-macro-transformer
+             (lambda (exp env)
+               (let ((id (cadr exp))
+                     (init (caddr exp))
+                     (test (cadddr exp))
+                     (return (cadddr (cdr exp)))
+                     (step (cadddr (cddr exp)))
+                     (close
+                      (lambda (exp free)
+                        (make-syntactic-closure env free exp))))
+                 `(letrec ((loop
+                            (lambda (,id)
+                              (if ,(close test (list id))
+                                  ,(close return (list id))
+                                  (loop ,(close step (list id)))))))
+                    (loop ,(close init '())))))))
+</pre>
+        <p class="noindent">This definition appears to take all of the proper precautions to
+prevent unintended captures.  It carefully closes the subexpressions in
+their original syntactic environment and it leaves the <code>id</code>
+identifier free in the <code>test</code>, <code>return</code>, and <code>step</code>
+expressions, so that it will be captured by the binding introduced by
+the <code>lambda</code> expression.  Unfortunately it uses the identifiers
+<code>if</code> and <code>loop</code> <em>within</em> that <code>lambda</code> expression,
+so if the user of <code>loop-until</code> just happens to use, say, <code>if</code>
+for the identifier, it will be inadvertently captured.
+
+        <p>The syntactic environment that <code>if</code> and <code>loop</code> want to be
+exposed to is the one just outside the <code>lambda</code> expression: before
+the user's identifier is added to the syntactic environment, but after
+the identifier <code>loop</code> has been added. 
+<code>capture-syntactic-environment</code> captures exactly that environment
+as follows:
+
+     <pre class="example">          (define-syntax loop-until
+            (sc-macro-transformer
+             (lambda (exp env)
+               (let ((id (cadr exp))
+                     (init (caddr exp))
+                     (test (cadddr exp))
+                     (return (cadddr (cdr exp)))
+                     (step (cadddr (cddr exp)))
+                     (close
+                      (lambda (exp free)
+                        (make-syntactic-closure env free exp))))
+                 `(letrec ((loop
+                            ,(capture-syntactic-environment
+                              (lambda (env)
+                                `(lambda (,id)
+                                   (,(make-syntactic-closure env '() `if)
+                                    ,(close test (list id))
+                                    ,(close return (list id))
+                                    (,(make-syntactic-closure env '() `loop)
+                                     ,(close step (list id)))))))))
+                    (loop ,(close init '())))))))
+</pre>
+        <p class="noindent">In this case, having captured the desired syntactic environment, it is
+convenient to construct syntactic closures of the identifiers <code>if</code>
+and the <code>loop</code> and use them in the body of the
+<code>lambda</code>.
+
+        <p>A common use of <code>capture-syntactic-environment</code> is to get the
+transformer environment of a macro transformer:
+
+     <pre class="example">          (sc-macro-transformer
+           (lambda (exp env)
+             (capture-syntactic-environment
+              (lambda (transformer-env)
+                ...))))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

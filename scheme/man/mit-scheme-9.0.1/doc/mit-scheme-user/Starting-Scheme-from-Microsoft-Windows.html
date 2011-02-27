@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Starting Scheme from Microsoft Windows - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Running-Scheme.html#Running-Scheme" title="Running Scheme">
+<link rel="prev" href="Environment-Variables.html#Environment-Variables" title="Environment Variables">
+<link rel="next" href="Leaving-Scheme.html#Leaving-Scheme" title="Leaving Scheme">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Starting-Scheme-from-Microsoft-Windows"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Leaving-Scheme.html#Leaving-Scheme">Leaving Scheme</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Environment-Variables.html#Environment-Variables">Environment Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Running-Scheme.html#Running-Scheme">Running Scheme</a>
+<hr>
+</div>
+
+<h3 class="section">2.7 Starting Scheme from Microsoft Windows</h3>
+
+<p>The Microsoft Windows version of MIT/GNU Scheme runs as a
+graphics-based application.  Scheme is normally started using shortcuts;
+the installer automatically generates several different predefined
+shortcuts for your convenience.
+
+   <p>The rest of this section gives some tips on how to set up shortcuts
+that run Scheme.  If you are unfamiliar with this concept you should
+read about it in the system help.
+
+     <ul>
+<li>Under Windows, shortcuts can be <em>common</em> or <em>personal</em>. 
+When setting common shortcuts it is important to make the shortcut
+properties independent of the vagaries of the environment of the user
+who is running them.
+
+     <li>Give the shortcut an accurate <var>Description</var>.
+
+     <li>Use an absolute pathname to <samp><span class="command">mit-scheme.exe</span></samp> in the shortcut
+<var>Command line</var>.
+
+     <li>If you specify the <samp><span class="option">--library</span></samp> command-line option then you do
+not have to worry about the <samp><span class="env">MITSCHEME_LIBRARY_PATH</span></samp> environment
+variable.
+
+     <li>Set the shortcut's <var>Working Directory</var> to something sensible.  On
+Windows you can use &lsquo;<samp><span class="samp">%HOMEDRIVE%%HOMEPATH%</span></samp>&rsquo; to make Scheme start
+up in the user's home directory.
+
+     <li>There are several icons available in the Scheme executable&mdash;choose
+one that best represents the options given on the command line.
+
+     <li>If you want the shortcut to start up Edwin automatically, put
+<samp><span class="option">--edit</span></samp> at the end of the command line. 
+</ul>
+
+   </body></html>
+

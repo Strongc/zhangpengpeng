@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Chained Methods - SOS 1.9</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="SOS 1.9">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Methods.html#Methods" title="Methods">
+<link rel="prev" href="Method-Syntax.html#Method-Syntax" title="Method Syntax">
+<link rel="next" href="Computed-Methods.html#Computed-Methods" title="Computed Methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents SOS 1.9.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Chained-Methods"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Computed-Methods.html#Computed-Methods">Computed Methods</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Method-Syntax.html#Method-Syntax">Method Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Methods.html#Methods">Methods</a>
+<hr>
+</div>
+
+<h3 class="section">5.3 Chained Methods</h3>
+
+<p><a name="index-chained-method-133"></a>Sometimes it is useful to have a method that adds functionality to
+existing methods.  <dfn>Chained methods</dfn> provide a mechanism to
+accomplish this.  A chained method, when invoked, can call the method
+that would have been called had this method not been defined: it is
+passed a procedure that will call the inherited method.  The chained
+method can run arbitrary code both before and after calling the
+inherited method.
+
+<div class="defun">
+&mdash; Procedure: <b>make-chained-method</b><var> specializers procedure<a name="index-make_002dchained_002dmethod-134"></a></var><br>
+<blockquote><p>Create and return a chained method.  <var>Procedure</var> must be a procedure
+of one argument that returns a procedure.  When the chained method is
+combined, its procedure will be called with one argument, a
+&ldquo;call-next-method&rdquo; procedure; it must then return another procedure
+that will be called when the method is invoked.  The
+&ldquo;call-next-method&rdquo; procedure may called by the method procedure at any
+time, which will invoke the next less-specific method.  The
+&ldquo;call-next-method&rdquo; procedure must be called with the same number of
+arguments as the method procedure; normally these are the same
+arguments, but that is not required. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>chained-method?</b><var> object<a name="index-chained_002dmethod_003f-135"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is a chained method, otherwise returns
+<code>#f</code>.  Note that every chained method satisfies <code>method?</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

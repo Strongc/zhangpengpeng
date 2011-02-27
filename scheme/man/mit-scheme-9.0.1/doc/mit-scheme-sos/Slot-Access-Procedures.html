@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Slot Access Procedures - SOS 1.9</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="SOS 1.9">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Slots.html#Slots" title="Slots">
+<link rel="prev" href="Slot-Access-Constructors.html#Slot-Access-Constructors" title="Slot Access Constructors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents SOS 1.9.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Slot-Access-Procedures"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Slot-Access-Constructors.html#Slot-Access-Constructors">Slot Access Constructors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Slots.html#Slots">Slots</a>
+<hr>
+</div>
+
+<h3 class="section">3.4 Slot Access Procedures</h3>
+
+<p>Finally, there is another set of three procedures, which access the
+contents of a slot directly, given an instance and a slot name.  These
+procedures are very slow by comparison with the above.
+
+   <p>However, note the following.  You can use these procedures in the body
+of a <code>define-method</code> special form in an efficient way.  If the
+<code>define-method</code> specifies the correct number of arguments, the body
+of the form contains a call to one of these procedures and nothing else,
+and the specified slot name is quoted, the form is rewritten during
+macro-expansion time as a call to the corresponding method-generating
+procedure.  For example, the following are equivalent:
+
+<pre class="lisp">     (define-method p ((v &lt;foo&gt;))
+       (slot-value v 'bar))
+     
+     (add-method p
+                 (slot-accessor-method &lt;foo&gt; 'bar))
+</pre>
+   <div class="defun">
+&mdash; Procedure: <b>slot-value</b><var> instance name<a name="index-slot_002dvalue-109"></a></var><br>
+<blockquote><p>Returns the contents of the slot <var>name</var> in <var>instance</var>; if the
+slot is uninitialized, an error of type
+<code>condition-type:uninitialized-slot</code> is signalled. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>set-slot-value!</b><var> instance name object<a name="index-set_002dslot_002dvalue_0021-110"></a></var><br>
+<blockquote><p>Modifies the slot <var>name</var> in <var>instance</var> to contain <var>object</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>slot-initialized?</b><var> instance name<a name="index-slot_002dinitialized_003f-111"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if the slot <var>name</var> in <var>instance</var> is
+initialized, otherwise returns <code>#f</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

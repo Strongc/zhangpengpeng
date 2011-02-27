@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>XML Output - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="XML-Support.html#XML-Support" title="XML Support">
+<link rel="prev" href="XML-Input.html#XML-Input" title="XML Input">
+<link rel="next" href="XML-Names.html#XML-Names" title="XML Names">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="XML-Output"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="XML-Names.html#XML-Names">XML Names</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="XML-Input.html#XML-Input">XML Input</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="XML-Support.html#XML-Support">XML Support</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.12.2 XML Output</h4>
+
+<p><a name="index-XML-output-2326"></a><a name="index-output_002c-XML-2327"></a>The following procedures serialize <acronym>XML</acronym> document records into
+character sequences.  All are virtually identical except for the way
+that the character sequence is represented.
+
+   <p>Each procedure will accept either an <code>xml-document</code> record or any
+of the other <acronym>XML</acronym> record types.  This makes it possible to
+write fragments of <acronym>XML</acronym> documents, although you should keep in
+mind that such fragments aren't documents and won't generally be
+accepted by any <acronym>XML</acronym> parser.
+
+   <p>If the <var>xml</var> being written is an <code>xml-document</code> record, the
+procedures <code>write-xml</code> and <code>write-xml-file</code> will look for a
+contained <code>xml-declaration</code> record and its <code>encoding</code>
+attribute.  If the <code>encoding</code> is a supported value, the output will
+be encoded as specified; otherwise it will be encoded as
+<acronym>UTF-8</acronym>.
+
+   <p>When an <acronym>XHTML</acronym> document record is written, named
+<acronym>XHTML</acronym> characters are translated into their corresponding
+entities.  For example, the character &lsquo;<samp><span class="samp">#\U+00A0</span></samp>&rsquo; is written as
+&lsquo;<samp><span class="samp">&amp;nbsp;</span></samp>&rsquo;.  In order for an <acronym>XML</acronym> document record to be
+recognized as <acronym>XHTML</acronym>, it must have a <acronym>DTD</acronym> record that
+satisfies the predicate <code>html-dtd?</code>.
+
+<div class="defun">
+&mdash; procedure: <b>write-xml</b><var> xml port<a name="index-write_002dxml-2328"></a></var><br>
+<blockquote><p>Write <var>xml</var> to <var>port</var>.  Note that character encoding will only
+be done if <var>port</var> supports it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>write-xml-file</b><var> xml pathname<a name="index-write_002dxml_002dfile-2329"></a></var><br>
+<blockquote><p>Write <var>xml</var> to the file specified by <var>pathname</var>.  Roughly
+equivalent to
+
+     <pre class="example">          (define (write-xml-file xml pathname)
+            (call-with-output-file pathname
+              (lambda (port)
+                (write-xml xml port))))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>xml-&gt;wide-string</b><var> xml<a name="index-xml_002d_003ewide_002dstring-2330"></a></var><br>
+<blockquote><p>Convert <var>xml</var> to a wide string.  No character encoding is used,
+since wide strings can represent all characters without encoding. 
+Roughly equivalent to
+
+     <pre class="example">          (define (xml-&gt;wide-string xml)
+            (call-with-wide-output-string
+             (lambda (port)
+               (write-xml xml port))))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>xml-&gt;string</b><var> xml<a name="index-xml_002d_003estring-2331"></a></var><br>
+<blockquote><p>Convert <var>xml</var> to a character string encoded as <acronym>UTF-8</acronym>. 
+Roughly equivalent to
+
+     <pre class="example">          (define (xml-&gt;string xml)
+            (wide-string-&gt;utf8-string (xml-&gt;wide-string xml)))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

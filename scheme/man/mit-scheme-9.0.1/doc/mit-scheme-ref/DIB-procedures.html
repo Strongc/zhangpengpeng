@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+<title>DIB procedures - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Device-Independent-Bitmap-Utilities.html#Device-Independent-Bitmap-Utilities" title="Device Independent Bitmap Utilities">
+<link rel="prev" href="Device-Independent-Bitmap-Utilities.html#Device-Independent-Bitmap-Utilities" title="Device Independent Bitmap Utilities">
+<link rel="next" href="Other-parts-of-the-DIB-Utilities-implementation.html#Other-parts-of-the-DIB-Utilities-implementation" title="Other parts of the DIB Utilities implementation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="DIB-procedures"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-parts-of-the-DIB-Utilities-implementation.html#Other-parts-of-the-DIB-Utilities-implementation">Other parts of the DIB Utilities implementation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Device-Independent-Bitmap-Utilities.html#Device-Independent-Bitmap-Utilities">Device Independent Bitmap Utilities</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Device-Independent-Bitmap-Utilities.html#Device-Independent-Bitmap-Utilities">Device Independent Bitmap Utilities</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.3.1 DIB procedures</h4>
+
+<p>The following procedures have typed parameters, using the same
+convention as <code>windows-procedure</code>.
+
+<div class="defun">
+&mdash; procedure: <b>open-dib</b> (<var>filename string</var>)<var><a name="index-open_002ddib-3167"></a></var><br>
+<blockquote><p>Return type: <var>dib</var>.  Calls the <code>OpenDIB</code> entry of
+<samp><span class="file">DIBUTILS.DLL</span></samp>.  If the return value is not <code>#f</code> then the file
+<var>filename</var> was found, successfully opened, and the contents were
+suitable for loading into memory as a device independent bitmap. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>write-dib</b> (<var>filename string</var>) (<var>dib dib</var>)<var><a name="index-write_002ddib-3168"></a></var><br>
+<blockquote><p>Return type: <var>bool</var>.  Calls the <code>WriteDIB</code> entry of
+<samp><span class="file">DIBUTILS.DLL</span></samp>.  Returns <code>#t</code> if the file <var>filename</var> could
+be opened and written to.  After this operation the file contains the
+bitmap data in a standard format that is understood by <code>open-dib</code>
+and various system utilities like the bitmap editor.  Any problems
+resulting in failure are signalled by a <code>#f</code> return value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>bitmap-from-dib</b> (<var>dib dib</var>) (<var>palette hpalette</var>)<var><a name="index-bitmap_002dfrom_002ddib-3169"></a></var><br>
+<blockquote><p>Return type: <var>hbitmap</var>. 
+Calls the <code>BitmapFromDib</code> entry of <samp><span class="file">DIBUTILS.DLL</span></samp>.  The returned
+value is a device dependent bitmap.  The colours from the DIB are
+matched against colors in <var>palette</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>dib-from-bitmap</b> (<var>bitmap hbitmap</var>) (<var>style dword</var>) (<var>bits word</var>) (<var>palette hpalette</var>)<var><a name="index-dib_002dfrom_002dbitmap-3170"></a></var><br>
+<blockquote><p>Return type: <var>dib</var>. 
+Returns a DIB containing the same image as the device dependent bitmap
+<var>bitmap</var>. 
+<var>Style</var> determines the kind of DIB, e.g. compression style. 
+Calls the <code>DibFromBitmap</code> entry of <samp><span class="file">DIBUTILS.DLL</span></samp>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>dib-blt</b> (<var>dest hdc</var>) (<var>x int</var>) (<var>y int</var>) (<var>w int</var>) (<var>h int</var>) (<var>src dib</var>) (<var>src-x int</var>) (<var>src-y int</var>) (<var>raster-op long</var>)<var><a name="index-dib_002dblt-3171"></a></var><br>
+<blockquote><p>Return type: <var>bool</var>.  Calls the <code>DibBlt</code> entry of
+<samp><span class="file">DIBUTILS.DLL</span></samp>.  Similar to the Win32 API <code>BitBlt</code> call, but
+draws a DIB rather than a piece of another device context.  Draws the
+<var>dib</var> on device context <var>hdc</var> at position (<var>x</var>,<var>y</var>).  A
+rectangle of width <var>w</var> and height <var>h</var> is copied from position
+(<var>src-x</var>,<var>src-y</var>) of <var>dib</var>. 
+<var>Raster-op</var> is supposed to allow the source and destination to be
+combined but I don't think I got this right so stick to <code>SRCCOPY</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>delete-dib</b> (<var>dib dib</var>)<var><a name="index-delete_002ddib-3172"></a></var><br>
+<blockquote><p>Return type: <var>bool</var>. 
+This procedure reclaims the storage occupied by a DIB. 
+After being deleted, the DIB should not be used. 
+This procedure allows the programmer to reclaim external heap storage
+rather than risking it running out before the next garbage collection. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>dib-height</b> (<var>dib dib</var>)<var><a name="index-dib_002dheight-3173"></a></var><br>
+<blockquote><p>Return type: <var>int</var>. 
+Calls the <code>DibHeight</code> expand entry of <samp><span class="file">DIBUTILS.DLL</span></samp>, which returns
+the height of the bitmap in pixels. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>dib-width</b> (<var>dib dib</var>)<var><a name="index-dib_002dwidth-3174"></a></var><br>
+<blockquote><p>Return type: <var>int</var>. 
+Calls the <code>DibWidth</code> entry of <samp><span class="file">DIBUTILS.DLL</span></samp>, which returns
+the width of the bitmap in pixels. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>copy-bitmap</b> (<var>bm hbitmap</var>)<var><a name="index-copy_002dbitmap-3175"></a></var><br>
+<blockquote><p>Return type: <var>hbitmap</var>. 
+Calls the <code>CopyBitmap</code> of <samp><span class="file">DIBUTILS.DLL</span></samp>, which creates a new
+bitmap with the same size and contents as the original. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>create-dib</b> (<var>width int</var>) (<var>height int</var>) (<var>style int</var>) (<var>depth int</var>) (<var>palette hpalette</var>)<var><a name="index-create_002ddib-3176"></a></var><br>
+<blockquote><p>Return type: <var>dib</var>. 
+Calls the <code>CreateDIB</code> entry of <samp><span class="file">DIBUTILS.DLL</span></samp>. 
+Creates a DIB of <var>width</var> by <var>height</var> pixels and <var>depth</var> bits
+of colour information. 
+The <var>style</var> parameter determines how the bitmap is stored. 
+I have only ever used <code>BI_RGB</code>. 
+If <var>depth</var>&lt;=8 then the <var>palette</var> determines the DIB's colour table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>crop-bitmap</b> (<var>bm hbitmap</var>) (<var>left int</var>) (<var>top int</var>) (<var>right int</var>) (<var>bottom int</var>)<var><a name="index-crop_002dbitmap-3177"></a></var><br>
+<blockquote><p>Return type: <var>hbitmap</var>. 
+Calls the <code>CropBitmap</code> entry of <samp><span class="file">DIBUTILS.DLL</span></samp>. 
+Returns a new bitmap containing the image from a region of the original. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>dib-set-pixels-unaligned</b><var> dib </var>(<var>pixels string</var>)<var><a name="index-dib_002dset_002dpixels_002dunaligned-3178"></a></var><br>
+<blockquote><p>Return type: <var>bool</var>. 
+Calls the <code>DIBSetPixelsUnaligned</code> entry of<br> <samp><span class="file">DIBUTILS.DLL</span></samp>.  Stuffs
+bytes from <var>pixels</var> into the bitmap.  There are no alignment
+constraints on <var>pixels</var> (the usual way of doing this is to use the
+<code>SetDIBits</code> function which requires that every scan line of the
+bitmap is 32-bit word aligned, even if the scan lines are not a multiple
+of 4 bytes long).  doing this
+</p></blockquote></div>
+
+   </body></html>
+

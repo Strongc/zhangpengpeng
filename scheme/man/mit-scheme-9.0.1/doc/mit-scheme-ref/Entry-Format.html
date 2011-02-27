@@ -1,0 +1,153 @@
+<html lang="en">
+<head>
+<title>Entry Format - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Notational-Conventions.html#Notational-Conventions" title="Notational Conventions">
+<link rel="prev" href="Examples.html#Examples" title="Examples">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Entry-Format"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Examples.html#Examples">Examples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Notational-Conventions.html#Notational-Conventions">Notational Conventions</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.1.3 Entry Format</h4>
+
+<p><a name="index-entry-format-37"></a><a name="index-format_002c-entry-38"></a>
+Each description of an MIT/GNU Scheme variable, special form, or
+procedure begins with one or more header lines in this format:
+
+<div class="defun">
+&mdash; <var>category</var>: <var>template</var><var><a name="index-g_t_0040var_007btemplate_007d-39"></a></var><br>
+        </div>
+
+<p class="noindent">where <var>category</var> specifies the kind of item (&ldquo;variable&rdquo;,
+&ldquo;special form&rdquo;, or &ldquo;procedure&rdquo;).  The form of <var>template</var> is
+interpreted depending on <var>category</var>.
+
+     <dl>
+<dt>Variable<dd><var>Template</var> consists of the variable's name. 
+<a name="index-variable_002c-entry-category-40"></a>
+<br><dt>Special Form<dd><var>Template</var> starts with the syntactic keyword of the special form,
+followed by a description of the special form's syntax.  The description
+is written using the following conventions. 
+<a name="index-special-form_002c-entry-category-41"></a>
+<a name="index-else-42"></a><a name="index-cond-43"></a>Named components are italicized in the printed manual, and uppercase in
+the Info file.  &ldquo;Noise&rdquo; keywords, such as the <code>else</code> keyword in
+the <code>cond</code> special form, are set in a fixed width font in the
+printed manual; in the Info file they are not distinguished. 
+Parentheses indicate themselves.
+
+     <p><a name="index-ellipsis_002c-in-entries-44"></a><a name="index-g_t_002e_002e_002e-in-entries-45"></a>A horizontal ellipsis (<small class="dots">...</small>) is describes repeated components. 
+Specifically,
+
+     <pre class="display">          <var>thing</var> <small class="dots">...</small>
+</pre>
+     <p class="noindent">indicates <em>zero</em> or more occurrences of <var>thing</var>, while
+
+     <pre class="display">          <var>thing</var> <var>thing</var> <small class="dots">...</small>
+</pre>
+     <p class="noindent">indicates <em>one</em> or more occurrences of <var>thing</var>.
+
+     <p><a name="index-bracket_002c-in-entries-46"></a><a name="index-g_t_005b-in-entries-47"></a><a name="index-g_t_005d-in-entries-48"></a><a name="index-optional-component_002c-in-entries-49"></a>Brackets, <code>[ ]</code>, enclose optional components.
+
+     <p><a name="index-body_002c-of-special-form-_0028defn_0029-50"></a><a name="index-lambda-51"></a>Several special forms (e.g. <code>lambda</code>) have an internal component
+consisting of a series of expressions; usually these expressions are
+evaluated sequentially under conditions that are specified in the
+description of the special form.  This sequence of expressions is commonly
+referred to as the <dfn>body</dfn> of the special form.
+
+     <br><dt>Procedure<dd><var>Template</var> starts with the name of the variable to which the
+procedure is bound, followed by a description of the procedure's
+arguments.  The arguments are described using &ldquo;lambda list&rdquo; notation
+(see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>), except that brackets are used to denote
+optional arguments, and ellipses are used to denote &ldquo;rest&rdquo; arguments. 
+<a name="index-procedure_002c-entry-format-52"></a>
+The names of the procedure's arguments are italicized in the printed
+manual, and uppercase in the Info file.
+
+     <p>When an argument names a Scheme data type, it indicates that the
+argument must be that type of data object.  For example,
+
+     <div class="defun">
+&mdash; procedure: <b>cdr</b><var> pair<a name="index-cdr-53"></a></var><br>
+          </div>
+
+     <p class="noindent">indicates that the standard Scheme procedure <code>cdr</code> takes one argument,
+which must be a pair.
+
+     <p>Many procedures signal an error when an argument is of the wrong type;
+usually this error is a condition of type
+<code>condition-type:wrong-type-argument</code>. 
+<a name="index-condition_002dtype_003awrong_002dtype_002dargument-54"></a>
+In addition to the standard data-type names (<var>pair</var>, <var>list</var>,
+<var>boolean</var>, <var>string</var>, etc.), the following names as arguments
+also imply type restrictions:
+
+          <ul>
+<li><var>object</var>: any object
+<li><var>thunk</var>: a procedure of no arguments
+<li><var>x</var>, <var>y</var>: real numbers
+<li><var>q</var>, <var>n</var>: integers
+<li><var>k</var>: an exact non-negative integer
+</ul>
+     </dl>
+
+   <p>Some examples:
+
+<div class="defun">
+&mdash; procedure: <b>list</b><var> object <small class="dots">...</small><a name="index-list-55"></a></var><br>
+        </div>
+
+<p class="noindent">indicates that the standard Scheme procedure <code>list</code> takes zero or
+more arguments, each of which may be any Scheme object.
+
+<div class="defun">
+&mdash; procedure: <b>write-char</b><var> char </var>[<var>output-port</var>]<var><a name="index-write_002dchar-56"></a></var><br>
+        </div>
+
+<p class="noindent">indicates that the standard Scheme procedure <code>write-char</code> must be
+called with a character, <var>char</var>, and may also be called with a
+character and an output port.
+
+   </body></html>
+

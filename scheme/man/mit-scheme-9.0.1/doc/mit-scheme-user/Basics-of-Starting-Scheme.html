@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Basics of Starting Scheme - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Running-Scheme.html#Running-Scheme" title="Running Scheme">
+<link rel="prev" href="Running-Scheme.html#Running-Scheme" title="Running Scheme">
+<link rel="next" href="Customizing-Scheme.html#Customizing-Scheme" title="Customizing Scheme">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basics-of-Starting-Scheme"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Customizing-Scheme.html#Customizing-Scheme">Customizing Scheme</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Running-Scheme.html#Running-Scheme">Running Scheme</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Running-Scheme.html#Running-Scheme">Running Scheme</a>
+<hr>
+</div>
+
+<h3 class="section">2.1 Basics of Starting Scheme</h3>
+
+<p>Under unix, MIT/GNU Scheme is invoked by typing
+
+<pre class="example">     mit-scheme
+</pre>
+   <p class="noindent">at your operating system's command interpreter.  Under Windows,
+MIT/GNU Scheme is invoked by double-clicking on a shortcut.  In
+either case, Scheme will load itself and print something like this:
+
+<pre class="example">     Copyright (C) 2010 Massachusetts Institute of Technology
+     This is free software; see the source for copying conditions. There is NO
+     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+     
+     Image saved on Monday February 1, 2010 at 12:26:59 AM
+       Release 9.0       || Microcode 15.1 || Runtime 15.7 || SF 4.41
+       LIAR/x86-64 4.118 || Edwin 3.116
+</pre>
+   <p class="noindent">This information, which can be printed again by evaluating
+
+   <p><a name="index-identify_002dworld-7"></a>
+<pre class="example">     (identify-world)
+</pre>
+   <p><a name="index-release-number-8"></a><a name="index-microcode_002c-version-9"></a><a name="index-runtime-system_002c-version-10"></a><a name="index-version-numbers-11"></a>tells you the following version information.  &lsquo;<samp><span class="samp">Release</span></samp>&rsquo; is the
+release number for the entire Scheme system.  This number is changed
+each time a new version of Scheme is released.  &lsquo;<samp><span class="samp">Microcode</span></samp>&rsquo; is the
+version number for the part of the system that is written in C. 
+&lsquo;<samp><span class="samp">Runtime</span></samp>&rsquo; is the version number for the part of the system that is
+written in Scheme.
+
+   <p><a name="index-subsystem-versions-12"></a><a name="index-SF_002c-version-13"></a><a name="index-compiler_002c-version-14"></a><a name="index-Edwin_002c-version-15"></a><a name="index-student-package_002c-version-16"></a><a name="index-compatibility-package_002c-version-17"></a>Following this there may be additional version numbers for specific
+subsystems.  &lsquo;<samp><span class="samp">SF</span></samp>&rsquo; refers to the scode optimization program
+<code>sf</code>; &lsquo;<samp><span class="samp">LIAR/</span><var>ARCH</var></samp>&rsquo; is the native-code compiler, where
+<var>ARCH</var> is the native-code architecture it compiles to;
+&lsquo;<samp><span class="samp">Edwin</span></samp>&rsquo; is the Emacs-like text editor.  There are other
+subsystems you can load that will add themselves to this list.
+
+   </body></html>
+

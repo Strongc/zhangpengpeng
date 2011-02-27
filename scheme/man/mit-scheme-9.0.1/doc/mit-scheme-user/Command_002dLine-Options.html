@@ -1,0 +1,197 @@
+<html lang="en">
+<head>
+<title>Command-Line Options - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Running-Scheme.html#Running-Scheme" title="Running Scheme">
+<link rel="prev" href="Memory-Usage.html#Memory-Usage" title="Memory Usage">
+<link rel="next" href="Custom-Command_002dline-Options.html#Custom-Command_002dline-Options" title="Custom Command-line Options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Command-Line-Options"></a>
+<a name="Command_002dLine-Options"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Custom-Command_002dline-Options.html#Custom-Command_002dline-Options">Custom Command-line Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Memory-Usage.html#Memory-Usage">Memory Usage</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Running-Scheme.html#Running-Scheme">Running Scheme</a>
+<hr>
+</div>
+
+<h3 class="section">2.4 Command-Line Options</h3>
+
+<p>Scheme accepts the command-line options detailed in the following
+sections.  The options may appear in any order, with the restriction
+that the microcode options must appear before the runtime options, and
+the runtime options must appear before any other arguments on the
+command line.  Any arguments other than these options will generate a
+warning message when Scheme starts.  If you want to define your own
+command-line options, see <a href="Custom-Command_002dline-Options.html#Custom-Command_002dline-Options">Custom Command-line Options</a>.
+
+   <p>Note that MIT/GNU Scheme supports only <dfn>long</dfn> options, that
+is, options specified by verbose names, as opposed to <dfn>short</dfn>
+options, which are specified by single characters.  As of release 7.7.90,
+all options start with two hyphens, for compatibility with GNU
+coding standards (and most modern programs).  Prior to this release,
+options started with a single hyphen.  While the single-hyphen style
+continues to work, it is deprecated and will someday stop working.
+
+   <p>These are the microcode options:
+
+     <dl>
+<dt><samp><span class="option">--band </span><var>filename</var></samp><dd><a name="index-g_t_002d_002dband-26"></a><a name="index-MITSCHEME_005fBAND-27"></a><a name="index-world-image-28"></a><a name="index-band-29"></a>Specifies the initial world image file (<dfn>band</dfn>) to be loaded. 
+Searches for <var>filename</var> in the working directory and the library
+directories, using the full pathname of the first readable file of
+that name.  If <var>filename</var> is an absolute pathname (on unix, this
+means it starts with <samp><span class="file">/</span></samp>), then no search occurs&mdash;<var>filename</var>
+is tested for readability and then used directly.  If this option
+isn't given, the filename is the value of the environment variable
+<samp><span class="env">MITSCHEME_BAND</span></samp>, or if that isn't defined, <samp><span class="file">all.com</span></samp>; in
+these cases the library directories are searched, but not the working
+directory.
+
+     <br><dt><samp><span class="option">--heap </span><var>blocks</var></samp><dd><a name="index-g_t_002d_002dheap-30"></a>Specifies the size of the heap in 1024-word blocks.  Overrides any
+default.  The size specified by this option is incremented by the
+amount of heap space needed by the band being loaded.  Consequently,
+<samp><span class="option">--heap</span></samp> specifies how much free space will be available in the
+heap when Scheme starts, independent of the amount of heap already
+consumed by the band.
+
+     <br><dt><samp><span class="option">--constant </span><var>blocks</var></samp><dd><a name="index-g_t_002d_002dconstant-31"></a>Specifies the size of constant space in 1024-word blocks.  Overrides any
+default.  Constant space holds the compiled code for the runtime system
+and other subsystems.
+
+     <br><dt><samp><span class="option">--stack </span><var>blocks</var></samp><dd><a name="index-g_t_002d_002dstack-32"></a>Specifies the size of the stack in 1024-word blocks.  Overrides any
+default.  This is Scheme's stack, <em>not</em> the unix stack used by C
+programs.
+
+     <br><dt><samp><span class="option">--option-summary</span></samp><dd><a name="index-g_t_002d_002doption_002dsummary-33"></a>Causes Scheme to write an option summary to standard error.  This
+shows the values of all of the settable microcode option variables.
+
+     <br><dt><samp><span class="option">--emacs</span></samp><dd><a name="index-g_t_002d_002demacs-34"></a>Specifies that Scheme is running as a subprocess of GNU Emacs.  This
+option is automatically supplied by GNU Emacs, and should not be given
+under other circumstances.
+
+     <br><dt><samp><span class="option">--interactive</span></samp><dd><a name="index-g_t_002d_002dinteractive-35"></a>If this option isn't specified, and Scheme's standard <acronym>I/O</acronym> is
+not a terminal, Scheme will detach itself from its controlling
+terminal, which prevents it from getting signals sent to the process
+group of that terminal.  If this option is specified, Scheme will not
+detach itself from the controlling terminal.
+
+     <p>This detaching behavior is useful for running Scheme as a background
+job.  For example, using Bourne shell, the following will run Scheme
+as a background job, redirecting its input and output to files, and
+preventing it from being killed by keyboard interrupts or by logging
+out:
+
+     <pre class="example">          mit-scheme &lt; /usr/cph/foo.in &gt; /usr/cph/foo.out 2&gt;&amp;1 &amp;
+</pre>
+     <p>This option is ignored under non-unix operating systems.
+
+     <br><dt><samp><span class="option">--nocore</span></samp><dd><a name="index-g_t_002d_002dnocore-36"></a>Specifies that Scheme should not generate a core dump under any
+circumstances.  If this option is not given, and Scheme terminates
+abnormally, you will be prompted to decide whether a core dump should be
+generated.
+
+     <p>This option is ignored under non-unix operating systems.
+
+     <br><dt><samp><span class="option">--library </span><var>path</var></samp><dd><a name="index-g_t_002d_002dlibrary-37"></a><a name="index-MITSCHEME_005fLIBRARY_005fPATH-38"></a>Sets the library search path to <var>path</var>.  This is a
+list of directories that is searched to find various library files, such
+as bands.  If this option is not given, the value of the environment
+variable <samp><span class="env">MITSCHEME_LIBRARY_PATH</span></samp> is used; if that isn't defined,
+the default is used.
+
+     <p>On unix, the elements of the list are separated by colons, and the
+default value is <samp><span class="file">/usr/local/lib/mit-scheme-</span><var>ARCH</var></samp>.  On PCs,
+the elements of the list are separated by semicolons, and the default
+value is <samp><span class="file">c:\local\mit-scheme</span></samp>.
+
+     <br><dt><samp><span class="option">--fasl </span><var>filename</var></samp><dd><a name="index-g_t_002d_002dfasl-39"></a>Specifies that a <dfn>cold load</dfn> should be performed, using
+<var>filename</var> as the initial file to be loaded.  If this option isn't
+given, a normal load is performed instead.  This option may not be
+used together with the <samp><span class="option">--band</span></samp> option.  This option is useful
+only for maintenance and development of the MIT/GNU Scheme runtime
+system. 
+</dl>
+
+<p class="noindent">The following options are runtime options.  They are processed after the
+microcode options and after the image file is loaded.
+
+     <dl>
+<dt><samp><span class="option">--no-init-file</span></samp><dd><a name="index-g_t_002d_002dno_002dinit_002dfile-40"></a>This option causes Scheme to ignore the <samp><span class="file">${HOME}/.scheme.init</span></samp> or
+<samp><span class="file">scheme.ini</span></samp> file, normally loaded automatically when Scheme starts
+(if it exists).
+
+     <br><dt><samp><span class="option">--suspend-file</span></samp><dd><a name="index-g_t_002d_002dsuspend_002dfile-41"></a>Under some circumstances Scheme can write out a file called
+<samp><span class="file">scheme_suspend</span></samp> in the user's home directory.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> This file is a world image containing the
+complete state of the Scheme process; restoring this file continues the
+computation that Scheme was performing at the time the file was written.
+
+     <p>Normally this file is never written, but the <samp><span class="option">--suspend-file</span></samp>
+option enables writing of this file.
+
+     <br><dt><samp><span class="option">--eval </span><var>expression</var><span class="option"> ...</span></samp><dd><a name="index-g_t_002d_002deval-42"></a>This option causes Scheme to evaluate the <var>expression</var>s following it
+on the command line, up to (but not including) the next argument that
+starts with a hyphen.  The expressions are evaluated in the
+<code>user-initial-environment</code>.  Unless explicitly handled, errors
+during evaluation are silently ignored.
+
+     <br><dt><samp><span class="option">--load </span><var>file</var><span class="option"> ...</span></samp><dd><a name="index-g_t_002d_002dload-43"></a>This option causes Scheme to load the <var>file</var>s (or lists of files)
+following it on the command line, up to (but not including) the next
+argument that starts with a hyphen.  The files are loaded in the
+<code>user-initial-environment</code>.  Unless explicitly handled, errors
+during loading are silently ignored. 
+</dl>
+
+<p class="noindent">The following option is supported only when Edwin is loaded.
+
+     <dl>
+<dt><samp><span class="option">--edit</span></samp><dd><a name="index-g_t_002d_002dedit-44"></a>This option causes Edwin to start immediately when Scheme is started. 
+</dl>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Under unix,
+this file is written when Scheme is terminated by the &lsquo;<samp><span class="samp">SIGUSR1</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">SIGHUP</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">SIGPWR</span></samp>&rsquo; signals.  Under other operating systems,
+this file is never written.</p>
+
+   <hr></div>
+
+   </body></html>
+

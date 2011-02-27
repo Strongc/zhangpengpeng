@@ -1,0 +1,186 @@
+<html lang="en">
+<head>
+<title>Miscellaneous OS Facilities - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Operating_002dSystem-Interface.html#Operating_002dSystem-Interface" title="Operating-System Interface">
+<link rel="prev" href="TCP-Sockets.html#TCP-Sockets" title="TCP Sockets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Miscellaneous-OS-Facilities"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="TCP-Sockets.html#TCP-Sockets">TCP Sockets</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Operating_002dSystem-Interface.html#Operating_002dSystem-Interface">Operating-System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">15.9 Miscellaneous OS Facilities</h3>
+
+<p>This section contains assorted operating-system facilities that don't
+fit into other categories.
+
+<div class="defun">
+&mdash; variable: <b>microcode-id/operating-system</b><var><a name="index-microcode_002did_002foperating_002dsystem-2746"></a></var><br>
+&mdash; variable: <b>microcode-id/operating-system-name</b><var><a name="index-microcode_002did_002foperating_002dsystem_002dname-2747"></a></var><br>
+<blockquote><p><code>microcode-id/operating-system</code> is bound to a symbol that specifies
+the type of operating system that Scheme is running under.  There are
+two possible values: <code>unix</code> or <code>nt</code>.
+
+        <p><code>microcode-id/operating-system-name</code> is a string containing the
+same name as <code>microcode-id/operating-system</code>; the latter is created
+by interning the former as a symbol. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>microcode-id/operating-system-variant</b><var><a name="index-microcode_002did_002foperating_002dsystem_002dvariant-2748"></a></var><br>
+<blockquote><p>This variable is a string that identifies the particular variant of the
+operating system that Scheme is running under.  Here are some of the
+possible values:
+
+     <pre class="example">          "GNU/Linux"
+          "MacOSX"
+          "Microsoft Windows NT 4.0 (Build 1381; Service Pack 3)"
+</pre>
+        <p class="noindent">For Windows systems, it is recommended that you match on the prefix of
+this string and ignore the <code>"Build"</code> suffix.  This is because the
+suffix may contain information about service packs or fixes, while the
+prefix will be constant for a particular version of Windows. 
+</p></blockquote></div>
+
+   <p>The next few procedures provide access to the <dfn>domain name service</dfn>
+(<acronym>DNS</acronym>), which maintains associations between internet host
+names such as <code>"www.swiss.ai.mit.edu"</code> and <acronym>IP</acronym> addresses,
+such as <code>18.23.0.16</code>.  In MIT/GNU Scheme, we represent an internet host
+name as a string, and an <acronym>IP</acronym> address as a byte vector of length
+4 (byte vectors are just character strings that are accessed using
+<code>vector-8b-ref</code> rather than <code>string-ref</code>).  The bytes in an
+<acronym>IP</acronym> address read in the same order as they do when written out:
+
+<pre class="example">     (get-host-by-name "www.swiss") &rArr; #("\022\027\000\020")
+</pre>
+   <div class="defun">
+&mdash; procedure: <b>get-host-by-name</b><var> host-name<a name="index-get_002dhost_002dby_002dname-2749"></a></var><br>
+<blockquote><p>Looks up the internet host name <var>host-name</var> using the <acronym>DNS</acronym>,
+returning a vector of <acronym>IP</acronym> addresses for the corresponding host,
+or <code>#f</code> if there is no such host.  Usually the returned vector has
+only one element, but if a host has more than one network interface, the
+vector might have more than one element.
+
+     <pre class="example">          (get-host-by-name "www.swiss") &rArr; #("\022\027\000\020")
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>get-host-by-address</b><var> ip-address<a name="index-get_002dhost_002dby_002daddress-2750"></a></var><br>
+<blockquote><p>Does a reverse <acronym>DNS</acronym> lookup on <var>ip-address</var>, returning the
+internet host name corresponding to that address, or <code>#f</code> if there
+is no such host.
+
+     <pre class="example">          (get-host-by-address "\022\027\000\020") &rArr; "swissnet.ai.mit.edu"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>canonical-host-name</b><var> host-name<a name="index-canonical_002dhost_002dname-2751"></a></var><br>
+<blockquote><p>Finds the &ldquo;canonical&rdquo; internet host name for <var>host-name</var>.  For
+example:
+
+     <pre class="example">          (canonical-host-name "zurich")    &rArr; "zurich.ai.mit.edu"
+          (canonical-host-name "www.swiss") &rArr; "swissnet.ai.mit.edu"
+</pre>
+        <p class="noindent">In both examples, the default internet domain &lsquo;<samp><span class="samp">ai.mit.edu</span></samp>&rsquo; is added
+to <var>host-name</var>.  In the second example, <code>"www.swiss"</code> is an
+alias for another computer named <code>"swissnet"</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>get-host-name</b><var><a name="index-get_002dhost_002dname-2752"></a></var><br>
+<blockquote><p>Returns the string that identifies the computer that MIT/GNU Scheme is
+running on.  Usually this is an unqualified internet host name, i.e. 
+the host name without the domain suffix:
+
+     <pre class="example">          (get-host-name) &rArr; "aarau"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>os/hostname</b><var><a name="index-os_002fhostname-2753"></a></var><br>
+<blockquote><p>Returns the canonical internet host name of the computer that MIT/GNU Scheme
+is running on.  So, in contrast to the example for <code>get-host-name</code>:
+
+     <pre class="example">          (os/hostname) &rArr; "aarau.ai.mit.edu"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>allocate-host-address</b><var><a name="index-allocate_002dhost_002daddress-2754"></a></var><br>
+<blockquote><p>Allocates and returns an <acronym>IP</acronym> address object.  This is just a
+string of a fixed length (current 4 bytes) into which an <acronym>IP</acronym>
+address may be stored.  This procedure is used to generate an
+appropriate argument to be passed to
+<code>tcp-server-connection-accept</code>.
+
+     <pre class="example">          (allocate-host-address) &rArr; "Xe\034\241"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>host-address-any</b><var><a name="index-host_002daddress_002dany-2755"></a></var><br>
+<blockquote><p>Return an <acronym>IP</acronym> address object that specifies &ldquo;any host&rdquo;.  This
+object is useful only when passed as the <var>address</var> argument to
+<code>open-tcp-server-socket</code>.
+
+     <pre class="example">          (host-address-any) &rArr; "\000\000\000\000"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>host-address-loopback</b><var><a name="index-host_002daddress_002dloopback-2756"></a></var><br>
+<blockquote><p><a name="index-loopback-interface-2757"></a>Return an <acronym>IP</acronym> address object that specifies the local
+<dfn>loopback</dfn> network interface.  The loopback interface is a software
+network interface that can be used only for communicating between
+processes on the same computer.  This address object is useful only when
+passed as the <var>address</var> argument to <code>open-tcp-server-socket</code>.
+
+     <pre class="example">          (host-address-loopback) &rArr; "\177\000\000\001"
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

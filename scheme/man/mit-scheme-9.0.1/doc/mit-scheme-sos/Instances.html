@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+<title>Instances - SOS 1.9</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="SOS 1.9">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Classes.html#Classes" title="Classes">
+<link rel="next" href="Slots.html#Slots" title="Slots">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents SOS 1.9.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Instances"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Slots.html#Slots">Slots</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Classes.html#Classes">Classes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">2 Instances</h2>
+
+<p><a name="index-instance-76"></a>An <dfn>instance</dfn> is a compound data structure much like a record,
+except that it is defined by a class rather than a record type
+descriptor.  Instances are more powerful than records, because their
+representation is designed to support inheritance, while the
+representation of records is not.
+
+<div class="defun">
+&mdash; Procedure: <b>instance-constructor</b><var> class slot-names </var>[<var>n-init-args</var>]<var><a name="index-instance_002dconstructor-77"></a></var><br>
+<blockquote><p>Creates and returns a procedure that, when called, will create and
+return a newly allocated instance of <var>class</var>.
+
+        <p><var>Class</var> must be a subclass of <code>&lt;instance&gt;</code>.  <var>Slot-names</var>
+must be a list of symbols, each of which must be the name of a slot in
+<var>class</var>.  <var>N-init-args</var> will be described below.
+
+        <p>In its basic operation, <code>instance-constructor</code> works much like
+<code>record-constructor</code>: the <var>slot-names</var> argument specifies how
+many arguments the returned constructor accepts, and each of those
+arguments is stored in the corresponding slot of the returned instance. 
+Any slots that are not specified in <var>slot-names</var> are given their
+initial values, as specified by the <code>initial-value</code> or
+<code>initializer</code> slot properties; otherwise they are left
+uninitialized.
+
+        <p><a name="index-initialize_002dinstance-78"></a><a name="index-initialize_002dinstance-79"></a>After the new instance is created and its slots filled in, but before it
+is returned, it is passed to the generic procedure
+<code>initialize-instance</code>.  Normally, <code>initialize-instance</code> does
+nothing, but because it is always called, the programmer can add methods
+to it to specify an initialization that is to be performed on every
+instance of the class.
+
+        <p>By default, <code>initialize-instance</code> is called with one argument, the
+newly created instance.  However, the optional argument
+<var>n-init-args</var> can be used to specify additional arguments that will
+be passed to <code>initialize-instance</code>.
+
+        <p>The way this works is that the returned constructor procedure accepts
+additional arguments after the specified number of slot values, and
+passes these extra arguments to <code>initialize-instance</code>.  When
+<var>n-init-args</var> is not supplied or is <code>#t</code>, any number of extra
+arguments are accepted and passed along.  When <var>n-init-args</var> is an
+exact non-negative integer, exactly that number of extra arguments must
+be supplied when the constructor is called.  Finally, if
+<var>n-init-args</var> is the symbol <code>no-initialize-instance</code>, then the
+constructor accepts no extra arguments and does not call
+<code>initialize-instance</code> at all; this is desirable when
+<code>initialize-instance</code> is not needed, because it makes the
+constructor significantly faster.
+
+        <p>For notational convenience, <var>n-init-args</var> may take two other forms. 
+First, it may be a list of symbols, which is equivalent to the integer
+that is the length of the list.  Second, it may be the symbol
+<code>no-init</code>, which is an abbreviation for
+<code>no-initialize-instance</code>.
+
+        <p>Note that the default method on <code>initialize-instance</code> accepts no
+extra arguments and does nothing.
+
+        <p>Examples of <code>instance-constructor</code>:
+
+     <pre class="lisp">          (define-class &lt;simple-reference&gt; (&lt;reference&gt;)
+            (from accessor reference-from)
+            (to accessor reference-to)
+            (cx accessor reference-cx)
+            (cy accessor reference-cy))
+          
+          (define make-simple-reference
+            (instance-constructor &lt;simple-reference&gt;
+                                  '(from to cx cy)
+                                  'no-init))
+          
+          (define-class &lt;simple-wirenet&gt; (&lt;wirenet&gt;)
+            (cell accessor wirenet-cell)
+            (wires accessor wirenet-wires
+                   modifier set-wirenet-wires!
+                   initial-value '()))
+          
+          (define make-simple-wirenet
+            (instance-constructor &lt;simple-wirenet&gt; '(cell)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>instance?</b><var> object<a name="index-instance_003f-80"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is an instance, otherwise returns
+<code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>instance-class</b><var> instance<a name="index-instance_002dclass-81"></a></var><br>
+<blockquote><p>Returns the class of <var>instance</var>.  This is faster than
+<code>object-class</code>, but it works only for instances, and not for other
+objects. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>instance-of?</b><var> object specializer<a name="index-instance_002dof_003f-82"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>object</var> is a general instance of
+<var>specializer</var>, otherwise returns <code>#f</code>.  This is equivalent to
+
+     <pre class="lisp">          (subclass? (object-class <var>object</var>) <var>specializer</var>)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>instance-predicate</b><var> specializer<a name="index-instance_002dpredicate-83"></a></var><br>
+<blockquote><p>Returns a predicate procedure for <var>specializer</var>.  The returned
+procedure accepts one argument and returns <code>#t</code> if the argument is
+an instance of <var>specializer</var> and <code>#f</code> otherwise. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>The Prompt and Level Number - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="REPL.html#REPL" title="REPL">
+<link rel="prev" href="REPL.html#REPL" title="REPL">
+<link rel="next" href="Interrupting.html#Interrupting" title="Interrupting">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="The-Prompt-and-Level-Number"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Interrupting.html#Interrupting">Interrupting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="REPL.html#REPL">REPL</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="REPL.html#REPL">REPL</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.1.1 The Prompt and Level Number</h4>
+
+<p><a name="index-prompt_002c-REPL-86"></a>The <acronym>REPL</acronym> <dfn>prompt</dfn> normally has the form
+
+<pre class="example">     1 ]=&gt;
+</pre>
+   <p><a name="index-level-number_002c-REPL-87"></a>The &lsquo;<samp><span class="samp">1</span></samp>&rsquo; in the prompt is a <dfn>level number</dfn>, which is always a
+positive integer.  This number is incremented under certain
+circumstances, the most common being an error.  For example, here is
+what you will see if you type <kbd>f o o &lt;RET&gt;</kbd> after starting
+Scheme:
+
+<pre class="example">     ;Unbound variable: foo
+     ;To continue, call RESTART with an option number:
+     ; (RESTART 3) =&gt; Specify a value to use instead of foo.
+     ; (RESTART 2) =&gt; Define foo to a given value.
+     ; (RESTART 1) =&gt; Return to read-eval-print level 1.
+     
+     2 error&gt;
+</pre>
+   <p class="noindent">In this case, the level number has been incremented to &lsquo;<samp><span class="samp">2</span></samp>&rsquo;, which
+indicates that a new <acronym>REPL</acronym> has been started (also the prompt
+string has been changed to remind you that the <acronym>REPL</acronym> was
+started because of an error).  The &lsquo;<samp><span class="samp">2</span></samp>&rsquo; means that this new
+<acronym>REPL</acronym> is &ldquo;over&rdquo; the old one.  The original <acronym>REPL</acronym>
+still exists, and is waiting for you to return to it, for example, by
+entering &lsquo;<samp><span class="samp">(restart 1)</span></samp>&rsquo;.  Furthermore, if an error occurs while you
+are in this <acronym>REPL</acronym>, yet another <acronym>REPL</acronym> will be started,
+and the level number will be increased to &lsquo;<samp><span class="samp">3</span></samp>&rsquo;.  This can continue
+ad infinitum, but normally it is rare to use more than a few levels.
+
+   <p>The normal way to get out of an error <acronym>REPL</acronym> and back to the top
+level <acronym>REPL</acronym> is to use the <kbd>C-g</kbd> interrupt.  This is a
+single-keystroke command executed by holding down the &lt;CTRL&gt; key and
+pressing the &lt;G&gt; key.  <kbd>C-g</kbd> always terminates whatever is
+running and returns you to the top level <acronym>REPL</acronym> immediately.
+
+   <p>Note: The appearance of the &lsquo;<samp><span class="samp">error&gt;</span></samp>&rsquo; prompt does not mean that
+Scheme is in some weird inconsistent state that you should avoid.  It is
+merely a reminder that your program was in error: an illegal operation
+was attempted, but it was detected and avoided.  Often the best way to
+find out what is in error is to do some poking around in the error
+<acronym>REPL</acronym>.  If you abort out of it, the context of the error will
+be destroyed, and you may not be able to find out what happened.
+
+   </body></html>
+

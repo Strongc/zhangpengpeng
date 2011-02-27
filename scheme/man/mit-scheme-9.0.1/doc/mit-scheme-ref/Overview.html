@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>Overview - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Acknowledgements.html#Acknowledgements" title="Acknowledgements">
+<link rel="next" href="Special-Forms.html#Special-Forms" title="Special Forms">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Overview"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Special-Forms.html#Special-Forms">Special Forms</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Acknowledgements.html#Acknowledgements">Acknowledgements</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">1 Overview</h2>
+
+<p><a name="index-runtime-system-1"></a>This manual is a detailed description of the MIT/GNU Scheme runtime system. 
+It is intended to be a reference document for programmers.  It does not
+describe how to run Scheme or how to interact with it &mdash; that is the
+subject of the <cite>MIT/GNU Scheme User's Manual</cite>.
+
+   <p>This chapter summarizes the semantics of Scheme, briefly describes the
+MIT/GNU Scheme programming environment, and explains the syntactic and
+lexical conventions of the language.  Subsequent chapters describe
+special forms, numerous data abstractions, and facilities for input and
+output.
+
+   <p><a name="index-standard-Scheme-_0028defn_0029-2"></a><a name="index-Scheme-standard-3"></a><a name="index-R4RS-4"></a>Throughout this manual, we will make frequent references to
+<dfn>standard Scheme</dfn>, which is the language defined by the document
+<cite>Revised^4 Report on the Algorithmic Language Scheme</cite>, by William
+Clinger, Jonathan Rees, et al., or by <span class="sc">ieee</span> Std. 1178-1990,
+<cite>IEEE Standard for the Scheme Programming Language</cite> (in fact,
+several parts of this document are copied from the <cite>Revised
+Report</cite>).  MIT/GNU Scheme is an extension of standard Scheme.
+
+   <p>These are the significant semantic characteristics of the Scheme
+language:
+
+     <dl>
+<dt>Variables are statically scoped<dd><a name="index-static-scoping-_0028defn_0029-5"></a><a name="index-scope-_0028see-region_0029-6"></a>Scheme is a <dfn>statically scoped</dfn> programming language, which means that
+each use of a variable is associated with a lexically apparent binding
+of that variable.  Algol is another statically scoped language.
+
+     <br><dt>Types are latent<dd><a name="index-latent-types-_0028defn_0029-7"></a><a name="index-manifest-types-_0028defn_0029-8"></a><a name="index-weak-types-_0028defn_0029-9"></a><a name="index-strong-types-_0028defn_0029-10"></a><a name="index-dynamic-types-_0028defn_0029-11"></a><a name="index-static-types-_0028defn_0029-12"></a><a name="index-types_002c-latent-_0028defn_0029-13"></a><a name="index-types_002c-manifest-_0028defn_0029-14"></a>Scheme has <dfn>latent</dfn> types as opposed to <dfn>manifest</dfn> types, which
+means that Scheme associates types with values (or objects) rather than
+with variables.  Other languages with latent types (also referred to as
+<dfn>weakly</dfn> typed or <dfn>dynamically</dfn> typed languages) include APL,
+Snobol, and other dialects of Lisp.  Languages with manifest types
+(sometimes referred to as <dfn>strongly</dfn> typed or <dfn>statically</dfn> typed
+languages) include Algol 60, Pascal, and C.
+
+     <br><dt>Objects have unlimited extent<dd><a name="index-extent_002c-of-objects-15"></a>All objects created during a Scheme computation, including procedures
+and continuations, have unlimited extent; no Scheme object is ever
+destroyed.  The system doesn't run out of memory because the garbage
+collector reclaims the storage occupied by an object when the object
+cannot possibly be needed by a future computation.  Other languages in
+which most objects have unlimited extent include APL and other Lisp
+dialects.
+
+     <br><dt>Proper tail recursion<dd><a name="index-proper-tail-recursion-_0028defn_0029-16"></a><a name="index-tail-recursion-_0028defn_0029-17"></a><a name="index-recursion-_0028see-tail-recursion_0029-18"></a>Scheme is <dfn>properly tail-recursive</dfn>, which means that iterative
+computation can occur in constant space, even if the iterative
+computation is described by a syntactically recursive procedure.  With a
+tail-recursive implementation, you can express iteration using the
+ordinary procedure-call mechanics; special iteration expressions are
+provided only for syntactic convenience.
+
+     <br><dt>Procedures are objects<dd>Scheme procedures are objects, which means that you can create them
+dynamically, store them in data structures, return them as the results
+of other procedures, and so on.  Other languages with such procedure
+objects include Common Lisp and ML.
+
+     <br><dt>Continuations are explicit<dd>In most other languages, continuations operate behind the scenes.  In
+Scheme, continuations are objects; you can use continuations for
+implementing a variety of advanced control constructs, including
+non-local exits, backtracking, and coroutines.
+
+     <br><dt>Arguments are passed by value<dd>Arguments to Scheme procedures are passed by value, which means that
+Scheme evaluates the argument expressions before the procedure gains
+control, whether or not the procedure needs the result of the
+evaluations.  ML, C, and APL are three other languages that pass
+arguments by value.  In languages such as SASL and Algol 60, argument
+expressions are not evaluated unless the values are needed by the
+procedure. 
+</dl>
+
+   <p><a name="index-read-19"></a>Scheme uses a parenthesized-list Polish notation to describe programs
+and (other) data.  The syntax of Scheme, like that of most Lisp
+dialects, provides for great expressive power, largely due to its
+simplicity.  An important consequence of this simplicity is the
+susceptibility of Scheme programs and data to uniform treatment by other
+Scheme programs.  As with other Lisp dialects, the <code>read</code> primitive
+parses its input; that is, it performs syntactic as well as lexical
+decomposition of what it reads.
+
+<ul class="menu">
+<li><a accesskey="1" href="Notational-Conventions.html#Notational-Conventions">Notational Conventions</a>
+<li><a accesskey="2" href="Scheme-Concepts.html#Scheme-Concepts">Scheme Concepts</a>
+<li><a accesskey="3" href="Lexical-Conventions.html#Lexical-Conventions">Lexical Conventions</a>
+<li><a accesskey="4" href="Expressions.html#Expressions">Expressions</a>
+</ul>
+
+   </body></html>
+

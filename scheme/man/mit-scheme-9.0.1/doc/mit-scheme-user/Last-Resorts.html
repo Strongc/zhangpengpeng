@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Last Resorts - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edwin.html#Edwin" title="Edwin">
+<link rel="prev" href="Edwin-Debugger.html#Edwin-Debugger" title="Edwin Debugger">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Last-Resorts"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Edwin-Debugger.html#Edwin-Debugger">Edwin Debugger</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edwin.html#Edwin">Edwin</a>
+<hr>
+</div>
+
+<h3 class="section">7.7 Last Resorts</h3>
+
+<p>When Scheme exits abnormally it tries to save any unsaved Edwin buffers. 
+The buffers are saved in an auto-save file in case the original is more
+valuable than the unsaved version.  You can use the editor command
+<kbd>M-x recover-file</kbd> to recover the auto-saved version.  The name
+used to specify an auto-save file is operating-system dependent: under
+unix, and on PC file systems with long file names, <samp><span class="file">foo.scm</span></samp> will
+be saved as <samp><span class="file">#foo.scm#</span></samp>; on PC file systems with short file names,
+it will be saved as <samp><span class="file">foo.sav</span></samp>.
+
+   <p>The following Scheme procedures are useful for recovering from bugs in
+Edwin's implementation.  All of them are designed for use when Edwin is
+<em>not</em> running&mdash;they should not be used when Edwin is running. 
+These procedures are designed to help Edwin's implementors deal with
+bugs during the implementation of the editor; they are not intended for
+casual use, but as a means of recovering from bugs that would otherwise
+require reloading the editor's world image from the disk.
+
+<div class="defun">
+&mdash; procedure: <b>save-editor-files</b><var><a name="index-save_002deditor_002dfiles-285"></a></var><br>
+<blockquote><p>Examines Edwin, offering to save any unsaved buffers.  This is useful if
+some bug caused Edwin to die while there were unsaved buffers, and you
+want to save the information without restarting the editor. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>reset-editor</b><var><a name="index-reset_002deditor-286"></a></var><br>
+<blockquote><p>Resets Edwin, causing it to be reinitialized the next time that
+<code>edit</code> is called.  If you encounter a fatal bug in Edwin, a good
+way to recover is to first call <code>save-editor-files</code>, and then to
+call <code>reset-editor</code>.  That should completely reset the editor to
+its initial state. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>reset-editor-windows</b><var><a name="index-reset_002deditor_002dwindows-287"></a></var><br>
+<blockquote><p>Resets Edwin's display structures, without affecting any of the buffers
+or their contents.  This is useful if a bug in the display code causes
+Edwin's internal display data structures to get into an inconsistent
+state that prevents Edwin from running. 
+</p></blockquote></div>
+
+   </body></html>
+

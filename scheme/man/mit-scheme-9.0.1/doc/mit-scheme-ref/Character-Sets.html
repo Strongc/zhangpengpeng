@@ -1,0 +1,199 @@
+<html lang="en">
+<head>
+<title>Character Sets - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Characters.html#Characters" title="Characters">
+<link rel="prev" href="ISO_002d8859_002d1-Characters.html#ISO_002d8859_002d1-Characters" title="ISO-8859-1 Characters">
+<link rel="next" href="Unicode.html#Unicode" title="Unicode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Character-Sets"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Unicode.html#Unicode">Unicode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ISO_002d8859_002d1-Characters.html#ISO_002d8859_002d1-Characters">ISO-8859-1 Characters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Characters.html#Characters">Characters</a>
+<hr>
+</div>
+
+<h3 class="section">5.6 Character Sets</h3>
+
+<p><a name="index-character-set-762"></a><a name="index-set_002c-of-characters-763"></a>
+MIT/GNU Scheme's character-set abstraction is used to represent groups
+of characters, such as the letters or digits.  Character sets may
+contain only <acronym>ISO-8859-1</acronym> characters; use the <dfn>alphabet</dfn>
+abstraction (see <a href="Unicode.html#Unicode">Unicode</a> if you need to cover the entire Unicode
+range.
+
+<div class="defun">
+&mdash; procedure: <b>char-set?</b><var> object<a name="index-char_002dset_003f-764"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-character-set-765"></a>Returns <code>#t</code> if <var>object</var> is a character set; otherwise returns
+<code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>char-set:upper-case</b><var><a name="index-char_002dset_003aupper_002dcase-766"></a></var><br>
+&mdash; variable: <b>char-set:lower-case</b><var><a name="index-char_002dset_003alower_002dcase-767"></a></var><br>
+&mdash; variable: <b>char-set:alphabetic</b><var><a name="index-char_002dset_003aalphabetic-768"></a></var><br>
+&mdash; variable: <b>char-set:numeric</b><var><a name="index-char_002dset_003anumeric-769"></a></var><br>
+&mdash; variable: <b>char-set:alphanumeric</b><var><a name="index-char_002dset_003aalphanumeric-770"></a></var><br>
+&mdash; variable: <b>char-set:whitespace</b><var><a name="index-char_002dset_003awhitespace-771"></a></var><br>
+&mdash; variable: <b>char-set:not-whitespace</b><var><a name="index-char_002dset_003anot_002dwhitespace-772"></a></var><br>
+&mdash; variable: <b>char-set:graphic</b><var><a name="index-char_002dset_003agraphic-773"></a></var><br>
+&mdash; variable: <b>char-set:not-graphic</b><var><a name="index-char_002dset_003anot_002dgraphic-774"></a></var><br>
+&mdash; variable: <b>char-set:standard</b><var><a name="index-char_002dset_003astandard-775"></a></var><br>
+<blockquote><p>These variables contain predefined character sets. 
+To see the contents of one of these sets, use <code>char-set-members</code>.
+
+        <p><a name="index-alphabetic-character-_0028defn_0029-776"></a><a name="index-character_002c-alphabetic-_0028defn_0029-777"></a><a name="index-numeric-character-_0028defn_0029-778"></a><a name="index-character_002c-numeric-_0028defn_0029-779"></a><a name="index-alphanumeric-character-_0028defn_0029-780"></a><a name="index-character_002c-alphanumeric-_0028defn_0029-781"></a><a name="index-whitespace-character-_0028defn_0029-782"></a><a name="index-character_002c-whitespace-_0028defn_0029-783"></a><a name="index-graphic-character-_0028defn_0029-784"></a><a name="index-character_002c-graphic-_0028defn_0029-785"></a><a name="index-standard-character-_0028defn_0029-786"></a><a name="index-character_002c-standard-_0028defn_0029-787"></a><a name="index-g_t_0023_005cspace-788"></a><a name="index-g_t_0023_005ctab-789"></a><a name="index-g_t_0023_005cpage-790"></a><a name="index-g_t_0023_005clinefeed-791"></a><a name="index-g_t_0023_005creturn-792"></a><a name="index-g_t_0023_005cnewline-793"></a><dfn>Alphabetic</dfn> characters are the 52 upper and lower case letters. 
+<dfn>Numeric</dfn> characters are the 10 decimal digits.  <dfn>Alphanumeric</dfn>
+characters are those in the union of these two sets.  <dfn>Whitespace</dfn>
+characters are <code>#\space</code>, <code>#\tab</code>, <code>#\page</code>,
+<code>#\linefeed</code>, and <code>#\return</code>.  <var>Graphic</var> characters are
+the printing characters and <code>#\space</code>.  <var>Standard</var> characters
+are the printing characters, <code>#\space</code>, and <code>#\newline</code>. 
+These are the printing characters:
+
+     <pre class="example">          ! " # $ % &amp; ' ( ) * + , - . /
+          0 1 2 3 4 5 6 7 8 9
+          : ; &lt; = &gt; ? @
+          A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+          [ \ ] ^ _ `
+          a b c d e f g h i j k l m n o p q r s t u v w x y z
+          { | } ~
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-upper-case?</b><var> char<a name="index-char_002dupper_002dcase_003f-794"></a></var><br>
+&mdash; procedure: <b>char-lower-case?</b><var> char<a name="index-char_002dlower_002dcase_003f-795"></a></var><br>
+&mdash; procedure: <b>char-alphabetic?</b><var> char<a name="index-char_002dalphabetic_003f-796"></a></var><br>
+&mdash; procedure: <b>char-numeric?</b><var> char<a name="index-char_002dnumeric_003f-797"></a></var><br>
+&mdash; procedure: <b>char-alphanumeric?</b><var> char<a name="index-char_002dalphanumeric_003f-798"></a></var><br>
+&mdash; procedure: <b>char-whitespace?</b><var> char<a name="index-char_002dwhitespace_003f-799"></a></var><br>
+&mdash; procedure: <b>char-graphic?</b><var> char<a name="index-char_002dgraphic_003f-800"></a></var><br>
+&mdash; procedure: <b>char-standard?</b><var> object<a name="index-char_002dstandard_003f-801"></a></var><br>
+<blockquote><p>These predicates are defined in terms of the respective character sets
+defined above. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-set-members</b><var> char-set<a name="index-char_002dset_002dmembers-802"></a></var><br>
+<blockquote><p>Returns a newly allocated list of the characters in <var>char-set</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-set-member?</b><var> char-set char<a name="index-char_002dset_002dmember_003f-803"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>char</var> is in <var>char-set</var>; otherwise returns
+<code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-set=?</b><var> char-set-1 char-set-2<a name="index-char_002dset_003d_003f-804"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>char-set-1</var> and <var>char-set-2</var> contain
+exactly the same characters; otherwise returns <code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-set</b><var> char <small class="dots">...</small><a name="index-char_002dset-805"></a></var><br>
+<blockquote><p><a name="index-construction_002c-of-character-set-806"></a>Returns a character set consisting of the specified <acronym>ISO-8859-1</acronym>
+characters.  With no arguments, <code>char-set</code> returns an empty
+character set. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>chars-&gt;char-set</b><var> chars<a name="index-chars_002d_003echar_002dset-807"></a></var><br>
+<blockquote><p>Returns a character set consisting of <var>chars</var>, which must be a list
+of <acronym>ISO-8859-1</acronym> characters.  This is equivalent to <code>(apply
+char-set </code><var>chars</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>string-&gt;char-set</b><var> string<a name="index-string_002d_003echar_002dset-808"></a></var><br>
+<blockquote><p>Returns a character set consisting of all the characters that occur in
+<var>string</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>ascii-range-&gt;char-set</b><var> lower upper<a name="index-ascii_002drange_002d_003echar_002dset-809"></a></var><br>
+<blockquote><p><var>Lower</var> and <var>upper</var> must be exact non-negative integers
+representing <acronym>ISO-8859-1</acronym> character codes, and <var>lower</var> must
+be less than or equal to <var>upper</var>.  This procedure creates and
+returns a new character set consisting of the characters whose
+<acronym>ISO-8859-1</acronym> codes are between <var>lower</var> (inclusive) and
+<var>upper</var> (exclusive).
+
+        <p>For historical reasons, the name of this procedure refers to
+&ldquo;<acronym>ASCII</acronym>&rdquo; rather than &ldquo;<acronym>ISO-8859-1</acronym>&rdquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>predicate-&gt;char-set</b><var> predicate<a name="index-predicate_002d_003echar_002dset-810"></a></var><br>
+<blockquote><p><var>Predicate</var> must be a procedure of one argument. 
+<code>predicate-&gt;char-set</code> creates and returns a character set
+consisting of the <acronym>ISO-8859-1</acronym> characters for which
+<var>predicate</var> is true. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-set-difference</b><var> char-set1 char-set2<a name="index-char_002dset_002ddifference-811"></a></var><br>
+<blockquote><p>Returns a character set consisting of the characters that are in
+<var>char-set1</var> but aren't in <var>char-set2</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-set-intersection</b><var> char-set <small class="dots">...</small><a name="index-char_002dset_002dintersection-812"></a></var><br>
+<blockquote><p>Returns a character set consisting of the characters that are in all of
+the <var>char-set</var>s. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-set-union</b><var> char-set <small class="dots">...</small><a name="index-char_002dset_002dunion-813"></a></var><br>
+<blockquote><p>Returns a character set consisting of the characters that are in at
+least one o the <var>char-set</var>s. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>char-set-invert</b><var> char-set<a name="index-char_002dset_002dinvert-814"></a></var><br>
+<blockquote><p>Returns a character set consisting of the <acronym>ISO-8859-1</acronym>
+characters that are not in <var>char-set</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Port Primitives - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Input_002fOutput.html#Input_002fOutput" title="Input/Output">
+<link rel="prev" href="Prompting.html#Prompting" title="Prompting">
+<link rel="next" href="Parser-Buffers.html#Parser-Buffers" title="Parser Buffers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Port-Primitives"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Parser-Buffers.html#Parser-Buffers">Parser Buffers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Prompting.html#Prompting">Prompting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Input_002fOutput.html#Input_002fOutput">Input/Output</a>
+<hr>
+</div>
+
+<h3 class="section">14.9 Port Primitives</h3>
+
+<p><a name="index-port-primitives-2146"></a>
+This section describes the low-level operations that can be used to
+build and manipulate <acronym>I/O</acronym> ports.
+
+   <p>The purpose of these operations is twofold: to allow programmers to
+construct new kinds of <acronym>I/O</acronym> ports, and to provide faster
+<acronym>I/O</acronym> operations than those supplied by the standard high
+level procedures.  The latter is useful because the standard
+<acronym>I/O</acronym> operations provide defaulting and error checking, and
+sometimes other features, which are often unnecessary.  This interface
+provides the means to bypass such features, thus improving
+performance.
+
+   <p>The abstract model of an <acronym>I/O</acronym> port, as implemented here, is a
+combination of a set of named operations and a state.  The state is an
+arbitrary object, the meaning of which is determined by the
+operations.  The operations are defined by a mapping from names to
+procedures.
+
+   <p><a name="index-port-type-2147"></a>The set of named operations is represented by an object called a
+<dfn>port type</dfn>.  A port type is constructed from a set of named
+operations, and is subsequently used to construct a port.  The port type
+completely specifies the behavior of the port.  Port types also support
+a simple form of inheritance, allowing you to create new ports that are
+similar to existing ports.
+
+   <p>The port operations are divided into two classes:
+
+     <dl>
+<dt>Standard operations<dd>There is a specific set of standard operations for input ports, and a
+different set for output ports.  Applications can assume that the
+standard input operations are implemented for all input ports, and
+likewise the standard output operations are implemented for all output
+ports. 
+<a name="index-standard-operations_002c-on-port-2148"></a>
+<br><dt>Custom operations<dd>Some ports support additional operations.  For example, ports that
+implement output to terminals (or windows) may define an operation named
+<code>y-size</code> that returns the height of the terminal in characters. 
+Because only some ports will implement these operations, programs that
+use custom operations must test each port for their existence, and be
+prepared to deal with ports that do not implement them. 
+<a name="index-custom-operations_002c-on-port-2149"></a><a name="index-y_002dsize-2150"></a></dl>
+
+<ul class="menu">
+<li><a accesskey="1" href="Port-Types.html#Port-Types">Port Types</a>
+<li><a accesskey="2" href="Constructors-and-Accessors-for-Ports.html#Constructors-and-Accessors-for-Ports">Constructors and Accessors for Ports</a>
+<li><a accesskey="3" href="Input-Port-Operations.html#Input-Port-Operations">Input Port Operations</a>
+<li><a accesskey="4" href="Output-Port-Operations.html#Output-Port-Operations">Output Port Operations</a>
+<li><a accesskey="5" href="Blocking-Mode.html#Blocking-Mode">Blocking Mode</a>
+<li><a accesskey="6" href="Terminal-Mode.html#Terminal-Mode">Terminal Mode</a>
+</ul>
+
+   </body></html>
+

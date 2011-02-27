@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Commands - IMAIL 1.19</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IMAIL 1.19">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Concepts.html#Concepts" title="Concepts">
+<link rel="next" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="GNU Free Documentation License">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents IMAIL 1.19.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Concepts.html#Concepts">Concepts</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">4 Commands</h2>
+
+<p><acronym>IMAIL</acronym> provides a rich set of commands for manipulating
+messages.  Like Rmail, most of these commands are bound to letter keys.
+
+   <p><a name="index-imail-49"></a>The most important command is <kbd>M-x imail</kbd>, which is used to start
+<acronym>IMAIL</acronym>.  With no arguments, <kbd>M-x imail</kbd> reads the primary
+folder, selects the first unseen message in the folder, then selects the
+folder's buffer.  If the primary folder is an <acronym>IMAP</acronym> folder,
+<kbd>M-x imail</kbd> will connect to the server and check for new mail.  If
+<kbd>M-x imail</kbd> is given a prefix argument, it will prompt for the
+<acronym>URL</acronym> of a folder rather than reading the primary folder.
+
+   <p>The <acronym>IMAIL</acronym> message buffer is put in <code>IMAIL</code> mode, a
+special mode in which most letter commands are defined to have special
+meanings.  Where possible, the letters chosen for these commands are the
+same as those for the corresponding Rmail commands.  The command keys
+specified in this chapter are for <code>IMAIL</code> mode, unless otherwise
+specified.
+
+<ul class="menu">
+<li><a accesskey="1" href="Navigation.html#Navigation">Navigation</a>
+<li><a accesskey="2" href="Deleting-Messages.html#Deleting-Messages">Deleting Messages</a>
+<li><a accesskey="3" href="Multiple-Folders.html#Multiple-Folders">Multiple Folders</a>
+<li><a accesskey="4" href="MIME-Support.html#MIME-Support">MIME Support</a>
+<li><a accesskey="5" href="Flags.html#Flags">Flags</a>
+<li><a accesskey="6" href="Sending-Replies.html#Sending-Replies">Sending Replies</a>
+<li><a accesskey="7" href="Message-Display.html#Message-Display">Message Display</a>
+<li><a accesskey="8" href="Summaries.html#Summaries">Summaries</a>
+<li><a accesskey="9" href="Sorting-Messages.html#Sorting-Messages">Sorting Messages</a>
+<li><a href="Other-Commands.html#Other-Commands">Other Commands</a>
+</ul>
+
+   </body></html>
+

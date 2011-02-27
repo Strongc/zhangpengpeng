@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<title>Regular Expressions - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Strings.html#Strings" title="Strings">
+<link rel="prev" href="Matching-Strings.html#Matching-Strings" title="Matching Strings">
+<link rel="next" href="Modification-of-Strings.html#Modification-of-Strings" title="Modification of Strings">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Regular-Expressions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Modification-of-Strings.html#Modification-of-Strings">Modification of Strings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Matching-Strings.html#Matching-Strings">Matching Strings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Strings.html#Strings">Strings</a>
+<hr>
+</div>
+
+<h3 class="section">6.8 Regular Expressions</h3>
+
+<p>MIT/GNU Scheme provides support for using regular expressions to search and
+match strings.  This manual does not define regular expressions; instead
+see <a href="../emacs/Regexps.html#Regexps">Syntax of Regular Expressions</a>.
+
+   <p>In addition to providing standard regular-expression support, MIT/GNU
+Scheme also provides the <acronym>REXP</acronym> abstraction.  This is an
+alternative way to write regular expressions that is easier to read
+and understand than the standard notation.  Regular expressions
+written in this notation can be translated into the standard
+notation.
+
+   <p>The regular-expression support is a run-time-loadable option.  To use
+it, execute
+
+<pre class="example">     (load-option 'regular-expression)
+</pre>
+   <p class="noindent">once before calling any of the procedures defined here.
+
+<ul class="menu">
+<li><a accesskey="1" href="Regular_002dexpression-procedures.html#Regular_002dexpression-procedures">Regular-expression procedures</a>
+<li><a accesskey="2" href="REXP-abstraction.html#REXP-abstraction">REXP abstraction</a>
+</ul>
+
+   </body></html>
+

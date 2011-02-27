@@ -1,0 +1,277 @@
+<html lang="en">
+<head>
+<title>Advising Procedures - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugging.html#Debugging" title="Debugging">
+<link rel="prev" href="Debugging-Aids.html#Debugging-Aids" title="Debugging Aids">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Advising-Procedures"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Debugging-Aids.html#Debugging-Aids">Debugging Aids</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugging.html#Debugging">Debugging</a>
+<hr>
+</div>
+
+<h3 class="section">5.4 Advising Procedures</h3>
+
+<p>Giving advice to procedures is a powerful debugging technique. 
+<code>trace</code> and <code>break</code> are useful examples of advice-giving
+procedures. 
+Note that the advice system only works for interpreted procedures.
+
+<div class="defun">
+&mdash; procedure: <b>trace-entry</b><var> procedure<a name="index-trace_002dentry-222"></a></var><br>
+<blockquote><p>Causes an informative message to be printed whenever
+<var>procedure</var> is entered.  The message is of the form
+
+     <pre class="example">          [Entering #[compound-procedure 1 foo]
+              Args: <var>val1</var>
+                    <var>val2</var>
+                    ...]
+</pre>
+        <p>where <var>val1</var>, <var>val2</var> etc. are the evaluated arguments supplied
+to the procedure.
+
+     <pre class="example">          (trace-entry fib)
+          (fib 3)
+          -| [Entering #[compound-procedure 19 fib]
+          -|     Args: 3]
+          -| [Entering #[compound-procedure 19 fib]
+          -|     Args: 1]
+          -| [Entering #[compound-procedure 19 fib]
+          -|     Args: 2]
+          &rArr; 3
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>trace-exit</b><var> procedure<a name="index-trace_002dexit-223"></a></var><br>
+<blockquote><p>Causes an informative message to be printed when <var>procedure</var>
+terminates.  The message contains the procedure, its argument values,
+and the value returned by the procedure.
+
+     <pre class="example">          (trace-exit fib)
+          (fib 3)
+          -| [1
+          -|       &lt;== #[compound-procedure 19 fib]
+          -|     Args: 1]
+          -| [2
+          -|       &lt;== #[compound-procedure 19 fib]
+          -|     Args: 2]
+          -| [3
+          -|       &lt;== #[compound-procedure 19 fib]
+          -|     Args: 3]
+          &rArr; 3
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>trace-both</b><var> procedure<a name="index-trace_002dboth-224"></a></var><br>
+&mdash; procedure: <b>trace</b><var> procedure<a name="index-trace-225"></a></var><br>
+<blockquote><p>Equivalent to calling both <code>trace-entry</code> and <code>trace-exit</code> on
+<var>procedure</var>.  <code>trace</code> is the same as <code>trace-both</code>.
+
+     <pre class="example">          (trace-both fib)
+          (fib 3)
+          -| [Entering #[compound-procedure 19 fib]
+          -|     Args: 3]
+          -| [Entering #[compound-procedure 19 fib]
+          -|     Args: 1]
+          -| [1
+          -|       &lt;== #[compound-procedure 19 fib]
+          -|     Args: 1]
+          -| [Entering #[compound-procedure 19 fib]
+          -|     Args: 2]
+          -| [2
+          -|       &lt;== #[compound-procedure 19 fib]
+          -|     Args: 2]
+          -| [3
+          -|       &lt;== #[compound-procedure 19 fib]
+          -|     Args: 3]
+          &rArr; 3
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>untrace-entry</b> [<var>procedure</var>]<var><a name="index-untrace_002dentry-226"></a></var><br>
+<blockquote><p>Stops tracing the entry of <var>procedure</var>.  If <var>procedure</var> is not
+given, the default is to stop tracing the entry of all entry-traced
+procedures. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>untrace-exit</b> [<var>procedure</var>]<var><a name="index-untrace_002dexit-227"></a></var><br>
+<blockquote><p>Stops tracing the exit of <var>procedure</var>.  If <var>procedure</var> is not
+given, the default is all exit-traced procedures. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>untrace</b> [<var>procedure</var>]<var><a name="index-untrace-228"></a></var><br>
+<blockquote><p>Stops tracing both the entry to and the exit from <var>procedure</var>.  If
+<var>procedure</var> is not given, the default is all traced procedures. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>break-entry</b><var> procedure<a name="index-break_002dentry-229"></a></var><br>
+<blockquote><p>Like <code>trace-entry</code> with the additional effect that a breakpoint is
+entered when <var>procedure</var> is invoked.  Both <var>procedure</var>
+and its arguments can be accessed by calling the procedures
+<code>*proc*</code> and <code>*args*</code>, respectively.  Use <code>restart</code> or
+<code>continue</code> to continue from a breakpoint. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>break-exit</b><var> procedure<a name="index-break_002dexit-230"></a></var><br>
+<blockquote><p>Like <code>trace-exit</code>, except that a breakpoint is entered just prior
+to leaving <var>procedure</var>.  <var>Procedure</var>, its
+arguments, and the result can be accessed by calling the procedures
+<code>*proc*</code>, <code>*args*</code>, and <code>*result*</code>, respectively.  Use
+<code>restart</code> or <code>continue</code> to continue from a breakpoint. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>break-both</b><var> procedure<a name="index-break_002dboth-231"></a></var><br>
+&mdash; procedure: <b>break</b><var> procedure<a name="index-break-232"></a></var><br>
+<blockquote><p>Sets a breakpoint at the beginning and end of <var>procedure</var>.  This is
+<code>break-entry</code> and <code>break-exit</code> combined. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>unbreak</b> [<var>procedure</var>]<var><a name="index-unbreak-233"></a></var><br>
+<blockquote><p>Discontinues the entering of a breakpoint on the entry to and exit from
+<var>procedure</var>.  If <var>procedure</var> is not given, the default is
+all breakpointed procedures. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>unbreak-entry</b> [<var>procedure</var>]<var><a name="index-unbreak_002dentry-234"></a></var><br>
+<blockquote><p>Discontinues the entering of a breakpoint on the entry to
+<var>procedure</var>.  If <var>procedure</var> is not given, the default is all
+entry-breakpointed procedures. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>unbreak-exit</b> [<var>procedure</var>]<var><a name="index-unbreak_002dexit-235"></a></var><br>
+<blockquote><p>Discontinues the entering of a breakpoint on the exit from
+<var>procedure</var>.  If <var>procedure</var> is not given, the default is all
+exit-breakpointed procedures. 
+</p></blockquote></div>
+
+   <p>The following three procedures are valid only within the dynamic extent
+of a breakpoint.  In other words, don't call them unless you are stopped
+inside a breakpoint.
+
+<div class="defun">
+&mdash; procedure: <b>*proc*</b><var><a name="index-g_t_002aproc_002a-236"></a></var><br>
+<blockquote><p>Returns the procedure in which the breakpoint has stopped. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>*args*</b><var><a name="index-g_t_002aargs_002a-237"></a></var><br>
+<blockquote><p>Returns the arguments to the procedure in which the breakpoint has
+stopped.  The arguments are returned as a newly allocated list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>*result*</b><var><a name="index-g_t_002aresult_002a-238"></a></var><br>
+<blockquote><p>Returns the result yielded by the procedure in which the breakpoint has
+stopped.  This is valid only when in an exit breakpoint. 
+</p></blockquote></div>
+
+   <p>The following procedures install <dfn>advice</dfn> procedures that are called
+when the advised procedure is entered or exited.  An entry-advice
+procedure must accept three arguments: the advised procedure, a list of
+the advised procedure's arguments, and the advised procedure's
+application environment (that is, the environment in which the
+procedure's formal parameters are bound).  An exit-advice procedure must
+accept four arguments: the advised procedure, a list of the advised
+procedure's arguments, the result yielded by the advised procedure, and
+the advised procedure's application environment.
+
+   <p>Note that the trace and breakpoint procedures described above are all
+implemented by means of the more general advice procedures, so removing
+advice from an advised procedure will also remove traces and
+breakpoints.
+
+<div class="defun">
+&mdash; procedure: <b>advise-entry</b><var> procedure advice<a name="index-advise_002dentry-239"></a></var><br>
+<blockquote><p><var>Advice</var> must be an entry-advice procedure.  <var>Advice</var> is
+attached to <var>procedure</var>, so that whenever <var>procedure</var> is
+entered, <var>advice</var> is called. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>advise-exit</b><var> procedure advice<a name="index-advise_002dexit-240"></a></var><br>
+<blockquote><p><var>Advice</var> must be an exit-advice procedure.  <var>Advice</var> is attached
+to <var>procedure</var>, so that whenever <var>procedure</var> returns,
+<var>advice</var> is called. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>advice</b><var> procedure<a name="index-advice-241"></a></var><br>
+<blockquote><p>Returns the advice procedures, if any, that are attached to
+<var>procedure</var>.  This is returned as a list of two lists: the first
+list is all of the entry-advice procedures attached to <var>procedure</var>,
+and the second is all of the exit-advice procedures. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>unadvise-entry</b> [<var>procedure</var>]<var><a name="index-unadvise_002dentry-242"></a></var><br>
+<blockquote><p>Removes all entry-advice procedures from <var>procedure</var>.  If
+<var>procedure</var> is not given, the default is all entry-advised
+procedures. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>unadvise-exit</b> [<var>procedure</var>]<var><a name="index-unadvise_002dexit-243"></a></var><br>
+<blockquote><p>Removes exit-advice procedures from <var>procedure</var>.  If <var>procedure</var>
+is not given, the default is all exit-advised procedures. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>unadvise</b> [<var>procedure</var>]<var><a name="index-unadvise-244"></a></var><br>
+<blockquote><p>Removes all advice procedures from <var>procedure</var>. This is a
+combination of <code>unadvise-entry</code> and <code>unadvise-exit</code>.  If
+<var>procedure</var> is not given, the default is all advised procedures. 
+</p></blockquote></div>
+
+   </body></html>
+

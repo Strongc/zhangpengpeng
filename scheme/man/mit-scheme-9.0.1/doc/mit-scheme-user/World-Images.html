@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>World Images - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Using-Scheme.html#Using-Scheme" title="Using Scheme">
+<link rel="prev" href="Loading-Files.html#Loading-Files" title="Loading Files">
+<link rel="next" href="Garbage-Collection.html#Garbage-Collection" title="Garbage Collection">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="World-Images"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Garbage-Collection.html#Garbage-Collection">Garbage Collection</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Loading-Files.html#Loading-Files">Loading Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Using-Scheme.html#Using-Scheme">Using Scheme</a>
+<hr>
+</div>
+
+<h3 class="section">3.3 World Images</h3>
+
+<p><a name="index-world-image-127"></a><a name="index-band-128"></a>A <dfn>world image</dfn>, also called a <dfn>band</dfn>, is a file that contains a
+complete Scheme system, perhaps additionally including user application
+code.  Scheme provides a method for saving and restoring world images. 
+The method writes a file containing all of the Scheme code and data in
+the running process.  The file <samp><span class="file">runtime.com</span></samp> that is loaded by the
+microcode is just such a band.  To make your own band, use the procedure
+<code>disk-save</code>.
+
+<div class="defun">
+&mdash; procedure: <b>disk-save</b><var> filename </var>[<var>identify</var>]<var><a name="index-disk_002dsave-129"></a></var><br>
+<blockquote><p>Causes a band to be written to the file specified by <var>filename</var>. 
+The optional argument <var>identify</var> controls what happens when that
+band is restored, as follows:
+
+          <dl>
+<dt>not specified<dd>Start up in the top-level <acronym>REPL</acronym>, identifying the world in the
+normal way.
+
+          <br><dt>a string<dd>Do the same thing except print that string instead of &lsquo;<samp><span class="samp">Scheme</span></samp>&rsquo; when
+restarting.
+
+          <br><dt>the constant <code>#t</code><dd>Restart exactly where you were when the call to <code>disk-save</code> was
+performed.  This is especially useful for saving your state when an
+error has occurred and you are not in the top-level <acronym>REPL</acronym>.
+
+          <br><dt>the constant <code>#f</code><dd>Just like <code>#t</code>, except that the runtime system will not perform
+normal restart initializations; in particular, it will not load your
+init file. 
+</dl>
+        </p></blockquote></div>
+
+   <p><a name="index-disk_002drestore-130"></a>To restore a saved band, give the <samp><span class="option">--band</span></samp> option when starting
+Scheme.  Alternatively, evaluate &lsquo;<samp><span class="samp">(disk-restore </span><var>filename</var><span class="samp">)</span></samp>&rsquo;,
+which will destroy the current world, replacing it with the saved world. 
+The argument to <code>disk-restore</code> may be omitted, in which case it
+defaults to the filename from which the current world was last restored.
+
+   </body></html>
+

@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Port Types - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Port-Primitives.html#Port-Primitives" title="Port Primitives">
+<link rel="prev" href="Port-Primitives.html#Port-Primitives" title="Port Primitives">
+<link rel="next" href="Constructors-and-Accessors-for-Ports.html#Constructors-and-Accessors-for-Ports" title="Constructors and Accessors for Ports">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Port-Types"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Constructors-and-Accessors-for-Ports.html#Constructors-and-Accessors-for-Ports">Constructors and Accessors for Ports</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Port-Primitives.html#Port-Primitives">Port Primitives</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Port-Primitives.html#Port-Primitives">Port Primitives</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.9.1 Port Types</h4>
+
+<p>The procedures in this section provide means for constructing port types
+with standard and custom operations, and accessing their operations.
+
+<div class="defun">
+&mdash; procedure: <b>make-port-type</b><var> operations port-type<a name="index-make_002dport_002dtype-2151"></a></var><br>
+<blockquote><p><a name="index-construction_002c-of-port-type-2152"></a>Creates and returns a new port type. 
+<var>Operations</var> must be a list; each element is a list of two elements,
+the name of the operation (a symbol) and the procedure that implements
+it.  <var>Port-type</var> is either <code>#f</code> or a port type; if it is a port
+type, any operations implemented by <var>port-type</var> but not specified in
+<var>operations</var> will be implemented by the resulting port type.
+
+        <p><var>Operations</var> need not contain definitions for all of the standard
+operations; the procedure will provide defaults for any standard
+operations that are not defined.  At a minimum, the following operations
+must be defined: for input ports, <code>read-char</code> and <code>peek-char</code>;
+for output ports, either <code>write-char</code> or <code>write-substring</code>. 
+<acronym>I/O</acronym> ports must supply the minimum operations for both input and
+output.
+
+        <p>If an operation in <var>operations</var> is defined to be <code>#f</code>, then the
+corresponding operation in <var>port-type</var> is <em>not</em> inherited.
+
+        <p>If <code>read-char</code> is defined in <var>operations</var>, then any standard
+input operations defined in <var>port-type</var> are ignored.  Likewise, if
+<code>write-char</code> or <code>write-substring</code> is defined in
+<var>operations</var>, then any standard output operations defined in
+<var>port-type</var> are ignored.  This feature allows overriding the
+standard operations without having to enumerate them. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port-type?</b><var> object<a name="index-port_002dtype_003f-2153"></a></var><br>
+&mdash; procedure: <b>input-port-type?</b><var> object<a name="index-input_002dport_002dtype_003f-2154"></a></var><br>
+&mdash; procedure: <b>output-port-type?</b><var> object<a name="index-output_002dport_002dtype_003f-2155"></a></var><br>
+&mdash; procedure: <b>i/o-port-type?</b><var> object<a name="index-i_002fo_002dport_002dtype_003f-2156"></a></var><br>
+<blockquote><p>These predicates return <code>#t</code> if <var>object</var> is a port type,
+input-port type, output-port type, or <acronym>I/O</acronym>-port type,
+respectively.  Otherwise, they return <code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port-type/operations</b><var> port-type<a name="index-port_002dtype_002foperations-2157"></a></var><br>
+<blockquote><p>Returns a newly allocated list containing all of the operations
+implemented by <var>port-type</var>.  Each element of the list is a list of
+two elements &mdash; the name and its associated operation. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port-type/operation-names</b><var> port-type<a name="index-port_002dtype_002foperation_002dnames-2158"></a></var><br>
+<blockquote><p>Returns a newly allocated list whose elements are the names of the
+operations implemented by <var>port-type</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>port-type/operation</b><var> port-type symbol<a name="index-port_002dtype_002foperation-2159"></a></var><br>
+<blockquote><p>Returns the operation named <var>symbol</var> in <var>port-type</var>.  If
+<var>port-type</var> has no such operation, returns <code>#f</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

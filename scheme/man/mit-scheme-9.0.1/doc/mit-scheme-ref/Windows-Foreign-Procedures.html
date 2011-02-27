@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+<title>Windows Foreign Procedures - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Foreign-function-interface.html#Foreign-function-interface" title="Foreign function interface">
+<link rel="prev" href="Windows-Types.html#Windows-Types" title="Windows Types">
+<link rel="next" href="Win32-API-names-and-procedures.html#Win32-API-names-and-procedures" title="Win32 API names and procedures">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Windows-Foreign-Procedures"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Win32-API-names-and-procedures.html#Win32-API-names-and-procedures">Win32 API names and procedures</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Windows-Types.html#Windows-Types">Windows Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Foreign-function-interface.html#Foreign-function-interface">Foreign function interface</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.2.2 Windows Foreign Procedures</h4>
+
+<p>Foreign procedures are declared as callable entry-points in a module,
+usually a dynamically linked library (DLL).
+
+<div class="defun">
+&mdash; procedure: <b>find-module</b><var> name<a name="index-find_002dmodule-3152"></a></var><br>
+<blockquote><p><a name="index-loading-DLLs-3153"></a><a name="index-DLL_002c-loading-3154"></a>Returns a module suitable for use in creating procedures with
+<code>windows-procedure</code>.  <var>Name</var> is a string which is the name of a
+DLL file.  Internally, <code>find-module</code> uses the <code>LoadLibrary</code>
+Win32 API, so <var>name</var> should conform to the specifications for this
+call.  <var>Name</var> should be either a full path name of a DLL, or the
+name of a DLL that resides in the same directory as the Scheme binary
+<samp><span class="file">SCHEME.EXE</span></samp> or in the system directory.
+
+        <p>The module returned is a description for the DLL, and the DLL need not
+necessarily be linked at or immediately after this call.  DLL modules
+are linked on need and unlinked before Scheme exits and when there
+are no remaining references to entry points after a garbage-collection. 
+This behavior ensures that the Scheme system can run when a DLL is
+absent, provided the DLL is not actually used (i.e. no attempt is made
+to call a procedure in the DLL). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>gdi32.dll</b><var><a name="index-gdi32_002edll-3155"></a></var><br>
+<blockquote><p><a name="index-DLL_002c-GDI32_002eDLL-3156"></a>This variable is bound to the module describing the <samp><span class="file">GDI32.DLL</span></samp>
+library, which contains the Win32 API graphics calls, e.g. 
+<code>LineTo</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>kernel32.dll</b><var><a name="index-kernel32_002edll-3157"></a></var><br>
+<blockquote><p><a name="index-DLL_002c-KERNEL32_002eDLL-3158"></a>This variable is bound to the module describing the <samp><span class="file">KERNEL32.DLL</span></samp>
+library. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; variable: <b>user32.dll</b><var><a name="index-user32_002edll-3159"></a></var><br>
+<blockquote><p><a name="index-DLL_002c-USER32_002eDLL-3160"></a>This variable is bound to the module describing the <samp><span class="file">USER32.DLL</span></samp>
+library.  This module contains many useful Win32 API procedures, like
+<code>MessageBox</code> and <code>SetWindowText</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; special form: <b>windows-procedure</b> (<var>name </var>(<var>parameter type</var>)<var> <small class="dots">...</small></var>)<var> return-type module entry-name </var>[<var>options</var>]<var><a name="index-windows_002dprocedure-3161"></a></var><br>
+<blockquote><p><a name="index-defining-foreign-procedures-3162"></a>This form creates a procedure, and could be thought of as
+&ldquo;foreign-named-lambda&rdquo;.  The form creates a Scheme procedure that
+calls the C procedure identified by the exported entry point
+<var>entry-name</var> in the module identified by the value of <var>module</var>. 
+Both <var>entry-name</var> and <var>module</var> are evaluated at procedure
+creation time, so either may be expression.  <var>Entry-name</var> must
+evaluate to a string and <var>module</var> must evaluate to a module as
+returned by <code>find-module</code>. 
+These are the only parts of the form that are evaluated at procedure
+creation time.
+
+        <p><var>Name</var> is the name of the procedure and is for documentation
+purposes only.  This form <em>does not</em> define a procedure called
+<var>name</var>.  It is more like <code>lambda</code>.  The name might be used for
+debugging and pretty-printing.
+
+        <p>A windows procedure has a fixed number of parameters (i.e. no `rest'
+parameters or `varargs'), each of which is named and associated with a
+windows type <var>type</var>.  Both the name <var>parameter</var> and the windows
+type <var>type</var> must be symbols and are not evaluated.  The procedure
+returns a value of the windows type <var>return-type</var>.
+
+        <p>The following example creates a procedure that takes a window handle
+(<code>hwnd</code>) and a string and returns a boolean (<code>bool</code>) result. 
+The procedure does this by calling the <code>SetWindowText</code> entry in the
+module that is the value of the variable <code>user32.dll</code>.  The
+variable <code>set-window-title</code> is defined to have this procedure as
+it's value.
+
+     <pre class="example">          (define set-window-title
+            (windows-procedure
+             (set-window-text (window hwnd) (text string))
+             bool user32.dll "SetWindowText"))
+          
+          (set-window-title my-win "Hi")
+                                   &rArr;  #t
+                                   <span class="roman">;; Changes window's title/text</span>
+          
+          set-window-title         &rArr;  #[compiled-procedure  ...]
+          set-window-text          error--&gt;  Unbound variable
+</pre>
+        <p>When there are no <var>options</var> the created procedure will (a) check its
+arguments against the types, (b) convert the arguments, (c) call the C
+procedure and (d) convert the returned value.  No reversion is
+performed, even if one of the <var>types</var> has a reversion defined. 
+(Reverted types are rare [I have never used one], so paying a cost for
+this unless it is used seems silly).
+
+        <p>The following options are allowed:
+
+          <dl>
+<dt><code>with-reversions</code><dd>The reversions are included in the type conversions.
+
+          <br><dt><code>expand</code><dd>A synonym for <code>with-reversions</code>.
+
+          <br><dt><var>Scheme code</var><dd>The <var>Scheme code</var> is placed between steps (a) and (b) in the default
+process.  The Scheme code can enforce constraints on the arguments,
+including constraints between arguments such as checking that an index
+refers to a valid position in a string. 
+</dl>
+
+        <p>If both options (i.e. <code>with-reversions</code> and Scheme code) are used,
+<code>with-reversions</code> must appear first.  There can be arbitrarily many
+Scheme expression. 
+</p></blockquote></div>
+
+   </body></html>
+

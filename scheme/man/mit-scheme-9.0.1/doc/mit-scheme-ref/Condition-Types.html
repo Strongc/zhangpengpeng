@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Condition Types - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Error-System.html#Error-System" title="Error System">
+<link rel="prev" href="Condition-Instances.html#Condition-Instances" title="Condition Instances">
+<link rel="next" href="Taxonomy.html#Taxonomy" title="Taxonomy">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Condition-Types"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Taxonomy.html#Taxonomy">Taxonomy</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Condition-Instances.html#Condition-Instances">Condition Instances</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Error-System.html#Error-System">Error System</a>
+<hr>
+</div>
+
+<h3 class="section">16.6 Condition Types</h3>
+
+<p><a name="index-condition-type-2922"></a><a name="index-type_002c-of-condition-2923"></a>Each condition has a <dfn>condition type</dfn> object associated with it. 
+These objects are used as a means of focusing on related classes of
+conditions, first by concentrating all of the information about a
+specific class of condition in a single place, and second by specifying
+an inheritance relationship between types.  This inheritance
+relationship forms the taxonomic structure of the condition hierarchy
+(see <a href="Taxonomy.html#Taxonomy">Taxonomy</a>).
+
+   <p>The following procedures consititute the abstraction for condition
+types.
+
+<div class="defun">
+&mdash; procedure: <b>make-condition-type</b><var> name generalization field-names reporter<a name="index-make_002dcondition_002dtype-2924"></a></var><br>
+<blockquote><p><a name="index-generalization_002c-of-condition-types-2925"></a>Creates and returns a (new) condition type that is a specialization of
+<var>generalization</var> (if it is a condition type) or is the root of a new
+tree of condition types (if <var>generalization</var> is <code>#f</code>).  For
+debugging purposes, the condition type has a <var>name</var>, and instances
+of this type contain storage for the fields specified by
+<var>field-names</var> (a list of symbols) in addition to the fields common
+to all conditions (<var>type</var>, <var>continuation</var> and <var>restarts</var>).
+
+        <p><var>Reporter</var> is used to produce a description of a particular
+condition of this type.  It may be a string describing the condition, a
+procedure of arity two (the first argument will be a condition of this
+type and the second a port) that will <code>write</code> the message to the
+given port, or <code>#f</code> to specify that the reporter should be taken
+from the condition type <var>generalization</var> (or produce an
+&ldquo;undocumented condition of type <small class="dots">...</small>&rdquo; message if <var>generalization</var>
+is <code>#f</code>).  The conventions used to form descriptions are spelled
+out in <a href="Error-Messages.html#Error-Messages">Error Messages</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>condition-type/error?</b><var> condition-type<a name="index-condition_002dtype_002ferror_003f-2926"></a></var><br>
+<blockquote><p><a name="index-condition_002dtype_003aerror-2927"></a><a name="index-specialization_002c-of-condition-types-2928"></a>Returns <code>#t</code> if the <var>condition-type</var> is
+<code>condition-type:error</code> or a specialization of it, <code>#f</code>
+otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>condition-type/field-names</b><var> condition-type<a name="index-condition_002dtype_002ffield_002dnames-2929"></a></var><br>
+<blockquote><p><a name="index-generalization_002c-of-condition-types-2930"></a>Returns a list of all of the field names for a condition of type
+<var>condition-type</var>.  This is the set union of the fields specified
+when this <var>condition-type</var> was created with the
+<code>condition-type/field-names</code> of the generalization of this
+<var>condition-type</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>condition-type/generalizations</b><var> condition-type<a name="index-condition_002dtype_002fgeneralizations-2931"></a></var><br>
+<blockquote><p><a name="index-generalization_002c-of-condition-types-2932"></a>Returns a list of all of the generalizations of <var>condition-type</var>. 
+Notice that every condition type is considered a generalization of
+itself. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>condition-type?</b><var> object<a name="index-condition_002dtype_003f-2933"></a></var><br>
+<blockquote><p>Returns <code>#f</code> if and only if <var>object</var> is not a condition type. 
+</p></blockquote></div>
+
+   </body></html>
+

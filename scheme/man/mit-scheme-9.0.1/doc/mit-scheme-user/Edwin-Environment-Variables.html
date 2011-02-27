@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Edwin Environment Variables - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Environment-Variables.html#Environment-Variables" title="Environment Variables">
+<link rel="prev" href="Runtime-Environment-Variables.html#Runtime-Environment-Variables" title="Runtime Environment Variables">
+<link rel="next" href="Windows-Environment-Variables.html#Windows-Environment-Variables" title="Windows Environment Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Edwin-Environment-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Windows-Environment-Variables.html#Windows-Environment-Variables">Windows Environment Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Runtime-Environment-Variables.html#Runtime-Environment-Variables">Runtime Environment Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Environment-Variables.html#Environment-Variables">Environment Variables</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.6.3 Environment Variables for Edwin</h4>
+
+<p>These environment variables are referred to by Edwin.
+
+     <dl>
+<dt><samp><span class="env">EDWIN_BINARY_DIRECTORY</span></samp><dd><a name="index-EDWIN_005fBINARY_005fDIRECTORY-61"></a>Directory where Edwin expects to find files providing autoloaded
+facilities.  The default is <samp><span class="file">edwin</span></samp> on the library path.
+
+     <br><dt><samp><span class="env">EDWIN_INFO_DIRECTORY</span></samp><dd><a name="index-EDWIN_005fINFO_005fDIRECTORY-62"></a>Directory where Edwin expects to find files for the `info' documentation
+subsystem.  The default is <samp><span class="file">edwin/info</span></samp> on the library path.
+
+     <br><dt><samp><span class="env">EDWIN_ETC_DIRECTORY</span></samp><dd><a name="index-EDWIN_005fETC_005fDIRECTORY-63"></a>Directory where Edwin expects to find utility programs and documentation
+strings.  The default is <samp><span class="file">edwin</span></samp> on the library path.
+
+     <br><dt><samp><span class="env">ESHELL</span></samp><dd><a name="index-ESHELL-64"></a>Filename of the shell program to use in shell buffers.  If not defined,
+the <samp><span class="env">SHELL</span></samp> environment variable is used instead.
+
+     <br><dt><samp><span class="env">SHELL</span></samp><dd><a name="index-SHELL-65"></a>Filename of the shell program to use in shell buffers and when executing
+shell commands.  Used to initialize the <code>shell-path-name</code> editor
+variable.  The default is <samp><span class="file">/bin/sh</span></samp> on unix systems and
+<samp><span class="file">cmd.exe</span></samp> on Windows systems.
+
+     <br><dt><samp><span class="env">PATH</span></samp><dd><a name="index-PATH-66"></a>Used to initialize the <code>exec-path</code> editor variable, which is
+subsequently used for finding programs to be run as subprocesses.
+
+     <br><dt><samp><span class="env">DISPLAY</span></samp><dd><a name="index-DISPLAY-67"></a>Used when Edwin runs under unix and uses X11.  Specifies the display
+on which Edwin will create windows.
+
+     <br><dt><samp><span class="env">TERM</span></samp><dd><a name="index-TERM-68"></a>Used when Edwin runs under unix on a terminal.  Terminal type.
+
+     <br><dt><samp><span class="env">LINES</span></samp><dd><a name="index-LINES-69"></a>Used when Edwin runs under unix on a terminal.  Number of text lines
+on the screen, for systems that don't support &lsquo;<samp><span class="samp">TIOCGWINSZ</span></samp>&rsquo;.
+
+     <br><dt><samp><span class="env">COLUMNS</span></samp><dd><a name="index-COLUMNS-70"></a>Used when Edwin runs under unix on a terminal.  Number of text columns
+on the screen, for systems that don't support &lsquo;<samp><span class="samp">TIOCGWINSZ</span></samp>&rsquo;. 
+</dl>
+
+   </body></html>
+

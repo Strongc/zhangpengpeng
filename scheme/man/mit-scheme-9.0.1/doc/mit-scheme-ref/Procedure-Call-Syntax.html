@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>Procedure Call Syntax - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Expressions.html#Expressions" title="Expressions">
+<link rel="prev" href="Special-Form-Syntax.html#Special-Form-Syntax" title="Special Form Syntax">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Procedure-Call-Syntax"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Special-Form-Syntax.html#Special-Form-Syntax">Special Form Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Expressions.html#Expressions">Expressions</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.4.4 Procedure Call Syntax</h4>
+
+<pre class="example">     (<var>operator</var> <var>operand</var> ...)
+</pre>
+   <p><a name="index-expression_002c-procedure-call-_0028defn_0029-165"></a><a name="index-procedure-call-_0028defn_0029-166"></a><a name="index-operator_002c-of-procedure-call-_0028defn_0029-167"></a><a name="index-operand_002c-of-procedure-call-_0028defn_0029-168"></a>A <dfn>procedure call</dfn> is written by simply enclosing in parentheses
+expressions for the procedure to be called (the <dfn>operator</dfn>) and the
+arguments to be passed to it (the <dfn>operands</dfn>).  The <var>operator</var>
+and <var>operand</var> expressions are evaluated and the resulting procedure
+is passed the resulting arguments.  See <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>, for a
+more complete description of this.
+
+   <p><a name="index-combination-_0028defn_0029-169"></a>Another name for the procedure call expression is <dfn>combination</dfn>. 
+This word is more specific in that it always refers to the expression;
+&ldquo;procedure call&rdquo; sometimes refers to the <em>process</em> of calling a
+procedure.
+
+   <p><a name="index-order_002c-of-argument-evaluation-170"></a><a name="index-evaluation-order_002c-of-arguments-171"></a><a name="index-argument-evaluation-order-172"></a>Unlike some other dialects of Lisp, Scheme always evaluates the operator
+expression and the operand expressions with the same evaluation rules,
+and the order of evaluation is unspecified.
+
+<pre class="example">     (+ 3 4)                                 &rArr;  7
+     ((if #f = *) 3 4)                       &rArr;  12
+</pre>
+   <p><a name="index-g_t_002b-173"></a><a name="index-g_t_002a-174"></a><a name="index-lambda-175"></a>A number of procedures are available as the values of variables in the
+initial environment; for example, the addition and multiplication
+procedures in the above examples are the values of the variables
+<code>+</code> and <code>*</code>.  New procedures are created by evaluating
+<code>lambda</code> expressions.
+
+   <p><a name="index-syntactic-keyword-176"></a>If the <var>operator</var> is a syntactic keyword, then the expression is not
+treated as a procedure call: it is a special form.
+
+   </body></html>
+

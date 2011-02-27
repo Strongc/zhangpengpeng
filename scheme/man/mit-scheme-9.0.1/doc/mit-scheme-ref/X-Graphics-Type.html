@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>X Graphics Type - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="X-Graphics.html#X-Graphics" title="X Graphics">
+<link rel="prev" href="X-Graphics.html#X-Graphics" title="X Graphics">
+<link rel="next" href="Utilities-for-X-Graphics.html#Utilities-for-X-Graphics" title="Utilities for X Graphics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="X-Graphics-Type"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Utilities-for-X-Graphics.html#Utilities-for-X-Graphics">Utilities for X Graphics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="X-Graphics.html#X-Graphics">X Graphics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="X-Graphics.html#X-Graphics">X Graphics</a>
+<hr>
+</div>
+
+<h4 class="subsection">17.9.1 X Graphics Type</h4>
+
+<p>A graphics device for X windows is created by passing the symbol
+<code>x</code> as the graphics device type name to
+<code>make-graphics-device</code>:
+
+<pre class="example">     (make-graphics-device 'x #!optional <var>display</var> <var>geometry</var> <var>suppress-map?</var>)
+</pre>
+   <p class="noindent">where <var>display</var> is either a display object, <code>#f</code>, or a string;
+<var>geometry</var> is either <code>#f</code> or a string; and <var>suppress-map?</var>
+is a boolean or a vector (see below).  A new window is created on the
+appropriate display, and a graphics device representing that window is
+returned.
+
+   <p><a name="index-x_002dopen_002ddisplay-3036"></a><var>Display</var> specifies which X display the window is to be opened on;
+if it is <code>#f</code> or a string, it is passed as an argument to
+<code>x-open-display</code>, and the value returned by that procedure is used
+in place of the original argument.  <var>Geometry</var> is an X geometry
+string, or <code>#f</code> which means to use the default geometry (which is
+specified as a resource).
+
+   <p><var>Suppress-map?</var>, if given, may take two forms.  First, it may be a
+boolean: if <code>#f</code> (the default), the window is automatically mapped
+after it is created; otherwise, <code>#t</code> means to suppress this
+automatic mapping.  The second form is a vector of three elements.  The
+first element is a boolean with the same meaning as the boolean form of
+<var>suppress-map?</var>.  The second element is a string, which specifies an
+alternative resource name to be used for looking up the window's
+resources.  The third element is also a string, which specifies a class
+name for looking up the window's resources.  The default value for
+<var>suppress-map?</var> is <code>#f</code>.
+
+   <p>The default resource and class names are <code>"schemeGraphics"</code> and
+<code>"SchemeGraphics"</code> respectively.
+
+   <p><a name="index-resources_002c-X-graphics-3037"></a><a name="index-X-resources_002c-graphics-3038"></a>The window is initialized using the resource and class names specified
+by <var>suppress-map?</var>, and is sensitive to the following resource
+properties:
+
+<pre class="example">     Property        Class           Default
+     --------        -----           -------
+     geometry        Geometry        512x384+0+0
+     font            Font            fixed
+     borderWidth     BorderWidth     2
+     internalBorder  BorderWidth     <span class="roman">[border width]</span>
+     background      Background      white
+     foreground      Foreground      black
+     borderColor     BorderColor     <span class="roman">[foreground color]</span>
+     cursorColor     Foreground      <span class="roman">[foreground color]</span>
+     pointerColor    Foreground      <span class="roman">[foreground color]</span>
+</pre>
+   <p>The window is created with a <code>backing_store</code> attribute of
+<code>Always</code>.  The window's name and icon name are initialized to
+<code>"scheme-graphics"</code>.
+
+   </body></html>
+

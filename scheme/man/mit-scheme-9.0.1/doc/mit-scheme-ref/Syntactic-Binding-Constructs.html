@@ -1,0 +1,214 @@
+<html lang="en">
+<head>
+<title>Syntactic Binding Constructs - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Macros.html#Macros" title="Macros">
+<link rel="prev" href="Macros.html#Macros" title="Macros">
+<link rel="next" href="Pattern-Language.html#Pattern-Language" title="Pattern Language">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Syntactic-Binding-Constructs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Pattern-Language.html#Pattern-Language">Pattern Language</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Macros.html#Macros">Macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Macros.html#Macros">Macros</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.11.1 Binding Constructs for Syntactic Keywords</h4>
+
+<p><code>let-syntax</code>, <code>letrec-syntax</code>, <code>let*-syntax</code> and
+<code>define-syntax</code> are analogous to <code>let</code>, <code>letrec</code>,
+<code>let*</code> and <code>define</code>, but they bind syntactic keywords to macro
+transformers instead of binding variables to locations that contain
+values.
+
+   <p>Any argument named <var>transformer-spec</var> must be a macro-transformer
+expression, which is one of the following:
+
+     <ul>
+<li>A macro transformer defined by the pattern language and denoted by the
+syntactic keyword <code>syntax-rules</code>.
+
+     <li>A macro transformer defined by one of the low-level mechanisms and
+denoted by one of the syntactic keywords <code>sc-macro-transformer</code>,
+<code>rsc-macro-transformer</code>, or <code>er-macro-transformer</code>.
+
+     <li>A syntactic keyword bound in the enclosing environment.  This is used
+to bind another name to an existing macro transformer. 
+</ul>
+
+<div class="defun">
+&mdash; special form: <b>let-syntax</b><var> bindings expression expression <small class="dots">...</small><a name="index-let_002dsyntax-373"></a></var><br>
+<blockquote><p><var>Bindings</var> should have the form
+
+     <pre class="example">          ((<var>keyword</var> <var>transformer-spec</var>) ...)
+</pre>
+        <p class="noindent">Each <var>keyword</var> is an identifier, each <var>transformer-spec</var> is a
+a macro-transformer expression, and the body is a sequence of
+one or more expressions.  It is an error for a <var>keyword</var> to appear
+more than once in the list of keywords being bound.
+
+        <p>The <var>expression</var>s are expanded in the syntactic environment obtained
+by extending the syntactic environment of the <code>let-syntax</code>
+expression with macros whose keywords are the <var>keyword</var>s, bound to
+the specified transformers.  Each binding of a <var>keyword</var> has the
+<var>expression</var>s as its region.
+
+     <pre class="example">          (let-syntax ((when (syntax-rules ()
+                               ((when test stmt1 stmt2 ...)
+                                (if test
+                                    (begin stmt1
+                                           stmt2 ...))))))
+            (let ((if #t))
+              (when if (set! if 'now))
+              if))                           &rArr;  now
+          
+          (let ((x 'outer))
+            (let-syntax ((m (syntax-rules () ((m) x))))
+              (let ((x 'inner))
+                (m))))                       &rArr;  outer
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; special form: <b>letrec-syntax</b><var> bindings expression expression <small class="dots">...</small><a name="index-letrec_002dsyntax-374"></a></var><br>
+<blockquote><p>The syntax of <code>letrec-syntax</code> is the same as for <code>let-syntax</code>.
+
+        <p>The <var>expression</var>s are expanded in the syntactic environment obtained
+by extending the syntactic environment of the <code>letrec-syntax</code>
+expression with macros whose keywords are the <var>keyword</var>s, bound to
+the specified transformers.  Each binding of a <var>keyword</var> has the
+<var>bindings</var> as well as the <var>expression</var>s within its region, so
+the transformers can transcribe expressions into uses of the macros
+introduced by the <code>letrec-syntax</code> expression.
+
+     <pre class="example">          (letrec-syntax
+            ((my-or (syntax-rules ()
+                      ((my-or) #f)
+                      ((my-or e) e)
+                      ((my-or e1 e2 ...)
+                       (let ((temp e1))
+                         (if temp
+                             temp
+                             (my-or e2 ...)))))))
+            (let ((x #f)
+                  (y 7)
+                  (temp 8)
+                  (let odd?)
+                  (if even?))
+              (my-or x
+                     (let temp)
+                     (if y)
+                     y)))        &rArr;  7
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; special form: <b>let*-syntax</b><var> bindings expression expression <small class="dots">...</small><a name="index-let_002a_002dsyntax-375"></a></var><br>
+<blockquote><p>The syntax of <code>let*-syntax</code> is the same as for <code>let-syntax</code>.
+
+        <p>The <var>expression</var>s are expanded in the syntactic environment obtained
+by extending the syntactic environment of the <code>letrec-syntax</code>
+expression with macros whose keywords are the <var>keyword</var>s, bound to
+the specified transformers.  Each binding of a <var>keyword</var> has the
+subsequent <var>bindings</var> as well as the <var>expression</var>s within its
+region.  Thus
+
+     <pre class="example">          (let*-syntax
+             ((a (syntax-rules ...))
+              (b (syntax-rules ...)))
+            ...)
+</pre>
+        <p class="noindent">is equivalent to
+
+     <pre class="example">          (let-syntax ((a (syntax-rules ...)))
+            (let-syntax ((b (syntax-rules ...)))
+              ...))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; special form: <b>define-syntax</b><var> keyword transformer-spec<a name="index-define_002dsyntax-376"></a></var><br>
+<blockquote><p><var>Keyword</var> is an identifier, and <var>transformer-spec</var> is a macro
+transformer expression.  The syntactic environment is extended by
+binding the <var>keyword</var> to the specified transformer.
+
+        <p>The region of the binding introduced by <code>define-syntax</code> is the
+entire block in which it appears.  However, the <var>keyword</var> may only
+be used after it has been defined.
+
+        <p>MIT/GNU Scheme permits <code>define-syntax</code> to appear both at top level and
+within <code>lambda</code> bodies.  The Revised^4 Report permits only
+top-level uses of <code>define-syntax</code>.
+
+        <p>When compiling a program, a top-level instance of <code>define-syntax</code>
+both defines the syntactic keyword and generates code that will redefine
+the keyword when the program is loaded.  This means that the same syntax
+can be used for defining macros that will be used during compilation
+and for defining macros to be used at run time.
+
+        <p>Although macros may expand into definitions and syntax definitions in
+any context that permits them, it is an error for a definition or syntax
+definition to shadow a syntactic keyword whose meaning is needed to
+determine whether some form in the group of forms that contains the
+shadowing definition is in fact a definition, or, for internal definitions,
+is needed to determine the boundary between the group and the expressions
+that follow the group.  For example, the following are errors:
+
+     <pre class="example">          (define define 3)
+          
+          (begin (define begin list))
+          
+          (let-syntax
+            ((foo (syntax-rules ()
+                    ((foo (proc args ...) body ...)
+                     (define proc
+                       (lambda (args ...)
+                         body ...))))))
+            (let ((x 3))
+              (foo (plus x y) (+ x y))
+              (define foo x)
+              (plus foo x)))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

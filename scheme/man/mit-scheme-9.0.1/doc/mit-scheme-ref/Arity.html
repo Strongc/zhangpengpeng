@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+<title>Arity - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Procedures.html#Procedures" title="Procedures">
+<link rel="prev" href="Procedure-Operations.html#Procedure-Operations" title="Procedure Operations">
+<link rel="next" href="Primitive-Procedures.html#Primitive-Procedures" title="Primitive Procedures">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Arity"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Primitive-Procedures.html#Primitive-Procedures">Primitive Procedures</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Procedure-Operations.html#Procedure-Operations">Procedure Operations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Procedures.html#Procedures">Procedures</a>
+<hr>
+</div>
+
+<h3 class="section">12.2 Arity</h3>
+
+<p><a name="index-arity-1821"></a>Each procedure has an <dfn>arity</dfn>, which is the minimum and
+(optionally) maximum number of arguments that it will accept.  MIT/GNU
+Scheme provides an abstraction that represents arity, and tests for
+the apparent arity of a procedure.
+
+   <p>Arity objects come in two forms: the simple form, an exact
+non-negative integer, represents a fixed number of arguments.  The
+general form is a pair whose <code>car</code> represents the minimum number
+of arguments and whose <code>cdr</code> is the maximum number of arguments.
+
+<div class="defun">
+&mdash; procedure: <b>make-procedure-arity</b><var> min </var>[<var>max </var>[<var>simple-ok?</var>]]<var><a name="index-make_002dprocedure_002darity-1822"></a></var><br>
+<blockquote><p>Returns an arity object made from <var>min</var> and <var>max</var>.  <var>Min</var>
+must be an exact non-negative integer.  <var>Max</var> must be an exact
+non-negative integer at least as large as <var>min</var>.  Alternatively,
+<var>max</var> may be omitted or given as &lsquo;<samp><span class="samp">#f</span></samp>&rsquo;, which represents an
+arity with no upper bound.
+
+        <p>If <var>simple-ok?</var> is true, the returned arity is in the simple form
+(an exact non-negative integer) when possible, and otherwise is always
+in the general form.  <var>Simple-ok?</var> defaults to &lsquo;<samp><span class="samp">#f</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>procedure-arity?</b><var> object<a name="index-procedure_002darity_003f-1823"></a></var><br>
+<blockquote><p>Returns &lsquo;<samp><span class="samp">#t</span></samp>&rsquo; if <var>object</var> is an arity object, and &lsquo;<samp><span class="samp">#f</span></samp>&rsquo;
+otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>guarantee-procedure-arity</b><var> object caller<a name="index-guarantee_002dprocedure_002darity-1824"></a></var><br>
+<blockquote><p>Signals an error if <var>object</var> is not an arity object.  <var>Caller</var>
+is a symbol that is printed as part of the error message and is
+intended to be the name of the procedure where the error occurs. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>procedure-arity-min</b><var> arity<a name="index-procedure_002darity_002dmin-1825"></a></var><br>
+&mdash; procedure: <b>procedure-arity-max</b><var> arity<a name="index-procedure_002darity_002dmax-1826"></a></var><br>
+<blockquote><p>Return the lower and upper bounds of <var>arity</var>, respectively. 
+</p></blockquote></div>
+
+   <p><a name="index-condition_002dtype_003awrong_002dnumber_002dof_002darguments-1827"></a>The following procedures test for the apparent arity of a procedure. 
+The results of the test may be less restrictive than the effect of
+calling the procedure.  In other words, these procedures may indicate
+that the procedure will accept a given number of arguments, but if you
+call the procedure it may signal a
+<code>condition-type:wrong-number-of-arguments</code> error.  For example,
+here is a procedure that appears to accept any number of arguments,
+but when called will signal an error if the number of arguments is not
+one:
+
+<pre class="example">     (lambda arguments (apply car arguments))
+</pre>
+   <div class="defun">
+&mdash; procedure: <b>procedure-arity</b><var> procedure<a name="index-procedure_002darity-1828"></a></var><br>
+<blockquote><p>Returns the arity that <var>procedure</var> accepts.  The result may be in
+either simple or general form.
+
+     <pre class="example">          (procedure-arity (lambda () 3))         &rArr;  (0 . 0)
+          (procedure-arity (lambda (x) x))        &rArr;  (1 . 1)
+          (procedure-arity car)                   &rArr;  (1 . 1)
+          (procedure-arity (lambda x x))          &rArr;  (0 . #f)
+          (procedure-arity (lambda (x . y) x))    &rArr;  (1 . #f)
+          (procedure-arity (lambda (x #!optional y) x))
+                                                  &rArr;  (1 . 2)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>procedure-arity-valid?</b><var> procedure arity<a name="index-procedure_002darity_002dvalid_003f-1829"></a></var><br>
+<blockquote><p>Returns &lsquo;<samp><span class="samp">#t</span></samp>&rsquo; if <var>procedure</var> accepts <var>arity</var>, and
+&lsquo;<samp><span class="samp">#f</span></samp>&rsquo; otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>procedure-of-arity?</b><var> object arity<a name="index-procedure_002dof_002darity_003f-1830"></a></var><br>
+<blockquote><p>Returns &lsquo;<samp><span class="samp">#t</span></samp>&rsquo; if <var>object</var> is a procedure that accepts
+<var>arity</var>, and &lsquo;<samp><span class="samp">#f</span></samp>&rsquo; otherwise.  Equivalent to:
+
+     <pre class="example">          (and (procedure? <var>object</var>)
+               (procedure-arity-valid? <var>object</var> <var>arity</var>))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>guarantee-procedure-of-arity</b><var> object arity caller<a name="index-guarantee_002dprocedure_002dof_002darity-1831"></a></var><br>
+<blockquote><p>Signals an error if <var>object</var> is not a procedure accepting
+<var>arity</var>.  <var>Caller</var> is a symbol that is printed as part of the
+error message and is intended to be the name of the procedure where
+the error occurs. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>thunk?</b><var> object<a name="index-thunk_003f-1832"></a></var><br>
+<blockquote><p>Returns &lsquo;<samp><span class="samp">#t</span></samp>&rsquo; if <var>object</var> is a procedure that accepts
+zero arguments, and &lsquo;<samp><span class="samp">#f</span></samp>&rsquo; otherwise.  Equivalent to:
+
+     <pre class="example">          (procedure-of-arity? <var>object</var> 0)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>guarantee-thunk</b><var> object caller<a name="index-guarantee_002dthunk-1833"></a></var><br>
+<blockquote><p>Signals an error if <var>object</var> is not a procedure accepting zero
+arguments.  <var>Caller</var> is a symbol that is printed as part of the
+error message and is intended to be the name of the procedure where
+the error occurs. 
+</p></blockquote></div>
+
+   </body></html>
+

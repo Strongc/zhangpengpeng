@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+<title>Replacement of Operators - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Declarations.html#Declarations" title="Declarations">
+<link rel="prev" href="In_002dline-Coding.html#In_002dline-Coding" title="In-line Coding">
+<link rel="next" href="Reduction-of-Operators.html#Reduction-of-Operators" title="Reduction of Operators">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Replacement-of-Operators"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Reduction-of-Operators.html#Reduction-of-Operators">Reduction of Operators</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="In_002dline-Coding.html#In_002dline-Coding">In-line Coding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Declarations.html#Declarations">Declarations</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.2.3 Operator Replacement</h4>
+
+<p>The <code>replace-operator</code> declaration is provided to inform the
+compiler that certain operators may be replaced by other operators
+depending on the number of arguments. 
+For example:
+
+<p class="noindent">Declaration:
+
+<pre class="example">     (declare (replace-operator (map (2 map-2) (3 map-3))))
+</pre>
+   <p class="noindent">Replacements:
+
+<pre class="example">     (map <var>f</var> <var>x</var> <var>y</var> <var>z</var>) ==&gt; (map <var>f</var> <var>x</var> <var>y</var> <var>z</var>)
+     (map <var>f</var> <var>x</var> <var>y</var>) ==&gt; (map-3 <var>f</var> <var>x</var> <var>y</var>)
+     (map <var>f</var> <var>x</var>) ==&gt; (map-2 <var>f</var> <var>x</var>)
+     (map <var>f</var>) ==&gt; (map <var>f</var>)
+     (map) ==&gt; (map)
+</pre>
+   <p class="noindent">Presumably <code>map-2</code> and <code>map-3</code> are efficient versions of
+<code>map</code> that are written for exactly two and three arguments
+respectively.  All the other cases are not expanded but are handled by
+the original, general <code>map</code> procedure, which is less efficient
+because it must handle a variable number of arguments.
+
+<div class="defun">
+&mdash; declaration: <b>replace-operator</b><var> name <small class="dots">...</small><a name="index-replace_002doperator-150"></a></var><br>
+<blockquote>
+        <p>The syntax of this declaration is
+
+     <pre class="example">          (replace-operator
+            (<var>name</var>
+              (<var>nargs1</var> <var>value1</var>)
+              (<var>nargs2</var> <var>value2</var>)
+              ...))
+</pre>
+        <p>where
+
+          <ul>
+<li><var>name</var> is a symbol.
+
+          <li><var>nargs1</var>, <var>nargs2</var> etc. are non-negative integers, or one of
+the following symbols: <code>any</code>, <code>else</code> or <code>otherwise</code>.
+
+          <li><var>value1</var>, <var>value2</var> etc. are simple
+expressions in one of these forms:
+
+               <dl>
+<dt><code>'</code><var>constant</var><dd>A constant.
+
+               <br><dt><var>variable</var><dd>A variable.
+
+               <br><dt><code>(primitive </code><var>primitive-name</var> <span class="roman">[</span><var>arity</var><span class="roman">]</span><code>)</code><dd>The primitive procedure named <var>primitive-name</var>.  The optional
+element <var>arity</var>, a non-negative integer, specifies the number of
+arguments that the primitive accepts.
+
+               <br><dt><code>(global </code><var>var</var><code>)</code><dd>A global variable. 
+</dl>
+          </ul>
+
+        <p>The meanings of these fields are:
+
+          <ul>
+<li><var>name</var> is the name of the operator to be reduced.  If is is not
+shadowed (for example, by a let) then it may be replaced according to
+the following rules.
+
+          <li>If the operator has <var>nargsN</var> arguments then it is replaced with a
+call to <var>valueN</var> with the same arguments.
+
+          <li>If the number of arguments is not listed, and one of the <var>nargsN</var> is
+<code>any</code>, <code>else</code> or <code>otherwise</code>, then the operation is
+replaced with a call to the corresponding <var>valueN</var>. 
+Only one of the <var>nargsN</var> may be of this form.
+
+          <li>If the number of arguments is not listed and none of the <var>nargsN</var> is
+<code>any</code>, <code>else</code> or <code>otherwise</code>, then the operation is not
+replaced. 
+</ul>
+        </p></blockquote></div>
+
+   </body></html>
+

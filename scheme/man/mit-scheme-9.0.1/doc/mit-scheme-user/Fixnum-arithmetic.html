@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Fixnum arithmetic - MIT/GNU Scheme 9.0</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Efficiency-Tips.html#Efficiency-Tips" title="Efficiency Tips">
+<link rel="prev" href="Global-variables.html#Global-variables" title="Global variables">
+<link rel="next" href="Flonum-arithmetic.html#Flonum-arithmetic" title="Flonum arithmetic">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the use of MIT/GNU Scheme 9.0.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Fixnum-arithmetic"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Flonum-arithmetic.html#Flonum-arithmetic">Flonum arithmetic</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Global-variables.html#Global-variables">Global variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Efficiency-Tips.html#Efficiency-Tips">Efficiency Tips</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.3.3 Fixnum arithmetic</h4>
+
+<p>The usual arithmetic operations like <code>+</code> and <code>&lt;</code> are called
+generic arithmetic operations because they work for all (appropriate)
+kinds of number.
+
+   <p><a name="index-fixnum-_0028defn_0029-166"></a>A <dfn>fixnum</dfn> is an exact integer that is small enough to fit in a
+machine word.  In MIT/GNU Scheme, fixnums are 26 bits on 32-bit
+machines, and 58 bits on 64-bit machines; it is reasonable to assume
+that fixnums are at least 24 bits.  Fixnums are signed; they are encoded
+using 2's complement.
+
+   <p>All exact integers that are small enough to be encoded as fixnums are
+always encoded as fixnums&mdash;in other words, any exact integer that is
+not a fixnum is too big to be encoded as such.  For this reason, small
+constants such as <code>0</code> or <code>1</code> are guaranteed to be fixnums.  In
+addition, the lengths of and valid indexes into strings and vectors are
+also always fixnums.
+
+   <p>If you know that a value is always a small fixnum, you can substitute
+the equivalent fixnum operation for the generic operation.  However,
+care should be exercised: if used improperly, these operations can
+return incorrect answers, or even malformed objects that confuse the
+garbage collector.  For a listing of all fixnum operations, see
+<a href="../scheme/Fixnum-Operations.html#Fixnum-Operations">Fixnum Operations</a>.
+
+   <p>A fruitful area for inserting fixnum operations is in the index
+operations in tight loops.
+
+   </body></html>
+

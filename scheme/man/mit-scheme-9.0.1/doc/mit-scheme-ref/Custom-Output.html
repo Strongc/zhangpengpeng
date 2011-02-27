@@ -1,0 +1,178 @@
+<html lang="en">
+<head>
+<title>Custom Output - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Input_002fOutput.html#Input_002fOutput" title="Input/Output">
+<link rel="prev" href="Format.html#Format" title="Format">
+<link rel="next" href="Prompting.html#Prompting" title="Prompting">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Custom-Output"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Prompting.html#Prompting">Prompting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Format.html#Format">Format</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Input_002fOutput.html#Input_002fOutput">Input/Output</a>
+<hr>
+</div>
+
+<h3 class="section">14.7 Custom Output</h3>
+
+<p>MIT/GNU Scheme provides hooks for specifying that certain kinds of objects
+have special written representations.  There are no restrictions on the
+written representations, but only a few kinds of objects may have custom
+representation specified for them, specifically: records
+(see <a href="Records.html#Records">Records</a>), vectors that have special tags in their zero-th
+elements (see <a href="Vectors.html#Vectors">Vectors</a>), and pairs that have special tags in their
+car fields (see <a href="Lists.html#Lists">Lists</a>).  There is a different procedure for
+specifying the written representation of each of these types.
+
+<div class="defun">
+&mdash; procedure: <b>set-record-type-unparser-method!</b><var> record-type unparser-method<a name="index-set_002drecord_002dtype_002dunparser_002dmethod_0021-2125"></a></var><br>
+<blockquote><p>Changes the unparser method of the type represented by <var>record-type</var>
+to be <var>unparser-method</var>, and returns an unspecified value. 
+Subsequently, when the unparser encounters a record of this type, it
+will invoke <var>unparser-method</var> to generate the written
+representation. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>unparser/set-tagged-vector-method!</b><var> tag unparser-method<a name="index-unparser_002fset_002dtagged_002dvector_002dmethod_0021-2126"></a></var><br>
+<blockquote><p>Changes the unparser method of the vector type represented by <var>tag</var>
+to be <var>unparser-method</var>, and returns an unspecified value. 
+Subsequently, when the unparser encounters a vector with <var>tag</var> as
+its zero-th element, it will invoke <var>unparser-method</var> to generate
+the written representation. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>unparser/set-tagged-pair-method!</b><var> tag unparser-method<a name="index-unparser_002fset_002dtagged_002dpair_002dmethod_0021-2127"></a></var><br>
+<blockquote><p>Changes the unparser method of the pair type represented by <var>tag</var> to
+be <var>unparser-method</var>, and returns an unspecified value. 
+Subsequently, when the unparser encounters a pair with <var>tag</var> in its
+car field, it will invoke <var>unparser-method</var> to generate the written
+representation. 
+</p></blockquote></div>
+
+   <p><a name="index-unparser-method-_0028defn_0029-2128"></a><a name="index-method_002c-unparser-_0028defn_0029-2129"></a>An <dfn>unparser method</dfn> is a procedure that is invoked with two
+arguments: an unparser state and an object.  An unparser method
+generates a written representation for the object, writing it to the
+output port specified by the unparser state.  The value yielded by an
+unparser method is ignored.  Note that an unparser state is not an
+output port, rather it is an object that contains an output port as one
+of its components.  Application programs generally do not construct or
+examine unparser state objects, but just pass them along.
+
+   <p>There are two ways to create an unparser method (which is then
+registered by one of the above procedures).  The first, and easiest, is
+to use <code>standard-unparser-method</code>.  The second is to define your
+own method using the procedure <code>with-current-unparser-state</code>.  We
+encourage the use of the first method, as it results in a more uniform
+appearance for objects.  Many predefined datatypes, for example
+procedures and environments, already have this appearance.
+
+<div class="defun">
+&mdash; procedure: <b>standard-unparser-method</b><var> name procedure<a name="index-standard_002dunparser_002dmethod-2130"></a></var><br>
+<blockquote><p>Returns a standard unparser method.  <var>Name</var> may be any object, and
+is used as the name of the type with which the unparser method is
+associated; <var>name</var> is usually a symbol.  <var>Procedure</var> must be
+<code>#f</code> or a procedure of two arguments.
+
+        <p><a name="index-g_t_0023_005b-as-external-representation-2131"></a>If <var>procedure</var> is <code>#f</code>, the returned method generates an
+external representation of this form:
+
+     <pre class="example">          #[<var>name</var> <var>hash</var>]
+</pre>
+        <p class="noindent"><a name="index-write-2132"></a><a name="index-write_002dstring-2133"></a><a name="index-hash-2134"></a>Here <var>name</var> is the external representation of the argument
+<var>name</var>, as generated by <code>write</code>,<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> and <var>hash</var> is the external
+representation of an exact non-negative integer unique to the object
+being printed (specifically, it is the result of calling <code>hash</code> on
+the object).  Subsequently, the expression
+
+     <pre class="example">          #@<var>hash</var>
+</pre>
+        <p class="noindent">is notation for the object.
+
+        <p>If <var>procedure</var> is supplied, the returned method generates a slightly
+different external representation:
+
+     <pre class="example">          #[<var>name</var> <var>hash</var> <var>output</var>]
+</pre>
+        <p class="noindent">Here <var>name</var> and <var>hash</var> are as above, and <var>output</var> is the
+output generated by <var>procedure</var>.  The representation is constructed
+in three stages:
+
+          <ol type=1 start=1>
+<li>The first part of the format (up to <var>output</var>) is written to the
+output port specified by the unparser state.  This is <code>"#["</code>,
+<var>name</var>, <code>" "</code>, and <var>hash</var>.
+
+          <li><var>Procedure</var> is invoked on two arguments: the object and an output
+port.
+
+          <li>The closing bracket is written to the output port.
+             </ol>
+</p></blockquote></div>
+
+   <p>The following procedure is useful for writing more general kinds of
+unparser methods.
+
+<div class="defun">
+&mdash; procedure: <b>with-current-unparser-state</b><var> unparser-state procedure<a name="index-with_002dcurrent_002dunparser_002dstate-2135"></a></var><br>
+<blockquote><p>This procedure calls <var>procedure</var> with one argument, the output port
+from <var>unparser-state</var>.  Additionally, it arranges for the remaining
+components of <var>unparser-state</var> to be given to the printer when they
+are needed.  The <var>procedure</var> generates some output by writing to the
+output port using the usual output operations, and the value yielded by
+<var>procedure</var> is returned from <code>with-current-unparser-state</code>.
+
+        <p>The port passed to <var>procedure</var> should only be used within the
+dynamic extent of <var>procedure</var>. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Except that if the
+argument <var>name</var> is a string, its external representation is
+generated by <code>write-string</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

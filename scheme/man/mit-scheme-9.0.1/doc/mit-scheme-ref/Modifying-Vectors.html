@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Modifying Vectors - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Vectors.html#Vectors" title="Vectors">
+<link rel="prev" href="Cutting-Vectors.html#Cutting-Vectors" title="Cutting Vectors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Modifying-Vectors"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Cutting-Vectors.html#Cutting-Vectors">Cutting Vectors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Vectors.html#Vectors">Vectors</a>
+<hr>
+</div>
+
+<h3 class="section">8.4 Modifying Vectors</h3>
+
+<p><a name="index-modification_002c-of-vector-1361"></a><a name="index-filling_002c-of-vector-1362"></a><a name="index-moving_002c-of-vector-elements-1363"></a>
+
+<div class="defun">
+&mdash; procedure: <b>vector-fill!</b><var> vector object<a name="index-vector_002dfill_0021-1364"></a></var><br>
+&mdash; procedure: <b>subvector-fill!</b><var> vector start end object<a name="index-subvector_002dfill_0021-1365"></a></var><br>
+<blockquote><p>Stores <var>object</var> in every element of the vector (subvector) and
+returns an unspecified value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>subvector-move-left!</b><var> vector1 start1 end1 vector2 start2<a name="index-subvector_002dmove_002dleft_0021-1366"></a></var><br>
+&mdash; procedure: <b>subvector-move-right!</b><var> vector1 start1 end1 vector2 start2<a name="index-subvector_002dmove_002dright_0021-1367"></a></var><br>
+<blockquote><p>Destructively copies the elements of <var>vector1</var>, starting with index
+<var>start1</var> (inclusive) and ending with <var>end1</var> (exclusive), into
+<var>vector2</var> starting at index <var>start2</var> (inclusive). 
+<var>Vector1</var>, <var>start1</var>, and <var>end1</var> must specify a valid
+subvector, and <var>start2</var> must be a valid index for <var>vector2</var>. 
+The length of the source subvector must not exceed the length of
+<var>vector2</var> minus the index <var>start2</var>.
+
+        <p>The elements are copied as follows (note that this is only important when
+<var>vector1</var> and <var>vector2</var> are <code>eqv?</code>):
+
+          <dl>
+<dt><code>subvector-move-left!</code><dd>The copy starts at the left end and moves toward the right (from smaller
+indices to larger).  Thus if <var>vector1</var> and <var>vector2</var> are the
+same, this procedure moves the elements toward the left inside the
+vector.
+
+          <br><dt><code>subvector-move-right!</code><dd>The copy starts at the right end and moves toward the left (from larger
+indices to smaller).  Thus if <var>vector1</var> and <var>vector2</var> are the
+same, this procedure moves the elements toward the right inside the
+vector. 
+</dl>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>sort!</b><var> vector procedure<a name="index-sort_0021-1368"></a></var><br>
+&mdash; procedure: <b>merge-sort!</b><var> vector procedure<a name="index-merge_002dsort_0021-1369"></a></var><br>
+&mdash; procedure: <b>quick-sort!</b><var> vector procedure<a name="index-quick_002dsort_0021-1370"></a></var><br>
+<blockquote><p><var>Procedure</var> must be a procedure of two arguments that defines a
+<dfn>total ordering</dfn> on the elements of <var>vector</var>.  The elements of
+<var>vector</var> are rearranged so that they are sorted in the order defined
+by <var>procedure</var>.  The elements are rearranged in place, that is,
+<var>vector</var> is destructively modified so that its elements are in the
+new order.
+
+        <p><code>sort!</code> returns <var>vector</var> as its value.
+
+        <p>Two sorting algorithms are implemented: <code>merge-sort!</code> and
+<code>quick-sort!</code>.  The procedure <code>sort!</code> is an alias for
+<code>merge-sort!</code>.
+
+        <p>See also the definition of <code>sort</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

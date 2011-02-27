@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Filenames and Pathnames - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Pathnames.html#Pathnames" title="Pathnames">
+<link rel="prev" href="Pathnames.html#Pathnames" title="Pathnames">
+<link rel="next" href="Components-of-Pathnames.html#Components-of-Pathnames" title="Components of Pathnames">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Filenames-and-Pathnames"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Components-of-Pathnames.html#Components-of-Pathnames">Components of Pathnames</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Pathnames.html#Pathnames">Pathnames</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Pathnames.html#Pathnames">Pathnames</a>
+<hr>
+</div>
+
+<h4 class="subsection">15.1.1 Filenames and Pathnames</h4>
+
+<p>Pathname objects are usually created by parsing filenames (character
+strings) into component parts.  MIT/GNU Scheme provides operations that
+convert filenames into pathnames and vice versa.
+
+<div class="defun">
+&mdash; procedure: <b>-&gt;pathname</b><var> object<a name="index-g_t_002d_003epathname-2482"></a></var><br>
+<blockquote><p><a name="index-construction_002c-of-pathname-2483"></a>Returns a pathname that is the equivalent of <var>object</var>.  <var>Object</var>
+must be a pathname or a string.  If <var>object</var> is a pathname, it is
+returned.  If <var>object</var> is a string, this procedure returns the
+pathname that corresponds to the string; in this case it is equivalent
+to <code>(parse-namestring </code><var>object</var><code> #f #f)</code>.
+
+     <pre class="example">          (-&gt;pathname "foo")          &rArr;  #[pathname 65 "foo"]
+          (-&gt;pathname "/usr/morris")  &rArr;  #[pathname 66 "/usr/morris"]
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>parse-namestring</b><var> thing </var>[<var>host </var>[<var>defaults</var>]]<var><a name="index-parse_002dnamestring-2484"></a></var><br>
+<blockquote><p><a name="index-construction_002c-of-pathname-2485"></a>This turns <var>thing</var> into a pathname. 
+<var>Thing</var> must be a pathname or a string. 
+If <var>thing</var> is a pathname, it is returned.  If <var>thing</var> is a
+string, this procedure returns the pathname that corresponds to the
+string, parsed according to the syntax of the file system specified by
+<var>host</var>.
+
+        <p>This procedure <em>does not</em> do defaulting of pathname components.
+
+        <p>The optional arguments are used to determine what syntax should be used
+for parsing the string.  In general this is only really useful if your
+implementation of MIT/GNU Scheme supports more than one file system,
+otherwise you would use <code>-&gt;pathname</code>.  If given, <var>host</var> must be
+a host object or <code>#f</code>, and <var>defaults</var> must be a pathname. 
+<var>Host</var> specifies the syntax used to parse the string.  If <var>host</var>
+is not given or <code>#f</code>, the host component from <var>defaults</var> is
+used instead; if <var>defaults</var> is not given, the host component from
+<code>*default-pathname-defaults*</code> is used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>-&gt;namestring</b><var> pathname<a name="index-g_t_002d_003enamestring-2486"></a></var><br>
+<blockquote><p><a name="index-conversion_002c-pathname-to-string-2487"></a><code>-&gt;namestring</code> returns a newly allocated string that is the
+filename corresponding to <var>pathname</var>.
+     <pre class="example">          (-&gt;namestring (-&gt;pathname "/usr/morris/minor.van"))
+               &rArr;  "/usr/morris/minor.van"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>pathname-simplify</b><var> pathname<a name="index-pathname_002dsimplify-2488"></a></var><br>
+<blockquote><p><a name="index-simplification_002c-of-pathname-2489"></a>Returns a pathname that locates the same file or directory as
+<var>pathname</var>, but is in some sense simpler.  Note that
+<code>pathname-simplify</code> might not always be able to simplify the
+pathname, e.g. on unix with symbolic links the directory
+<samp><span class="file">/usr/morris/../</span></samp> need not be the same as <samp><span class="file">/usr/</span></samp>.  In cases
+of uncertainty the behavior is conservative, returning the original or a
+partly simplified pathname.
+
+     <pre class="example">          (pathname-simplify "/usr/morris/../morris/dance")
+               &rArr;  #[pathname "/usr/morris/dance"]
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

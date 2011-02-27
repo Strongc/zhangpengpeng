@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>Comparison of Characters - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Characters.html#Characters" title="Characters">
+<link rel="prev" href="External-Representation-of-Characters.html#External-Representation-of-Characters" title="External Representation of Characters">
+<link rel="next" href="Miscellaneous-Character-Operations.html#Miscellaneous-Character-Operations" title="Miscellaneous Character Operations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Comparison-of-Characters"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Miscellaneous-Character-Operations.html#Miscellaneous-Character-Operations">Miscellaneous Character Operations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="External-Representation-of-Characters.html#External-Representation-of-Characters">External Representation of Characters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Characters.html#Characters">Characters</a>
+<hr>
+</div>
+
+<h3 class="section">5.2 Comparison of Characters</h3>
+
+<p><a name="index-ordering_002c-of-characters-711"></a><a name="index-comparison_002c-of-characters-712"></a><a name="index-equivalence-predicates_002c-for-characters-713"></a>
+
+<div class="defun">
+&mdash; procedure: <b>char=?</b><var> char1 char2<a name="index-char_003d_003f-714"></a></var><br>
+&mdash; procedure: <b>char&lt;?</b><var> char1 char2<a name="index-char_003c_003f-715"></a></var><br>
+&mdash; procedure: <b>char&gt;?</b><var> char1 char2<a name="index-char_003e_003f-716"></a></var><br>
+&mdash; procedure: <b>char&lt;=?</b><var> char1 char2<a name="index-char_003c_003d_003f-717"></a></var><br>
+&mdash; procedure: <b>char&gt;=?</b><var> char1 char2<a name="index-char_003e_003d_003f-718"></a></var><br>
+&mdash; procedure: <b>char-ci=?</b><var> char1 char2<a name="index-char_002dci_003d_003f-719"></a></var><br>
+&mdash; procedure: <b>char-ci&lt;?</b><var> char1 char2<a name="index-char_002dci_003c_003f-720"></a></var><br>
+&mdash; procedure: <b>char-ci&gt;?</b><var> char1 char2<a name="index-char_002dci_003e_003f-721"></a></var><br>
+&mdash; procedure: <b>char-ci&lt;=?</b><var> char1 char2<a name="index-char_002dci_003c_003d_003f-722"></a></var><br>
+&mdash; procedure: <b>char-ci&gt;=?</b><var> char1 char2<a name="index-char_002dci_003e_003d_003f-723"></a></var><br>
+<blockquote><p><a name="index-equivalence-predicate_002c-for-characters-724"></a>Returns <code>#t</code> if the specified characters are have the appropriate
+order relationship to one another; otherwise returns <code>#f</code>.  The
+<code>-ci</code> procedures don't distinguish uppercase and lowercase letters.
+
+        <p>Character ordering follows these portability rules:
+
+          <ul>
+<li>The digits are in order; for example, <code>(char&lt;? #\0 #\9)</code> returns
+<code>#t</code>.
+
+          <li>The uppercase characters are in order; for example, <code>(char&lt;? #\A
+#\B)</code> returns <code>#t</code>.
+
+          <li>The lowercase characters are in order; for example, <code>(char&lt;? #\a
+#\b)</code> returns <code>#t</code>. 
+</ul>
+
+        <p>MIT/GNU Scheme uses a specific character ordering, in which characters
+have the same order as their corresponding integers.  See the
+documentation for <code>char-&gt;integer</code> for further details.
+
+        <p><strong>Note</strong>: Although character objects can represent all of Unicode,
+the model of alphabetic case used covers only <acronym>ASCII</acronym> letters,
+which means that case-insensitive comparisons and case conversions are
+incorrect for non-<acronym>ASCII</acronym> letters.  This will eventually be
+fixed. 
+</p></blockquote></div>
+
+   </body></html>
+

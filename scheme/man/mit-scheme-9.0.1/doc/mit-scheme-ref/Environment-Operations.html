@@ -1,0 +1,230 @@
+<html lang="en">
+<head>
+<title>Environment Operations - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Environments.html#Environments" title="Environments">
+<link rel="prev" href="Environments.html#Environments" title="Environments">
+<link rel="next" href="Environment-Variables.html#Environment-Variables" title="Environment Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Environment-Operations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Environment-Variables.html#Environment-Variables">Environment Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Environments.html#Environments">Environments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Environments.html#Environments">Environments</a>
+<hr>
+</div>
+
+<h3 class="section">13.1 Environment Operations</h3>
+
+<p>Environments are first-class objects in MIT/GNU Scheme.  An environment
+consists of some bindings and possibly a parent environment, from which
+other bindings are inherited.  The operations in this section reveal the
+frame-like structure of environments by permitting you to examine the
+bindings of a particular environment separately from those of its
+parent.
+
+   <p><a name="index-variable-binding-1898"></a><a name="index-binding_002c-variable-1899"></a><a name="index-unassigned-binding-1900"></a><a name="index-binding_002c-unassigned-1901"></a><a name="index-condition_002dtype_003aunassigned_002dvariable-1902"></a>There are several types of bindings that can occur in an environment. 
+The most common is the simple variable binding, which associates a value
+(any Scheme object) with an identifier (a symbol).  A variable binding
+can also be <dfn>unassigned</dfn>, which means that it has no value.  An
+unassigned variable is bound, in that is will shadow other bindings of
+the same name in ancestor environments, but a reference to that variable
+will signal an error of type <code>condition-type:unassigned-variable</code>. 
+An unassigned variable can be <dfn>assigned</dfn> (using <code>set!</code> or
+<code>environment-assign!</code>) to give it a value.
+
+   <p><a name="index-keyword-binding-1903"></a><a name="index-syntactic-keyword-binding-1904"></a><a name="index-binding_002c-syntactic-keyword-1905"></a><a name="index-condition_002dtype_003amacro_002dbinding-1906"></a>In addition to variable bindings, an environment can also have
+<dfn>keyword bindings</dfn>.  A keyword binding associates a syntactic
+keyword (usually a macro transformer) with an identifier.  Keyword
+bindings are special in that they are considered &ldquo;bound&rdquo;, but ordinary
+variable references don't work on them.  So an attempt to reference or
+assign a keyword binding results in an error of type
+<code>condition-type:macro-binding</code>.  However, keyword bindings can be
+redefined using <code>define</code> or <code>environment-define</code>.
+
+<div class="defun">
+&mdash; procedure: <b>environment?</b><var> object<a name="index-environment_003f-1907"></a></var><br>
+<blockquote><p><a name="index-type-predicate_002c-for-environment-1908"></a>Returns <code>#t</code> if <var>object</var> is an environment; otherwise returns
+<code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-has-parent?</b><var> environment<a name="index-environment_002dhas_002dparent_003f-1909"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>environment</var> has a parent environment;
+otherwise returns <code>#f</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-parent</b><var> environment<a name="index-environment_002dparent-1910"></a></var><br>
+<blockquote><p>Returns the parent environment of <var>environment</var>.  It is an error if
+<var>environment</var> has no parent. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-bound-names</b><var> environment<a name="index-environment_002dbound_002dnames-1911"></a></var><br>
+<blockquote><p>Returns a newly allocated list of the names (symbols) that are bound by
+<var>environment</var>.  This does not include the names that are bound by
+the parent environment of <var>environment</var>.  It does include names that
+are unassigned or keywords in <var>environment</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-macro-names</b><var> environment<a name="index-environment_002dmacro_002dnames-1912"></a></var><br>
+<blockquote><p>Returns a newly allocated list of the names (symbols) that are bound to
+syntactic keywords in <var>environment</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-bindings</b><var> environment<a name="index-environment_002dbindings-1913"></a></var><br>
+<blockquote><p>Returns a newly allocated list of the bindings of <var>environment</var>;
+does not include the bindings of the parent environment.  Each element
+of this list takes one of two forms: <code>(</code><var>symbol</var><code>)</code> indicates
+that <var>symbol</var> is bound but unassigned, while <code>(</code><var>symbol</var>
+<var>object</var><code>)</code> indicates that <var>symbol</var> is bound, and its value is
+<var>object</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-reference-type</b><var> environment symbol<a name="index-environment_002dreference_002dtype-1914"></a></var><br>
+<blockquote><p>Returns a symbol describing the <dfn>reference type</dfn> of <var>symbol</var> in
+<var>environment</var> or one of its ancestor environments.  The result is
+one of the following:
+
+          <dl>
+<dt><code>normal</code><dd>means <var>symbol</var> is a variable binding with a normal value.
+
+          <br><dt><code>unassigned</code><dd>means <var>symbol</var> is a variable binding with no value.
+
+          <br><dt><code>macro</code><dd>means <var>symbol</var> is a keyword binding.
+
+          <br><dt><code>unbound</code><dd>means <var>symbol</var> has no associated binding. 
+</dl>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-bound?</b><var> environment symbol<a name="index-environment_002dbound_003f-1915"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>symbol</var> is bound in <var>environment</var> or one
+of its ancestor environments; otherwise returns <code>#f</code>.  This is
+equivalent to
+
+     <pre class="example">          (not (eq? 'unbound
+                    (environment-reference-type <var>environment</var> <var>symbol</var>)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-assigned?</b><var> environment symbol<a name="index-environment_002dassigned_003f-1916"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>symbol</var> is bound in <var>environment</var> or one
+of its ancestor environments, and has a normal value.  Returns <code>#f</code>
+if it is bound but unassigned.  Signals an error if it is unbound or is
+bound to a keyword. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-lookup</b><var> environment symbol<a name="index-environment_002dlookup-1917"></a></var><br>
+<blockquote><p><var>Symbol</var> must be bound to a normal value in <var>environment</var> or one
+of its ancestor environments.  Returns the value to which it is bound. 
+Signals an error if unbound, unassigned, or a keyword. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-lookup-macro</b><var> environment symbol<a name="index-environment_002dlookup_002dmacro-1918"></a></var><br>
+<blockquote><p>If <var>symbol</var> is a keyword binding in <var>environment</var> or one of its
+ancestor environments, returns the value of the binding.  Otherwise,
+returns <code>#f</code>.  Does not signal any errors other than argument-type
+errors. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-assignable?</b><var> environment symbol<a name="index-environment_002dassignable_003f-1919"></a></var><br>
+<blockquote><p><var>Symbol</var> must be bound in <var>environment</var> or one of its ancestor
+environments.  Returns <code>#t</code> if the binding may be modified by side
+effect. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-assign!</b><var> environment symbol object<a name="index-environment_002dassign_0021-1920"></a></var><br>
+<blockquote><p><var>Symbol</var> must be bound in <var>environment</var> or one of its ancestor
+environments, and must be assignable.  Modifies the binding to have
+<var>object</var> as its value, and returns an unspecified result. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-definable?</b><var> environment symbol<a name="index-environment_002ddefinable_003f-1921"></a></var><br>
+<blockquote><p>Returns <code>#t</code> if <var>symbol</var> is definable in <var>environment</var>, and
+<code>#f</code> otherwise.  At present, this is false for environments
+generated by application of compiled procedures, and true for all other
+environments. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-define</b><var> environment symbol object<a name="index-environment_002ddefine-1922"></a></var><br>
+<blockquote><p>Defines <var>symbol</var> to be bound to <var>object</var> in <var>environment</var>,
+and returns an unspecified value.  Signals an error if <var>symbol</var>
+isn't definable in <var>environment</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>environment-define-macro</b><var> environment symbol transformer<a name="index-environment_002ddefine_002dmacro-1923"></a></var><br>
+<blockquote><p>Defines <var>symbol</var> to be a keyword bound to <var>transformer</var> in
+<var>environment</var>, and returns an unspecified value.  Signals an error
+if <var>symbol</var> isn't definable in <var>environment</var>.  The type of
+<var>transformer</var> is defined by the syntax engine and is not checked by
+this procedure.  If the type is incorrect this will subsequently signal
+an error during syntax expansion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>eval</b><var> expression environment<a name="index-eval-1924"></a></var><br>
+<blockquote><p><a name="index-s_002dexpression-1925"></a><a name="index-evaluation_002c-of-s_002dexpression-1926"></a>Evaluates <var>expression</var>, a list-structure representation (sometimes
+called s-expression representation) of a Scheme expression, in
+<var>environment</var>.  You rarely need <code>eval</code> in ordinary programs; it
+is useful mostly for evaluating expressions that have been created &ldquo;on
+the fly&rdquo; by a program.  <code>eval</code> is relatively expensive because it
+must convert <var>expression</var> to an internal form before it is executed.
+
+     <pre class="example">          (define foo (list '+ 1 2))
+          (eval foo (the-environment))            &rArr;  3
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

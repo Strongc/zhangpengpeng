@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>Variable-Length Strings - MIT/GNU Scheme 9.0.1</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="MIT/GNU Scheme 9.0.1">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Strings.html#Strings" title="Strings">
+<link rel="prev" href="Modification-of-Strings.html#Modification-of-Strings" title="Modification of Strings">
+<link rel="next" href="Byte-Vectors.html#Byte-Vectors" title="Byte Vectors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents MIT/GNU Scheme 9.0.1.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009, 2010 Massachusetts Institute of
+    Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Variable-Length-Strings"></a>
+<a name="Variable_002dLength-Strings"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Byte-Vectors.html#Byte-Vectors">Byte Vectors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Modification-of-Strings.html#Modification-of-Strings">Modification of Strings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Strings.html#Strings">Strings</a>
+<hr>
+</div>
+
+<h3 class="section">6.10 Variable-Length Strings</h3>
+
+<p><a name="index-length_002c-of-string-1076"></a><a name="index-maximum-length_002c-of-string-_0028defn_0029-1077"></a>MIT/GNU Scheme allows the length of a string to be dynamically adjusted in a
+limited way.  When a new string is allocated, by whatever method, it has
+a specific length.  At the time of allocation, it is also given a
+<dfn>maximum length</dfn>, which is guaranteed to be at least as large as the
+string's length.  (Sometimes the maximum length will be slightly larger
+than the length, but it is a bad idea to count on this.  Programs should
+assume that the maximum length is the same as the length at the time of
+the string's allocation.)  After the string is allocated, the operation
+<code>set-string-length!</code> can be used to alter the string's length to
+any value between 0 and the string's maximum length, inclusive.
+
+<div class="defun">
+&mdash; procedure: <b>string-maximum-length</b><var> string<a name="index-string_002dmaximum_002dlength-1078"></a></var><br>
+<blockquote><p>Returns the maximum length of <var>string</var>.  The following is
+guaranteed:
+
+     <pre class="example">          (&lt;= (string-length string)
+              (string-maximum-length string))     &rArr;  #t
+</pre>
+        <p><a name="index-string_002dlength-1079"></a>
+The maximum length of a string never changes. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; procedure: <b>set-string-length!</b><var> string k<a name="index-set_002dstring_002dlength_0021-1080"></a></var><br>
+<blockquote><p>Alters the length of <var>string</var> to be <var>k</var>, and returns an
+unspecified value.  <var>K</var> must be less than or equal to the maximum
+length of <var>string</var>.  <code>set-string-length!</code> does not change the
+maximum length of <var>string</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

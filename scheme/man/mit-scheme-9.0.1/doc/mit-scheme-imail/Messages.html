@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>Messages - IMAIL 1.19</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IMAIL 1.19">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Concepts.html#Concepts" title="Concepts">
+<link rel="prev" href="Concepts.html#Concepts" title="Concepts">
+<link rel="next" href="Folders.html#Folders" title="Folders">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents IMAIL 1.19.
+
+Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+    1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+    2005, 2006, 2007, 2008, 2009 Massachusetts Institute of Technology
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Messages"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Folders.html#Folders">Folders</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Concepts.html#Concepts">Concepts</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Concepts.html#Concepts">Concepts</a>
+<hr>
+</div>
+
+<h3 class="section">3.1 Messages</h3>
+
+<p><a name="index-message-9"></a><a name="index-email-message-10"></a><a name="index-RFC-821-11"></a><a name="index-RFC-822-12"></a><a name="index-SMTP-13"></a>A <dfn>message</dfn>, or <dfn>email message</dfn>, is the basic unit of electronic
+mail.  The format of a message is defined by
+<a href="http://www.ietf.org/rfc/rfc0822.txt"><acronym>RFC</acronym> 822</a>.  Nearly
+all email messages are transmitted over the internet, which means that
+the contents of such messages are further constrained by the
+<acronym>SMTP</acronym> protocol that is used for internet message transmission,
+as defined in <a href="http://www.ietf.org/rfc/rfc0821.txt"><acronym>RFC</acronym> 821</a>.
+
+   <p><a name="index-Multipurpose-Internet-Mail-Extensions-14"></a><a name="index-MIME-15"></a><a name="index-RFC-2045-16"></a>In brief, the primary constraints on an email message is that it may
+contain only printable <acronym>US-ASCII</acronym> characters, and that lines of
+text in the message may not exceed 1000 characters, <em>including</em> the
+carriage-return/linefeed pair at the end of each line.  These
+constraints are fairly strict, and do not permit messages to contain
+text in languages other than English, or to contain non-textual data
+such as images.  The <dfn>Multipurpose Internet Mail Extensions</dfn>
+(<acronym>MIME</acronym>, <a href="http://www.ietf.org/rfc/rfc2045.txt"><acronym>RFC</acronym> 2045</a>) provide a way to encode other kinds of text and
+data so that they can be carried in an email message.  Most modern email
+software supports the <acronym>MIME</acronym> standard; one notable exception is
+Emacs Rmail.
+
+   </body></html>
+
