@@ -1,0 +1,19 @@
+div.mainleft{
+	position:absolute;
+	left:10%;
+	top:270px;
+}
+div.mainright{
+	position:absolute;
+	left:60%;
+	top:300px;
+}
+div.downarea{
+	position:absolute;
+	left:35%;
+	top:700px;
+	font-size:90%;
+	border-style:none;
+	height:2cm;
+	padding-bottom:1cm;
+}
