@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0050)http://log.medcl.net/item/2010/03/git-quick-start/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" id="aeaoofnhgocdbnbeljkmbjdmhbcokfdb-mousedown"><head profile="http://gmpg.org/xfn/11"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="robots" content="index,follow"><title>git快速入门 | 旁门左道</title>
+<link rel="stylesheet" type="text/css" media="all" href="./git快速入门   旁门左道_files/style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://log.medcl.net/feed/">
+<link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="http://log.medcl.net/feed/atom/">
+<link rel="pingback" href="http://log.medcl.net/xmlrpc.php">
+<link rel="alternate" type="application/rss+xml" title="旁门左道 » git快速入门 Comments Feed" href="http://log.medcl.net/item/2010/03/git-quick-start/feed/">
+<link rel="stylesheet" id="wp-pagenavi-css" href="./git快速入门   旁门左道_files/pagenavi-css.css" type="text/css" media="all">
+<script type="text/javascript" src="./git快速入门   旁门左道_files/jquery.js"></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://log.medcl.net/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://log.medcl.net/wp-includes/wlwmanifest.xml"> 
+<link rel="index" title="旁门左道" href="http://log.medcl.net/">
+<link rel="start" title="新鲜上线!" href="http://log.medcl.net/item/2009/06/hello-world/">
+<link rel="prev" title="[独家]Elastic Search,偶然发现的强悍的搜索引擎" href="http://log.medcl.net/item/2010/03/elastic-search-accidentally-discovered-the-powerful-search-engine/">
+<link rel="next" title="SSH 介绍" href="http://log.medcl.net/item/2010/03/ssh-introduction/">
+<meta name="generator" content="WordPress 2.8">
+
+<!-- All in One SEO Pack 1.6.10.2 by Michael Torbert of Semper Fi Web Design[325,364] -->
+<link rel="canonical" href="./git快速入门   旁门左道_files/git快速入门   旁门左道.html">
+<!-- /all in one seo pack -->
+<link rel="stylesheet" type="text/css" href="./git快速入门   旁门左道_files/colorbox.css" media="screen">
+
+<!-- Protected by WP-SpamFree v2.1.0.7 :: JS BEGIN -->
+<script type="text/javascript" src="./git快速入门   旁门左道_files/wpsf-js.php"></script> 
+<!-- Protected by WP-SpamFree v2.1.0.7 :: JS END -->
+
+
+<link rel="stylesheet" href="./git快速入门   旁门左道_files/wp-syntax.css" type="text/css" media="screen">
+<!-- wp thread comment 1.4.9.4.002 -->
+<style type="text/css" media="screen">
+.editComment, .editableComment, .textComment{
+	display: inline;
+}
+.comment-childs{
+	border: 1px solid #999;
+	margin: 5px 2px 2px 4px;
+	padding: 4px 2px 2px 4px;
+	background-color: white;
+}
+.chalt{
+	background-color: #E2E2E2;
+}
+#newcomment{
+	border:1px dashed #777;width:90%;
+}
+#newcommentsubmit{
+	color:red;
+}
+.adminreplycomment{
+	border:1px dashed #777;
+	width:99%;
+	margin:4px;
+	padding:4px;
+}
+.mvccls{
+	color: #999;
+}
+			
+</style>
+<link rev="stylesheet" rel="stylesheet" type="text/css" href="./git快速入门   旁门左道_files/addfeed.css" media="all"><style type="text/css"></style></head>
+<body id="main">
+<div class="h">
+<div class="header">
+<div class="nav">
+<ul class="nav-ul nova-l">
+<li class="page_item"><a href="http://log.medcl.net/" title="首页">首页</a></li>
+<li class="page_item page-item-2"><a href="http://log.medcl.net/about/" title="关于">关于</a></li>
+<li class="page_item page-item-12"><a href="http://log.medcl.net/web-slice/" title="Web Slice">Web Slice</a></li>
+<li class="page_item page-item-14"><a href="http://log.medcl.net/%e5%ad%98%e6%a1%a3/" title="存档">存档</a></li>
+<li class="page_item page-item-16"><a href="http://log.medcl.net/%e5%88%86%e4%ba%ab/" title="分享">分享</a></li>
+<li class="page_item page-item-178"><a href="http://log.medcl.net/photos/" title="照片">照片</a></li>
+<li class="page_item page-item-262"><a href="http://log.medcl.net/tags/" title="标签">标签</a></li>
+</ul>
+<div class="search nova-r"><form method="get" class="searchform" name="searchform" action="http://log.medcl.net/index.php">
+<input type="text" class="search-input nova-l" size="24" value="请尝试搜索" name="s" onfocus="if (this.value == &#39;请尝试搜索&#39;) {this.value = &#39;&#39;;}" onblur="if (this.value == &#39;&#39;) {this.value = &#39;请尝试搜索&#39;;}">
+<input type="submit" class="search-submit nova-r" value="">
+</form></div></div>
+<div class="nova-l">
+<a href="http://log.medcl.net/"><img src="./git快速入门   旁门左道_files/livesino_logo.gif" id="livesino-logo" alt="旁门左道"></a>
+<div id="description">记录生活</div>
+</div>
+<div class="header-widget nova-r">
+<span class="live-translator"><a target="_blank" href="http://www.windowslivetranslator.com/BV.aspx?ref=AddIn&lp=zh-CHS_en&a=http://log.medcl.net/item/2010/03/git-quick-start/" title="Powered by Windows Live Translator">Translate this Page</a></span><br>
+<!--<span class="im-control"><a href="" target="_blank" rel="nofollow">Live Messenger IM Control</a></span><br/>-->
+<!--<span class="webslices"><a href="http://log.medcl.net/webslices">旁门左道 IE8 Web Slices</a></span>-->
+</div>
+</div><div class="content">
+<div class="post clearfix" id="post-313">
+<div class="post-title">
+<h2><a href="./git快速入门   旁门左道_files/git快速入门   旁门左道.html" rel="bookmark" title="到 git快速入门 的永久链接">git快速入门</a></h2>
+
+<span class="post-date">&lt;Date: 2010-03-24&gt;</span>
+<span class="post-author">&lt;Author: <a href="http://log.medcl.net/item/author/admin/" title="Posts by medcl">medcl</a>&gt;</span>
+<span class="post-cat">&lt;Category: <a href="http://log.medcl.net/item/category/%e7%ab%99%e5%86%85%e6%b6%88%e6%81%af/" title="View all posts in 小道消息" rel="category tag">小道消息</a>,  <a href="http://log.medcl.net/item/category/%e8%b5%84%e6%ba%90%e5%88%86%e4%ba%ab/" title="View all posts in 资源分享" rel="category tag">资源分享</a>&gt;</span>
+
+<span class="post-add-comment nova-r"><a href="http://log.medcl.net/item/2010/03/git-quick-start/#respond">查看评论</a></span>
+
+</div>
+<div class="entry clearfix">
+<p><a href="http://github.com/"><img src="./git快速入门   旁门左道_files/102956rid.png" alt="github"></a></p>
+<p>首先到http://github.com/申请一个300M的免费空间（足够了），然后按照下面的流程操作，注意SSHkey生成的那步</p>
+<p>From&nbsp;<a href="http://hi.baidu.com/kissdev/blog/item/944aa2fab2817215a8d311f1.html">http://hi.baidu.com/kissdev/blog/item/944aa2fab2817215a8d311f1.html</a></p>
+<p><strong>1. GIT</strong><br style="line-height: normal;"><br style="line-height: normal;">相比CVS/SVN，Git 的优势：<br style="line-height: normal;">－ 支持离线开发，离线Repository<br style="line-height: normal;">－ 强大的分支功能，适合多个独立开发者协作<br style="line-height: normal;">－ 速度块<br style="line-height: normal;"><br style="line-height: normal;"><strong>2. GitHub</strong><br style="line-height: normal;"><br style="line-height: normal;">GitHub是一个托管Git （开源或闭源）项目的网站，闭源收费</p>
+<p><span id="more-313"></span></p>
+<p id=""><strong>使用GitHub步骤：</strong><br style="line-height: normal;">1、申请GitHub帐户 xxx ，创建名为new-project的新Repository&nbsp;<br style="line-height: normal;"><br style="line-height: normal;">2、安装Git客户端（Linux）<br style="line-height: normal;">#yum install git git-gui<br style="line-height: normal;"><br style="line-height: normal;">3、 生成密钥对，这样项目可以push到 GitHub上<br style="line-height: normal;">#ssh-keygen -t rsa -C "xxx@gmail.com"<br style="line-height: normal;">4、将.ssh/id_rsa.pub拷贝到GitHub网站<br style="line-height: normal;"><span style="line-height: normal;"><img style="line-height: normal;" src="./git快速入门   旁门左道_files/1029586r9.jpg" border="0" alt=""></span><br style="line-height: normal;"><br style="line-height: normal;">5、为了方便，设置ssh不输入口令<br style="line-height: normal;"># eval `ssh-agent`<br style="line-height: normal;"># ssh-add<br style="line-height: normal;">（输入passphrase）<br style="line-height: normal;"><br style="line-height: normal;">6、测试是否能联通GitHub<br style="line-height: normal;">#ssh git@github.com<br style="line-height: normal;">如果配置正确，显示<br style="line-height: normal;">ERROR: Hi xxx! You've successfully authenticated, but GitHub does not provide shell access<br style="line-height: normal;">Connection to github.com closed.<br style="line-height: normal;"><br style="line-height: normal;">7、设置Git全局用户配置<br style="line-height: normal;"># git config --global user.name "xxx"<br style="line-height: normal;"># git config --global user.email xxx@gmail.com<br style="line-height: normal;"><br style="line-height: normal;">8、创建本地新项目工作树<br style="line-height: normal;"># mkdir new-project<br style="line-height: normal;"># cd new-project<br style="line-height: normal;"># git init<br style="line-height: normal;"># touch README<br style="line-height: normal;"># git add README<br style="line-height: normal;"># git commit -m 'first commit'<br style="line-height: normal;">定义远程服务器别名origin<br style="line-height: normal;">#&nbsp; git remote add origin git@github.com:xxx/new-project.git&nbsp;&nbsp;&nbsp;<br style="line-height: normal;">本地和远程合并，本地默认分支为master<br style="line-height: normal;"># git push origin master&nbsp;&nbsp;<br style="line-height: normal;"><br style="line-height: normal;">GitHub网站上就可以看见了， http://github.com/xxx/new-project<br style="line-height: normal;"><br style="line-height: normal;">9. 更新文件<br style="line-height: normal;"># vi README<br style="line-height: normal;">自动commit更改文件<br style="line-height: normal;"># git commit -a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br style="line-height: normal;">更新至远程<br style="line-height: normal;"># git push origin master<br style="line-height: normal;"><br style="line-height: normal;">10. 创建和合并分支<br style="line-height: normal;">#git branch 显示当前分支是master<br style="line-height: normal;">#git branch new-feature&nbsp; 创建分支<br style="line-height: normal;"># git checkout new-feature 切换到新分支<br style="line-height: normal;"># vi page_cache.inc.php<br style="line-height: normal;"># git add page_cache.inc.php<br style="line-height: normal;">Commit 到本地GIT<br style="line-height: normal;"># git commit -a -m "added initial version of page cache"<br style="line-height: normal;">合并到远程服务器<br style="line-height: normal;"># git push origin new-feature<br style="line-height: normal;"><br style="line-height: normal;">如果new-feature分支成熟了，觉得有必要合并进master<br style="line-height: normal;">#git checkout master<br style="line-height: normal;">#git merge new-feature<br style="line-height: normal;">#git branch<br style="line-height: normal;">#git push&nbsp;<br style="line-height: normal;">则master中也合并了new-feature 的代码<br style="line-height: normal;"><br style="line-height: normal;">再登录到GitHub可以看见"Switch Branches"下的分支选项：<br style="line-height: normal;"><br style="line-height: normal;"><span style="line-height: normal;"><img style="line-height: normal;" src="./git快速入门   旁门左道_files/102959hoE.jpg" border="0" alt=""></span><br style="line-height: normal;"><br style="line-height: normal;">GitHub还有一个很实用的功能，查看开发进程网络图（Network）：<br style="line-height: normal;"><br style="line-height: normal;"><span style="line-height: normal;"><img style="line-height: normal;" src="./git快速入门   旁门左道_files/102959A3E.jpg" border="0" alt=""></span></p>
+<h3><span style="line-height: normal;"><strong><span style="color: #99cc00;">进阶使用，多人开发，分支管理</span></strong></span></h3>
+<p><strong style="line-height: normal;">1. .gitIgnore 文件忽略哪些不被Git跟踪的文件</strong><br style="line-height: normal;"><br style="line-height: normal;">在根目录下生成 .gitignore 文件，<br style="line-height: normal;">例子1：<br style="line-height: normal;"># Can ignore specific files<br style="line-height: normal;">.DS_Store<br style="line-height: normal;"># Use wildcards as well<br style="line-height: normal;">*~<br style="line-height: normal;">*.swp<br style="line-height: normal;"># Can also ignore all directories and files in a directory.<br style="line-height: normal;">tmp/**/*<br style="line-height: normal;"><br style="line-height: normal;">例子2：<br style="line-height: normal;"># Ignore all dotfiles...<br style="line-height: normal;">.*<br style="line-height: normal;"># except for .gitignore<br style="line-height: normal;">!.gitignore<br style="line-height: normal;"><br style="line-height: normal;"><strong style="line-height: normal;">2. 使用</strong><strong style="line-height: normal;">GitHub进行</strong><strong style="line-height: normal;">多人协同开发</strong><br style="line-height: normal;"><span style="line-height: normal;"><img style="line-height: normal;" src="./git快速入门   旁门左道_files/193626YvK.jpg" border="0" alt=""></span><br style="line-height: normal;"><br style="line-height: normal;">GitHub上大的项目如Ruby有多个Branch<br style="line-height: normal;">(0) 克隆GitHub项目<br style="line-height: normal;">git clone git://github.com/xxx/xxx.git<br style="line-height: normal;"><br style="line-height: normal;">(1) 分支的创建和合并<br style="line-height: normal;"># git branch local&nbsp;<br style="line-height: normal;"># git checkout local&nbsp;&nbsp;&nbsp; 切换到local<br style="line-height: normal;"><br style="line-height: normal;"># ...&nbsp; 开发local分支<br style="line-height: normal;"><br style="line-height: normal;">与master分支合并<br style="line-height: normal;"># git checkout master<br style="line-height: normal;"># git merge local<br style="line-height: normal;"># git branch -d local&nbsp;&nbsp;&nbsp; 合并完后删除local<br style="line-height: normal;"><br style="line-height: normal;"><span style="line-height: normal; color: #ff0000;"><strong style="line-height: normal;">(2) 最佳方式的GitHub多人协作，每个人建立自己分支<br style="line-height: normal;"></strong></span><br style="line-height: normal;">假定有项目创建者A （主力开发者和代码合并）和其他开发者B, C , D, E ...<br style="line-height: normal;">创建者A将其他开发者加到项目的Collaborator里 ，如下图所示（项目Admin菜单）<br style="line-height: normal;"><br style="line-height: normal;"><span style="line-height: normal;"><img style="line-height: normal;" src="./git快速入门   旁门左道_files/103627QPY.jpg" border="0" alt=""></span><br style="line-height: normal;"><br style="line-height: normal;">其他开发者B, C , D, E...，配置好Git和GitHub的证书：<br style="line-height: normal;"><br style="line-height: normal;"># git clone git@github.com: xxx/xxx.git&nbsp;&nbsp; （ private 链接）<br style="line-height: normal;"># git pull&nbsp;&nbsp;&nbsp; 从服务器更新<br style="line-height: normal;"># git log&nbsp;&nbsp; 查看其他成员更新日志<br style="line-height: normal;"><br style="line-height: normal;"><span style="line-height: normal; color: #ff0000;"><strong style="line-height: normal;">其他开发者建议在开发时建立自己的分支，不要在master上整了</strong></span><br style="line-height: normal;">B开发者（当然主力开发者也适用）<br style="line-height: normal;"># git branch dev-b<br style="line-height: normal;"># git checkout dev-b<br style="line-height: normal;">....&nbsp; 开发<br style="line-height: normal;"><br style="line-height: normal;">将分支push到github<br style="line-height: normal;"># git push origin dev-b&nbsp;&nbsp; （如果不通过github，通过自己机器上的路径也可以）<br style="line-height: normal;"><br style="line-height: normal;">主开发者A<br style="line-height: normal;"># git pull origin dev-b&nbsp; 即可合并其他开发者的Branch<br style="line-height: normal;"><br style="line-height: normal;">为了保险起见，主开发者可以在新的Branch中测试B的开发成果，测试稳定后再合并进Master<br style="line-height: normal;"># git branch newexp<br style="line-height: normal;"># git checkout newexp<br style="line-height: normal;"># git pull origin dev-b<br style="line-height: normal;">... (testing...)<br style="line-height: normal;">....<br style="line-height: normal;"># git checkout master<br style="line-height: normal;"># git merge newexp<br style="line-height: normal;"><br style="line-height: normal;"><br style="line-height: normal;"><strong style="line-height: normal;">3. 建立自己的Git服务器进行多人协同开发</strong><br style="line-height: normal;"><br style="line-height: normal;">服务器server1:&nbsp;<br style="line-height: normal;"># mkdir myproject.git<br style="line-height: normal;"># cd myproject.git<br style="line-height: normal;"># git --bare init --shared<br style="line-height: normal;"><br style="line-height: normal;">开发者A 初始化服务器上项目<br style="line-height: normal;"># cd myproject<br style="line-height: normal;"># git push user@server1:myproject.git&nbsp; master<br style="line-height: normal;"><br style="line-height: normal;">开发者N可获得初始项目文件<br style="line-height: normal;"># git clone user@server1:myproject.git<br style="line-height: normal;">改动<br style="line-height: normal;"># git commit&nbsp;<br style="line-height: normal;"># git pull<br style="line-height: normal;"># git push</p>
+<span style="clear:both;display:none;"><img src="./git快速入门   旁门左道_files/wpsf-img.php" width="0" height="0" alt="" style="border-style:none;width:0px;height:0px;display:none;"></span>
+	<br><h4 style="color:#60B2E4"><b>相关文章 (Related posts)</b></h4>
+	<ul class="st-related-posts">
+	<li><a href="http://log.medcl.net/item/2010/05/github-support-svn-client-and-good/" title="github支持svn客户端了，不错 ()">github支持svn客户端了，不错</a> (0)</li>
+</ul>
+
+<p>本文来自: <a href="./git快速入门   旁门左道_files/git快速入门   旁门左道.html" rel="bookmark" title="到 git快速入门 的永久链接">git快速入门</a></p>
+</div>
+<div class="notice nova"><div class="post-tags"><a href="http://log.medcl.net/item/tag/git/" rel="tag">git</a>, <a href="http://log.medcl.net/item/tag/github/" rel="tag">github</a></div></div>
+﻿<div class="permalink">本页面链接地址（或者<a href="http://log.medcl.net/item/2010/03/git-quick-start/trackback/" rel="trackback">引用地址 Trackback</a>） <input type="text" name="trackback" id="trackback" value="http://log.medcl.net/item/2010/03/git-quick-start/" size="75" tabindex="1"></div>
+<div id="comments">
+ 
+<h3 class="comments-title" id="respond">发表评论</h3>
+<form action="http://log.medcl.net/wp-comments-post.php" method="post" id="commentform">
+<p><input type="text" name="author" class="comments-input" id="author" value="" size="35" tabindex="1">
+<label for="author"><small>姓名 </small></label></p>
+<p><input type="text" name="email" class="comments-input" id="email" value="" size="35" tabindex="2">
+<label for="email"><small>Email (不会被公开) </small></label></p>
+<p><input type="text" name="url" class="comments-input" id="url" value="" size="35" tabindex="3">
+<label for="url"><small>网站/博客</small></label></p>
+<p><textarea name="comment" id="comment-textarea" class="form-textarea" cols="100%" rows="5" tabindex="4"></textarea></p>
+<p><input name="submit" type="submit" class="form-submit" tabindex="5" value="发表评论">
+<input type="hidden" name="comment_post_ID" value="313">
+</p>
+	<script type="text/javascript">
+	<!--
+	refJS = escape( document[ 'referrer' ] );
+	document.write("<input type='hidden' name='refJS' value='"+refJS+"'>");
+	// -->
+	</script><input type="hidden" name="refJS" value="http%3A//www.google.com.hk/search%3Fhl%3Dzh-TW%26newwindow%3D1%26q%3Dgithub+%25E5%2585%25A5%25E9%2597%25A8%26aq%3Df%26aqi%3D%26aql%3D%26oq%3D">
+	<p><input type="hidden" id="comment_reply_ID" name="comment_reply_ID" value="0"><input type="hidden" id="comment_reply_dp" name="comment_reply_dp" value="0"></p><div id="cancel_reply" style="display:none;"><a href="javascript:void(0)" onclick="movecfm(null,0,1,null);" style="color:red;">Click to cancel reply</a></div><p><input type="checkbox" name="comment_mail_notify" id="comment_mail_notify" value="comment_mail_notify" checked="checked" style="width: auto;"><label for="comment_mail_notify" style="display: inline;">Notify me of follow-up comments via e-mail</label></p><script type="text/javascript">
+/* <![CDATA[ */
+var commentformid = "commentform";
+var USERINFO = false;
+var atreply = "authorlink";
+/* ]]> */
+</script>
+<script type="text/javascript" src="./git快速入门   旁门左道_files/wp-thread-comment.js.php"></script>
+</form>
+</div><div class="navigation"><div class="previous-entries nova-l"><a href="http://log.medcl.net/item/2010/03/elastic-search-accidentally-discovered-the-powerful-search-engine/">[独家]Elastic Search,偶然发现的强悍的搜索引擎</a></div><div class="next-entries nova-r"><a href="http://log.medcl.net/item/2010/03/ssh-introduction/">SSH 介绍</a></div></div>
+</div>
+</div>
+<div class="sidebar">
+<ul class="sidebar-ul">
+<li class="sidebar-li">
+<div class="sidebar-rssfeed"><a href="http://log.medcl.net/feed/">本站 RSS Feed</a> <script type="text/javascript" src="./git快速入门   旁门左道_files/addfeed.js" charset="UTF-8"></script><span class="addfeed_cn"><a href="http://log.medcl.net/?feed=rss2" title="订阅我吧"><img src="./git快速入门   旁门左道_files/f1.gif" alt="分享家:Addfeed" align="absmiddle"></a></span></div>
+</li>
+<li class="sidebar-li"><ul class="list_page"><div id="MicrosoftTranslatorWidget" style="width: 200px; border-top-style: solid; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-color: rgb(0, 88, 147); border-right-color: rgb(0, 88, 147); border-bottom-color: rgb(0, 88, 147); border-left-color: rgb(0, 88, 147); background-color: rgb(120, 173, 208); direction: ltr; min-height: 83px; background-image: url(data:image/x-ms-bmp;base64,Qk2eAAAAAAAAADYAAAAoAAAAAQAAABoAAAABABgAAAAAAGgAAAAAAAAAAAAAAAAAAAAAAAAAsoM8/69/N/+tfDP/qnku/6h1Kv+mciX/o28g/6FsHP+faBf/nGUS/5piDv+YXwn/lVsF/7KDPP+0hkH/tolF/7mMSv+7kE7/vZNT/8CWWP/CmVz/xJ1h/8egZv/Jo2r/y6Zv/86qc/8=); background-repeat: repeat no-repeat; " class=""><div id="MSTWContent"><div id="MSTWHeader" style="border-top-color: rgb(84, 148, 190); border-right-color: rgb(84, 148, 190); border-bottom-color: rgb(84, 148, 190); border-left-color: rgb(84, 148, 190); "><span class="MSTWBox"><span id="MSTWHeaderText" style="width: 160px;">Translate this page</span></span><span class="MSTWBox"><select name="MSTWMenu" id="MSTWMenu" style="margin-top: 2px; "><option value="ar">Arabic</option><option value="bg">Bulgarian</option><option value="zh-cht">Chinese Traditional</option><option value="cs">Czech</option><option value="da">Danish</option><option value="nl">Dutch</option><option selected="selected" value="en">English</option><option value="et">Estonian</option><option value="fi">Finnish</option><option value="fr">French</option><option value="de">German</option><option value="el">Greek</option><option value="ht">Haitian Creole</option><option value="he">Hebrew</option><option value="hu">Hungarian</option><option value="id">Indonesian</option><option value="it">Italian</option><option value="ja">Japanese</option><option value="ko">Korean</option><option value="lv">Latvian</option><option value="lt">Lithuanian</option><option value="no">Norwegian</option><option value="pl">Polish</option><option value="pt">Portuguese</option><option value="ro">Romanian</option><option value="ru">Russian</option><option value="sk">Slovak</option><option value="sl">Slovenian</option><option value="es">Spanish</option><option value="sv">Swedish</option><option value="th">Thai</option><option value="tr">Turkish</option><option value="uk">Ukrainian</option><option value="vi">Vietnamese</option></select><a id="MSTWGoButton" title="Translate this page" class="MSTWButtonLink" style="overflow-x: hidden; overflow-y: hidden; background-image: url(data:image/x-ms-bmp;base64,Qk2GAAAAAAAAADYAAAAoAAAAAQAAABQAAAABABgAAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAA4MOW/97Ak//cvpD/27yN/9m6iv/YuIf/1raE/9Wzgf/TsX7/0q97/+DDlv/hxZn/48ec/+TJn//my6L/582l/+nPqP/q0qv/7NSu/+3Wsf8=); border-top-color: rgb(84, 148, 190); border-right-color: rgb(84, 148, 190); border-bottom-color: rgb(84, 148, 190); border-left-color: rgb(84, 148, 190); background-repeat: repeat no-repeat; " href="javascript: Translate this page"><img id="MSTWGoImage" src="data:image/gif;base64,R0lGODlhGAASAHAAACH5BAEAAP8ALAAAAAAYABIAhwAAAP%2f%2f%2fwAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAg8AP8JHEiwoMGDCBMqXMiwIcMAARwihAhRYkGKFC0KxIjRIkeODj9%2bfCiyYsOSHkFq7KhxY8SW%0d%0aMGPKRBgQADs%3d" style="border-width:0px;"></a></span></div><div id="MSTWFooter"><span id="MSTWBrand" class="MSTWBox"><a id="MSTWBrandLink" title="Microsoft® Translator" href="http://www.microsofttranslator.com/?ref=MSTWidget" target="_blank"><span style="font-family: Segoe UI; direction: ltr;">Microsoft<sup style="vertical-align: super; font-size: 70%;">®</sup> Translator</span></a></span><span id="MSTWGetShare" class="MSTWBox"><a id="MSTWGetButton" title="Get this widget for your own site" class="MSTWButtonLink" href="http://www.microsofttranslator.com/widget/?ref=MSTWidget" target="_blank" style="border-top-color: rgb(84, 148, 190); border-right-color: rgb(84, 148, 190); border-bottom-color: rgb(84, 148, 190); border-left-color: rgb(84, 148, 190); "><img id="MSTWGetImage" src="data:image/gif;base64,R0lGODlhGAASAPcAAAAAAP%2f%2f%2fwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAP8ALAAAAAAYABIA%0d%0aAAhBAP8JHEiwoMGDCBMqXMiwocOHCAMEGCgRYkWCFxlmxDhx4caCH0F2TBiSI8mRJw%2bWVIny38qI%0d%0aI19CnEmzpk2DAQEAOw%3d%3d" style="border-width:0px;"></a><a id="MSTWShareButton" title="Share translated page with friends" class="MSTWButtonLink" target="_blank" style="border-top-color: rgb(84, 148, 190); border-right-color: rgb(84, 148, 190); border-bottom-color: rgb(84, 148, 190); border-left-color: rgb(84, 148, 190); " href="mailto:?charset=utf-8&subject=Check%20out%20this%20page%20in%20English%20translated%20from%20Chinese%20Simplified&body=Translated%3A%20http%3A%2F%2Flog.medcl.net%2Fitem%2F2010%2F03%2Fgit-quick-start%2F%23mstto%3Den%0D%0AOriginal%3A%20http%3A%2F%2Flog.medcl.net%2Fitem%2F2010%2F03%2Fgit-quick-start%2F%0D%0A%0D%0AAutomatic%20translation%20powered%20by%20Microsoft%C2%AE%20Translator%0D%0Ahttp%3A%2F%2Fwww.microsofttranslator.com%2F"><img id="MSTWShareImage" src="data:image/gif;base64,R0lGODlhGAASAPcAAAAAAP%2f%2f%2fwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%0d%0aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAP8ALAAAAAAYABIA%0d%0aAAhHAP8JHEiwoMGDCBMqXMiwocOHBQNInEiRokKJFwNc%2fKfxoMaOCDuCHChyo8CRIEcaLGmxZMKP%0d%0aITlmnPmyok2MEHPq3MlTYUAAOw%3d%3d" style="border-width:0px;"></a></span></div><div id="MSTWHidden" style="display: none;"><span id="MSTWDisplayLanguage">en</span><span id="MSTWPreferredLanguage">en</span><span id="MSTWCheckOut">Check out this page in</span><span id="MSTWTranslatedFrom">translated from</span><span id="MSTWTranslated">Translated:</span><span id="MSTWOriginal">Original:</span><span id="MSTWPoweredBy">Automatic translation powered by Microsoft® Translator</span><span id="MSTWStart">Start translating</span><span id="MSTWStop">Stop translating</span><span id="MSTWClose">Close</span><span id="MSTWCloseShowOrig">Close and show original page</span><span id="MSTWLangNotSup"></span><span id="MSTWSelect">Select</span></div></div></div><script id="MicrosoftTranslatorWidgetScript" type="text/javascript" src="./git快速入门   旁门左道_files/Embed"></script></ul></li>
+<li class="sidebar-li">
+<h2 class="sidebar-title">最新文章</h2>
+<ul class="list_page">	<li><a href="http://log.medcl.net/item/2011/03/mahout-ppt-collection/" title="mahout ppt 收集">mahout ppt 收集</a></li>
+	<li><a href="http://log.medcl.net/item/2011/02/jekyll/" title="static site generator：jekyll">static site generator：jekyll</a></li>
+	<li><a href="http://log.medcl.net/item/2011/02/sudo-on-cygwin/" title="sudo on cygwin">sudo on cygwin</a></li>
+	<li><a href="http://log.medcl.net/item/2011/02/mahout_install/" title="Mahout 安装配置">Mahout 安装配置</a></li>
+	<li><a href="http://log.medcl.net/item/2011/02/launchy-plugin-sina-microblogging/" title="launchy插件：新浪微博、海词">launchy插件：新浪微博、海词</a></li>
+	<li><a href="http://log.medcl.net/item/2011/02/hadoop-cluster-configuration-centos/" title="Hadoop 集群配置(centos\CDH3)">Hadoop 集群配置(centos\CDH3)</a></li>
+	<li><a href="http://log.medcl.net/item/2011/02/transfer-amdahlu002639s-law-amdahlu002639s-law-and-the-evolution-of-thinking/" title="[转]Amdahl’s law (阿姆达尔定律)的演化和思考">[转]Amdahl’s law (阿姆达尔定律)的演化和思考</a></li>
+	<li><a href="http://log.medcl.net/item/2011/02/machine-learning-open-source-tools/" title="机器学习的开源工具">机器学习的开源工具</a></li>
+	<li><a href="http://log.medcl.net/item/2011/01/hmm-viterbi-algorithm/" title="HMM-Viterbi Algorithm">HMM-Viterbi Algorithm</a></li>
+	<li><a href="http://log.medcl.net/item/2011/01/rabbitmq-net-client-to-use-examples/" title="RabbitMQ .NET Client使用范例">RabbitMQ .NET Client使用范例</a></li>
+	<li><a href="http://log.medcl.net/item/2011/01/quick-msil-instruction/" title="MSIL指令速查">MSIL指令速查</a></li>
+	<li><a href="http://log.medcl.net/item/2011/01/elasticseach-client-updated/" title="ElasticSeach.Client Updated！">ElasticSeach.Client Updated！</a></li>
+</ul>
+</li>
+
+<li class="sidebar-li">
+<h2 class="sidebar-title">标签</h2>
+<div class="sidebar-widget sidebar-tags"><a href="http://log.medcl.net/item/tag/%e5%ba%8f%e5%88%97%e5%8f%b7/" class="tag-link-158" title="3 topics" rel="tag" style="font-size: 9pt;">序列号</a>
+<a href="http://log.medcl.net/item/tag/%e6%96%b0%e6%b5%aa%e5%be%ae%e5%8d%9a/" class="tag-link-92" title="4 topics" rel="tag" style="font-size: 9.4pt;">新浪微博</a>
+<a href="http://log.medcl.net/item/tag/net/" class="tag-link-71" title="6 topics" rel="tag" style="font-size: 10.2pt;">.NET</a>
+<a href="http://log.medcl.net/item/tag/c/" class="tag-link-62" title="3 topics" rel="tag" style="font-size: 9pt;">C++</a>
+<a href="http://log.medcl.net/item/tag/cassandra/" class="tag-link-222" title="5 topics" rel="tag" style="font-size: 9.8pt;">cassandra</a>
+<a href="http://log.medcl.net/item/tag/dd-wrt/" class="tag-link-260" title="4 topics" rel="tag" style="font-size: 9.4pt;">dd-wrt</a>
+<a href="http://log.medcl.net/item/tag/elasticsearch/" class="tag-link-148" title="13 topics" rel="tag" style="font-size: 13pt;">elasticsearch</a>
+<a href="http://log.medcl.net/item/tag/elastic-search/" class="tag-link-135" title="3 topics" rel="tag" style="font-size: 9pt;">Elastic Search</a>
+<a href="http://log.medcl.net/item/tag/hadoop/" class="tag-link-203" title="6 topics" rel="tag" style="font-size: 10.2pt;">Hadoop</a>
+<a href="http://log.medcl.net/item/tag/linux/" class="tag-link-149" title="4 topics" rel="tag" style="font-size: 9.4pt;">Linux</a>
+<a href="http://log.medcl.net/item/tag/lucene/" class="tag-link-91" title="4 topics" rel="tag" style="font-size: 9.4pt;">Lucene</a>
+<a href="http://log.medcl.net/item/tag/mysql/" class="tag-link-79" title="3 topics" rel="tag" style="font-size: 9pt;">mysql</a>
+<a href="http://log.medcl.net/item/tag/nosql/" class="tag-link-220" title="7 topics" rel="tag" style="font-size: 10.6pt;">nosql</a>
+<a href="http://log.medcl.net/item/tag/perl/" class="tag-link-165" title="4 topics" rel="tag" style="font-size: 9.4pt;">Perl</a>
+<a href="http://log.medcl.net/item/tag/php/" class="tag-link-25" title="4 topics" rel="tag" style="font-size: 9.4pt;">php</a>
+<a href="http://log.medcl.net/item/tag/sql/" class="tag-link-35" title="13 topics" rel="tag" style="font-size: 13pt;">SQL</a>
+<a href="http://log.medcl.net/item/tag/sql-server/" class="tag-link-10" title="10 topics" rel="tag" style="font-size: 11.8pt;">SQL Server</a>
+<a href="http://log.medcl.net/item/tag/sql-server-2005/" class="tag-link-39" title="4 topics" rel="tag" style="font-size: 9.4pt;">SQL Server 2005</a>
+<a href="http://log.medcl.net/item/tag/stored-procedure/" class="tag-link-37" title="3 topics" rel="tag" style="font-size: 9pt;">Stored Procedure</a>
+<a href="http://log.medcl.net/item/tag/vps/" class="tag-link-126" title="8 topics" rel="tag" style="font-size: 11pt;">vps</a></div>
+</li>
+<li class="sidebar-li">
+<a href="http://www.clicki.cc/" title="统计系统">
+	<img title="实时统计" src="./git快速入门   旁门左道_files/feeler_img.php">
+</a>
+</li>
+<li class="sidebar-li">
+<h2 class="sidebar-title">广而告之</h2>
+<div class="sidebar-google-adsense" style="vertical-align:top;height:200px;overflow:hidden" valign="top">
+<script type="text/javascript"><!--
+google_ad_client = "pub-9516277730901843";
+/* 200x200, 创建于 09-10-10 */
+google_ad_slot = "0598850261";
+google_ad_width = 200;
+google_ad_height = 200;
+//-->
+</script>
+<script type="text/javascript" src="./git快速入门   旁门左道_files/show_ads.js">
+</script><script src="./git快速入门   旁门左道_files/show_ads_impl.js"></script><script src="./git快速入门   旁门左道_files/expansion_embed.js"></script><script src="./git快速入门   旁门左道_files/test_domain.js"></script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><ins style="display:inline-table;border:none;height:200px;margin:0;padding:0;position:relative;visibility:visible;width:200px"><ins id="google_ads_frame1_anchor" style="display:block;border:none;height:200px;margin:0;padding:0;position:relative;visibility:visible;width:200px"><iframe allowtransparency="true" frameborder="0" height="200" hspace="0" id="google_ads_frame1" marginheight="0" marginwidth="0" name="google_ads_frame" scrolling="no" src="./git快速入门   旁门左道_files/ads.html" style="left:0;position:absolute;top:0" vspace="0" width="200"></iframe></ins></ins>
+
+</div>
+</li>
+<li class="sidebar-li">
+<h2 class="sidebar-title">Meta</h2>
+<ul class="widget_meta">
+<li><a href="http://log.medcl.net/wp-login.php?action=register">Register</a></li><li><a href="http://log.medcl.net/wp-login.php">Log in</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div></body></html>
