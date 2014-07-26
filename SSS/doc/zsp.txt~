@@ -1,0 +1,28 @@
+Z Stream Protocol
+
+head:
+id  "#zsp#0"  64bit
+session 32bit
+sequence  32bit
+command 32bit
+reserved 64bit
+content-size 32bit
+
+commands:
+10 Hello
+20 Bye
+30 Play
+40 Stop
+100 Pause
+110 Resume
+120 Fast
+130 Slow
+200 OK
+1000 Error
+1001 Not Found
+
+Flow:
+Hello
+Play
+Stop
+Bye

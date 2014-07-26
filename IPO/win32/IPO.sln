@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IPO_Process", "IPO_Process.vcxproj", "{2E50EE40-77CF-4544-AEF3-8310C29FDBAD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IPO_I_CmdInput", "IPO_I_CmdInput\IPO_I_CmdInput.vcxproj", "{68D147B9-FA7C-4E76-A624-789D4327938A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IPO_O_TipDlg", "IPO_O_TipDlg\IPO_O_TipDlg.vcxproj", "{10DFFD24-472F-413C-882A-74085C19CA87}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E50EE40-77CF-4544-AEF3-8310C29FDBAD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2E50EE40-77CF-4544-AEF3-8310C29FDBAD}.Debug|Win32.Build.0 = Debug|Win32
+		{2E50EE40-77CF-4544-AEF3-8310C29FDBAD}.Release|Win32.ActiveCfg = Release|Win32
+		{2E50EE40-77CF-4544-AEF3-8310C29FDBAD}.Release|Win32.Build.0 = Release|Win32
+		{68D147B9-FA7C-4E76-A624-789D4327938A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{68D147B9-FA7C-4E76-A624-789D4327938A}.Debug|Win32.Build.0 = Debug|Win32
+		{68D147B9-FA7C-4E76-A624-789D4327938A}.Release|Win32.ActiveCfg = Release|Win32
+		{68D147B9-FA7C-4E76-A624-789D4327938A}.Release|Win32.Build.0 = Release|Win32
+		{10DFFD24-472F-413C-882A-74085C19CA87}.Debug|Win32.ActiveCfg = Debug|Win32
+		{10DFFD24-472F-413C-882A-74085C19CA87}.Debug|Win32.Build.0 = Debug|Win32
+		{10DFFD24-472F-413C-882A-74085C19CA87}.Release|Win32.ActiveCfg = Release|Win32
+		{10DFFD24-472F-413C-882A-74085C19CA87}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

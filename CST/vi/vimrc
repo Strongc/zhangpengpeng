@@ -1,0 +1,13 @@
+map! vv <esc>
+set nu
+set showcmd
+set cin
+syntax on
+filetype on
+set smartindent
+set tabstop=4
+set softtabstop=4
+set cindent shiftwidth=4
+set ai
+set fileencoding=gb2312
+set fileencodings=utf8,gb2312,utf-16,big5

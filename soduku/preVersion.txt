@@ -1,0 +1,90 @@
+Revision: 9
+Author: rocflyhi@gmail.com
+Date: 23:10:20, 2011年1月29日
+Message:
+chg problem to test again
+----
+Modified : /trunk/main.c
+Modified : /trunk/soduku
+
+Revision: 8
+Author: rocflyhi@gmail.com
+Date: 9:09:36, 2011年1月21日
+Message:
+delete test.c which is just for test at first
+----
+Deleted : /trunk/test.c
+
+Revision: 7
+Author: rocflyhi@gmail.com
+Date: 9:02:33, 2011年1月21日
+Message:
+solve by a violent way
+----
+Modified : /trunk/main.c
+Modified : /trunk/soduku
+Modified : /trunk/makefile
+Modified : /trunk/rules.c
+Modified : /trunk/soduku.c
+Modified : /trunk/soduku.h
+Added : /trunk/wayViolent.c
+
+Revision: 6
+Author: rocflyhi@gmail.com
+Date: 17:03:28, 2011年1月20日
+Message:
+add 3 rules to check
+----
+Modified : /trunk/main.c
+Added : /trunk/soduku
+Modified : /trunk/makefile
+Added : /trunk/rules.c
+Modified : /trunk/soduku.c
+Modified : /trunk/soduku.h
+
+Revision: 5
+Author: rocflyhi@gmail.com
+Date: 15:41:32, 2011年1月20日
+Message:
+add initial and show functions and makefile
+----
+Added : /trunk/main.c
+Added : /trunk/makefile
+Added : /trunk/soduku.c
+Modified : /trunk/soduku.h
+
+Revision: 4
+Author: rocflyhi@gmail.com
+Date: 14:29:12, 2011年1月20日
+Message:
+add one command header
+----
+Modified : /trunk/test.c
+Added : /trunk/soduku.h
+
+Revision: 3
+Author: rocflyhi@gmail.com
+Date: 16:35:11, 2011年1月18日
+Message:
+测试在windows下使用
+----
+Modified : /trunk/test.c
+
+Revision: 2
+Author: rocflyhi@gmail.com
+Date: 18:37:49, 2011年1月10日
+Message:
+commit test
+----
+Added : /trunk/test.c
+
+Revision: 1
+Author: 
+Date: 17:10:46, 2011年1月10日
+Message:
+Initial directory structure.
+----
+Added : /trunk
+Added : /branches
+Added : /tags
+Added : /wiki

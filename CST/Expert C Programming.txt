@@ -1,0 +1,42 @@
+C专家编程  Expert C Programming Deep C Secrets  by Peter Van Der Linden
+1. C语言太多的缺省可见性。  all-or-nothing
+       function apple() { /*在任何地方均可见*/ }
+       extern function peer()  { /*在任何地方均可见*/ }
+       static function turnip()  { /* 在这个文件内可见*/ }
+   用static 可在一定程度上实现“内部”函数。  （面向对象之信息隐藏）
+   而在头文件中的声明就无须包含static的函数。
+   头文件中，包含typedef struct _XX {...} XX; 外部函数（public）声明。
+
+2. 关键字 const并不能把变量变成常量！在一个符号前加上const限定符只是表示它的值对于这个符号来说是只读的（不能修改）。回首往事，const关键字原先如果命名为readonly就好多了。
+
+3. C语言中的符号重载（在不同的上下文环境中有不同的含义）：static, extern, void, *, &, ()。
+
+4. 当sizeiof的操作数是个类型名，必须加括号，如果是个变量，则可不加。
+
+5. 很好的建议：在C语言中牢记两个优先级就够了：乘除先于加减，在涉及其他操作符时一律加上括号。、
+
+6. 理解C语言声明的优先级规则：名字-括号()-后缀-前缀
+     A. 声明从它的名字开始读取，然后按照优先级顺序依次读取；
+     B. 优先级从高到低依次是：
+             B1. 声明中被括号括起来的那部分
+             B2. 后缀操作符：括号()表示这是一个函数，方括号[]表示这是一个数组
+             B3. 前缀操作符：星号*表示“指向...的指针”。
+     C. 如果const、volatile关键字的后面紧跟类型说明符（如int，long等），那么它作用于类型说明符。其他情况下，const、volatile关键字作用于它左边紧邻的指针星号。
+例如：1. char * const *(*next)();   //next是个指针，它指向一个函数，该函数返回另一个指针，该指针指向一个类型为char的常量指针。
+         2. char * (*C[10])(int **p);    //C 是一个数组，它的元素类型是函数指针，其所指向的函数的返回值是一个指向char的指针。
+
+7. C also partitions a program's identifiers into four namespaces. Identifiers in one namespace, are also considered different from identifiers in another. The four namespaces are:
+           1. Labels for goto position.
+           2. Tags for a struct/union/enum's name.
+           3. Members of a struct/union(actually a separate namespace is assigned to each struct/union).
+           4. Ordinary identifiers. or we can call them others.
+
+8. 指针：1, 保存数据的地址；2, 间接访问，首先取得指针的内容，把它作为一个地址，然后从这个地址中提取数据。如果指针有一个下标[i]，就把指针的内容加上i作为地址再取值。
+    数组：1, 保存数据；2, 直接访问，a[i]只是简单地以a+i为地址取数据
+                /*  =：左值，地址；右值，地址里的内容。*/
+
+9. C语言的设计哲学之一：程序员所做的都是对的。
+    警惕interpositioning
+
+10. 形参 parameter (形式参数formal parameter)
+     实参 argument  (实际参数actual parameter)

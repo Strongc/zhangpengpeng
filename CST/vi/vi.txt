@@ -1,0 +1,48 @@
+﻿/* vi vim zhangpengpeng rocflyhi@gmail.com*/
+: ! {num} {motion}
+:help [sth]
+K
+:!command
+:shell
+
+j  k  h  l  
+ctrl+f/b/d/u
+f/F{char}  ;  ,  
+:lineNum  lineNum-gg  Num-%
+gg  G  H
+
+*  #  g*  g#  gd  gD
+m{a-zA-Z}
+`{a-zA-Z}
+:marks  
+``  
+:jumps
+ctrl+I/O
+
+[:]/string ?string  
+n  N  
+v  V  ctrl+v
+zf  zd
+
+i  a  o  I  A  O  y  d  c  p  P  x  X  r  R  u  U  ctrl+r
+:[range]s/old/new[/g]
+>>  <<  =
+"{char}
+:reg[{arg}]
+"{arg}p/P 
+
+.  q  @  q:
+
+ctrl+p/n
+ctrl+x-ctrl+?
+
+ctrl+g
+g-ctrl+g
+
+:map/:map!
+:abbreviate
+:set sth[?]
+
+:make
+:cn,cp,cl,cw
+

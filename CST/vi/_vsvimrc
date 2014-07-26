@@ -1,0 +1,10 @@
+map! vv <esc>
+set backspace=indent,eol,start
+set keymodel=startsel,stopsel
+set selection=exclusive
+set selectmode=mouse,key
+set whichwrap=<,>,[,]
+set autoindent
+set number
+set shiftwidth=4
+set tabstop=4

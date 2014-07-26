@@ -1,0 +1,70 @@
+抽象度 抽象层次
+分层、虚拟、透明：  （+ 指导思想 设计思想）
+概念层--概念特征与领域性
+逻辑层--组成原理与可行性
+物理层--具体实现与可用性
+
+停机问题
+Hypothesis: exist H(p)  //假设存在一个判断机
+then:  K:=while(H(K));  //构造一个程序，当用判断机判断出自己停时，用while让自己不停
+come to contradiction.
+
+算法的基本特征：有穷性，确定性，可行性，输入及输出；
+算法设计的要求：正确性，确定性，稳健性，算法效率（时/空复杂度）。
+数据结构是研究数据的逻辑结构和物理结构以及它们之间的相互关系，并对 与这种结构定义相应的操作 设计出相应的算法。
+逻辑结构：线性结构（线性表.etc），非线性结构（树，图，etc）；
+存储结构：顺序映像，非顺序映像。
+顺其自然、紧盯目标、融汇其他知识 ====my intellect & inspiration====>> 好算法。
+
+离散数学
+数理逻辑， 与或非 ，命题逻辑推理系统Pn，谓词逻辑推理系统Fn。
+集合论，序偶，笛卡尔积，笛卡尔积的子集叫做关系。
+二元关系的性质：自反性、反自反性、对称性、反对成型、拟反对称性、传递性。
+图论 代数
+
+科学研究通常有三种途径：理论推导、科学实验、仿真模拟。
+  本质上，数学是计算机的灵魂。这是因为，计算机的发明及其日常的应用所依据的思想都源自于先进的数学，如通用计算机的概念最先由数学家巴贝其(Babbage)提出，图灵(Turing)对数理逻辑的研究，而导致证明通用计算机的可能性，冯诺依曼(Von Neumann)提出程序存储等思想，这些都为计算机的产生奠定了基础。反之，计算机的发展又使数学科学的发展产生了革命性的变化，这不仅是数学科学应用范围和能力得到极大地扩大，而且更引起了数学科学自身的重大发展；如通过在计算机上进行大量计算，解决了许多困难的数学问题，并猜测和发现了新的事实和理论（“四色定理”，孤立子解等）；促进了离散数学等新数学理论的诞生；把人类的演绎思维机械化，实现了机器证明，开创了自动推理等新领域。
+   科学可以把握自然，但不能穷尽自然。
+   构建事物要具备三个要素：差异、联系和相互作用。
+ 老子有云：“道生一，一生二，二生三，三生万物”。我们虽然不知道老子当时说这个话的时候，究竟是指什么意思，但是“一生二”，却确实说明差异的来源；而“二生三”，也恰好是对于在差异产生的基础上，差异事物之间进一步出现相互联系和相互作用的最简明的表述。“三生万物”也就顺理成章了。
+  古人有云：“五行一阴阳也，阴阳一太极也，太极本无极也。”
+
+
+Standard Template Library
+泛型程序设计，简单地说就是使用模板的程序设计。
+模板的调试比较困难，一般先写一个特殊版本的函数/类，运行正确后，再改成模板。
+STL的三个基本组件：containers, iterators, algorithm
+容器是一种数据结构，以类模板的方式提供。
+迭代器提供了访问容器中对象的能力。迭代器就如同一个指针（指针也是一种迭代器），迭代器可以是那些定义了Operator *()以及其他类似于指针的操作的类对象。
+算法是用来操作容器中数据的函数模板。
+
+
+Think:C编程的思考
+I think ,so I am. 我思故我在。
+教科书上的所有知识或不正确，或模糊的，或偏见的。
+编程真的是算法+数据么，我想这个对编程的表述起码是不完备的。编程更准确的说是模型和任务的混合。
+计算机对人来说就是完成人交给的任务，这就是面向过程方法论的来源，与其说是面向过程不如说是面向任务。C程序就是一个大任务无数个小任务组成的。
+然而人要用计算机完成任务，人就首先对世界建模，计算机也要把计算机外部世界映射到计算机内部的模型中。面向对象方法论就是首先对世界建模，因为数据之间是有联系的：一对一关系，一对多关系，多对多关系，父子关系，继承关系。
+面向过程方法、面向对象是两个方法论，程序员可以采用其中的一个，也可以同时采用两者去写代码。C语言的开发就是面向过程和面向对象的交互协作。C程序员要同时用面向过程完成系统任务，用面向对象对系统数据建模。
+大象几条腿？
+面向过程，面向对象是大象的腿么？如果是大象另两条腿是什么？
+计算机对人来说就有两个任务，一是计算，二是控制。
+计算就是知道事物的已知的状态根据已经发现的规律计算事物的另一种状态。
+控制就是利用电流的热效应，磁效应，光效应去控制物理世界。
+
+
+C Traps and Pitfalls   C陷阱和缺陷
+1, 赋值运算符=的优先级要低于逻辑运算符||
+    （事实上，赋值运算符仅比逗号运算符高，可以认为是最低的了，再其次是条件运算符 ? : 唯一的一个三目运算符。）
+2, 我们一旦知道如何声明一个变量，也就自然知道如何对一个常数进行类型转换，将其转型为该变量的类型，只需在变量声明中将变量名去掉即可。 e.g.  void (*fun)(); => (*(void(*)())0)();
+3, 运算符&&和|| 首先对左侧操作数求值，只有需要时才对右侧操作数求值。
+
+
+Something from the Tao of Programming
+  Something mysterious is formed, born in the silent void. Waiting alone and Unmoving, it is at once still and yet in constant motion. It is the source of all programs. I do not know its name, so I will call it the Tao of Programming.
+  The Tao of Programming flows far away and returns on the wind of morning.
+  The wise programmer is told about Tao and follows it. The average programmer is told about Tao and searches for it. The foolish programmer is told about Tao and laughs at it.
+   Grand master Turing once dreamed that he was a machine. When he awoke he exclaimed:" I don't know whether I am Turing dreaming that I am a machine, or a machine dreaming that I am Turing."
+   A well-written program is its own heaven; a poorly-written program is its own hell.
+   The Tao lies beyond Yin and Yang. It is silent and still as a pool of water. It does not seek fame, therefore nobody knows its presence. It does not seek fortune, for it is complete within itself. It exists beyond space and time.
+   Thus spake the Master programmer: " It is time for you to leave!"

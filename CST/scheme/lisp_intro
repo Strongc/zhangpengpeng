@@ -1,0 +1,53 @@
+LISP（全名LISt Processor，即列表处理语言），是一种基于λ演算的函数式编程语言。
+Lisp was originally created as a practical mathematical notation for computer programs, influenced by the notation of Alonzo Church's lambda calculus.
+
+Lisp的表达式是一个原子（atom）或表（list），原子（atom）又包含符号（symbol）与数值（number）；表是由零个或多个表达式组成的序列，表达式之间用空格分隔开，放入一对括号中。
+A function call or syntactic form is written as a list with the function or operator's name first, and the arguments following; for instance, a function f that takes three arguments might be called using (f arg1 arg2 arg3).（即 f(arg1, arg2, arg3）。
+
+Lisp有7大基本操作符：quote, atom, eq, car, cdr, cons, cond。
+在Lisp中，表就是一切。程序是表， 单引号' (quote)用来表示数据
+
+数值运算、逻辑运算
+>(+ 1 (* 3 4))
+ 13
+>(or (> 3 4) (> 4 2))
+ T
+
+CAR 操作符、CDR 操作符、CXR 组合操作符
+>(car '((1 2) 3))
+ (1 2)
+>(cdr '(1 2 3 4 5))
+ (2 3 4 5)
+
+CONS 操作符：合一个表；
+append 函数：连接两个表；
+LIST 函数：所有的参数放入一个表中并返回之；
+ATOM运算符：判断一个表达式是不是原子；
+NULL 函数：判断表达式的值是不是NIL；
+EQUAL 函数：判断两个表达式的值是否完全相等
+SETQ运算符：绑定一个变量
+
+DEFUN 操作符：用来自定义函数， 形式：(defun 函数名原子 参数名列表 执行列表)
+>(defun 2nd (x)
+  (car (cdr x))
+)
+2ND
+>(2nd '(1 2))
+2
+>(defun lianjie (x y) (append x y))
+
+Cond 操作符：条件分支，形式：(cond 分支列表1 分支列表2 分支列表3 ... 分支列表N)，而其中分支列表的构成为 (条件p 值e)
+>(defun max2 (a b) (cond ((> a b) a) (t b)))
+ MAX2
+>(max2 2 3)
+ 3
+
+IF函数:形式：(if 判断表达式 真值时的返回值 假值时的返回值)
+>(defun max2 (a b)
+  (if (> a b) a b)
+)
+
+递归函数：函数可以递归，注意要有条件句。
+>(defun dseq (x) (cond ((= x 1) 0) (t (+ (dseq (- x 1)) 2))))
+ DSEQ
+Lisp的“语法”定义中值得一提的规则似乎只有一条“括号要配对”，其它的都是“语义”上的规范。

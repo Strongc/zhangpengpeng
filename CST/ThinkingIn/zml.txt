@@ -1,0 +1,32 @@
+ZML :  Z Markup Language
+ 
+\r\n 换行表示下一条记录，或者配合缩进表示子关系，可以多个子关系
+\t 缩进表示子关系，下一级比上一级多一个缩进；
+: 冒号表示名称--值关系；
+! 相关信息和设置，如版本、编码等，也是name:value的格式，可以只有name，一行只写一个。
+// 注释
+子名称或值可以嵌套。
+ 
+有如下情况
+name                 // 单独一个名称
+name:value        // 冒号表示 名称和值的对应关系
+name                 // 换行缩进表示子关系，并且可以有多个子关系
+    name    
+    name:value
+ 
+示例zml报文
+!zml
+!version:1.0
+!charset=utf-8
+root
+    first
+    second:2
+    third
+        thirty
+    fourth
+        fourteen:14
+        fourty
+        formore
+            more1:100
+            more2:200
+ 

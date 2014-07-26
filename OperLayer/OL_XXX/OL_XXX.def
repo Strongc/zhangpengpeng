@@ -1,0 +1,6 @@
+LIBRARY	"OL_XXX"
+
+EXPORTS
+OL_Init
+OL_UnInit
+OL_Dosth

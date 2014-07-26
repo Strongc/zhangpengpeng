@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OperLayer", "OperLayer\OperLayer.vcproj", "{84BEC52C-F821-49F5-9DA0-D086C2D77A05}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OL_XXX", "OL_XXX\OL_XXX.vcproj", "{A13F450B-51CA-4C32-B90F-E341638FC873}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OL_Test", "OL_Test\OL_Test.vcproj", "{3936C2AE-D029-41C1-89F5-408C8010DDCA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84BEC52C-F821-49F5-9DA0-D086C2D77A05}.Debug|Win32.ActiveCfg = Debug|Win32
+		{84BEC52C-F821-49F5-9DA0-D086C2D77A05}.Debug|Win32.Build.0 = Debug|Win32
+		{84BEC52C-F821-49F5-9DA0-D086C2D77A05}.Release|Win32.ActiveCfg = Release|Win32
+		{84BEC52C-F821-49F5-9DA0-D086C2D77A05}.Release|Win32.Build.0 = Release|Win32
+		{A13F450B-51CA-4C32-B90F-E341638FC873}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A13F450B-51CA-4C32-B90F-E341638FC873}.Debug|Win32.Build.0 = Debug|Win32
+		{A13F450B-51CA-4C32-B90F-E341638FC873}.Release|Win32.ActiveCfg = Release|Win32
+		{A13F450B-51CA-4C32-B90F-E341638FC873}.Release|Win32.Build.0 = Release|Win32
+		{3936C2AE-D029-41C1-89F5-408C8010DDCA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3936C2AE-D029-41C1-89F5-408C8010DDCA}.Debug|Win32.Build.0 = Debug|Win32
+		{3936C2AE-D029-41C1-89F5-408C8010DDCA}.Release|Win32.ActiveCfg = Release|Win32
+		{3936C2AE-D029-41C1-89F5-408C8010DDCA}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

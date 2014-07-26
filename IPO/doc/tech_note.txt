@@ -1,0 +1,14 @@
+  '(zhangpengpeng 2014/5/8)
+* 多进程的输入处理输出模型（Input-Process-Outpu）；
+* 多线程的各个IPO模块；
+* Process模块中含有任务列表线程；
+* 各个模块各司其职，简洁专一，可复用；
+* 进程间通讯；
+* 屏幕右下角弹框提示；
+* 独立配置进程对主进程实时配置；
+
+
+Projects:
+IPO_Process：逻辑处理单元，负责汇总和分发。
+IPO_I_CmdInput：命令行下输入信息。
+IPO_O_TipDlg：右下角提示框。

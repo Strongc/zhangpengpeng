@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SnakeApp", "SnakeApp.vcproj", "{F0A2C4D9-6C8E-4A31-BF42-C98CD19AB9DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F0A2C4D9-6C8E-4A31-BF42-C98CD19AB9DE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F0A2C4D9-6C8E-4A31-BF42-C98CD19AB9DE}.Debug|Win32.Build.0 = Debug|Win32
+		{F0A2C4D9-6C8E-4A31-BF42-C98CD19AB9DE}.Release|Win32.ActiveCfg = Release|Win32
+		{F0A2C4D9-6C8E-4A31-BF42-C98CD19AB9DE}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
