@@ -1,7 +1,0 @@
-map! vv <esc>
-set nu
-set showcmd
-set cin
-syntax on
-filetype on
-set smartindent
