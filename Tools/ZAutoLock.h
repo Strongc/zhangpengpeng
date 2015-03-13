@@ -1,4 +1,4 @@
-/* class CZAutoLock  '(zhangpengpeng 2013/09/10)
+/* class ZAutoLock  '(zhangpengpeng 2013/09/10)
  * my one lock tool
  */
 
@@ -10,20 +10,20 @@
 // InitializeCriticalSection(&cs);
 // DeleteCriticalSection(&cs);
 
-class CZAutoLock
+class ZAutoLock
 {
 private:
-	CRITICAL_SECTION *m_pCS;
+	CRITICAL_SECTION *cs;
 
 public:
-	CZAutoLock(CRITICAL_SECTION *pCS) : m_pCS(pCS)
+	ZAutoLock(CRITICAL_SECTION *s) : cs(s)
 	{
-		EnterCriticalSection(m_pCS);
+		EnterCriticalSection(cs);
 	}
 
-	~CZAutoLock(void)
+	~ZAutoLock(void)
 	{
-		LeaveCriticalSection(m_pCS);
+		LeaveCriticalSection(cs);
 	}
 };
 

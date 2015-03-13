@@ -1,7 +1,8 @@
 Z Stream Protocol
 
 head:
-id  "#zsp#0"  64bit
+magic  "zsp0"  32bit
+head-size  32bit
 session 32bit
 sequence  32bit
 command 32bit
@@ -9,17 +10,19 @@ reserved 64bit
 content-size 32bit
 
 commands:
+0 Unknown
 10 Hello
 20 Bye
 30 Play
 40 Stop
 110 Pause
 120 Resume
-130 Fast
-140 Slow
-200 OK
-300 Error
-400 Not Found
+130 SetSpeed
+
+reponse:
+1010 OK
+1020 Error
+1030 Not Found
 
 Flow:
 Hello

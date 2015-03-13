@@ -5,10 +5,13 @@
 #ifndef _ZTHREADPOOL_H_
 #define _ZTHREADPOOL_H_
 
+#include <Windows.h>
 #include <deque>
 using namespace std;
 
-class CZThreadTaskInterface
+typedef int (*ZTP_TASKDO_FUN)(void *param);
+
+class ZThreadTaskInterface
 {
 // collect do_func and params together
 // private: 
@@ -17,52 +20,53 @@ public:
 	virtual int Task_Do() = 0;
 };
 
-class CZThreadPool;
+class ZThreadPool;
 typedef struct struct_ZThreadInfo
 {
-	int iIndex;						// inner id
+	int index;						// inner id
 	HANDLE hThread;					// thread handle
-	DWORD dwThreadId;				// thread id
-	CZThreadPool *pPool;			// pointer to thread pool
-	unsigned int uiCount;			// run times count
+	DWORD threadId;					// thread id
+	ZThreadPool *pool;				// pointer to thread pool
+	unsigned int count;				// run times count
 }ZTHREADINFO;
 
-class CZThreadPool
+class ZThreadPool
 {
 public:
-	bool Start(int iMaxThreadNum, int iInitThreadNum, int iIncreThreadNum);
+	bool Start(int maxThreadNum, int initThreadNum, int increThreadNum);
 	bool Stop();
-	bool AddTask(CZThreadTaskInterface *pTask);
+	bool AddTask(ZThreadTaskInterface *task);
+	bool AddTask(ZTP_TASKDO_FUN fun, void *param);
 	bool ClearTasks();
 
 public:
-	CZThreadPool(void);
-	~CZThreadPool(void);
-	int taskThread(ZTHREADINFO *pThreadInfo);
+	ZThreadPool(void);
+	~ZThreadPool(void);
+	int taskThread(ZTHREADINFO *threadInfo);
 
 private:
 	int createThreads(int iNum);
-	int endThread(ZTHREADINFO *pThreadInfo);
+	int endThread(ZTHREADINFO *threadInfo);
 	bool adjustThreadNum();
 
 private:
-	deque<ZTHREADINFO*> m_ThreadList;
-	deque<CZThreadTaskInterface*> m_TaskList;
+	deque<ZTHREADINFO*> threadList;
+	deque<ZThreadTaskInterface*> taskList;
 
-	long m_lThreadNum;
-	long m_lRunningNum;
+	long threadNum;
+	long runningNum;
 
-	int m_iMaxThreadNum;
-	int m_iInitThreadNum;
-	int m_iIncreThreadNum;
+	int maxThreadNum;
+	int initThreadNum;
+	int increThreadNum;
 
-	HANDLE m_hEventEndAll;
-	HANDLE m_hEventEndComplete;
-	HANDLE m_hSemEnd;
-	HANDLE m_hSemTask;
-	HANDLE m_hMutexThread;
-	HANDLE m_hMutexTask;
-	HANDLE m_hMutexAdjust;
+	HANDLE eventEndAll;
+	HANDLE eventEndComplete;
+	HANDLE semEnd;
+	HANDLE semTask;
+	HANDLE mutexThread;
+	HANDLE mutexTask;
+	HANDLE mutexAdjust;
 };
 
 #endif // _ZTHREADPOOL_H_

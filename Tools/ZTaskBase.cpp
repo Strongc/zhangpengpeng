@@ -2,139 +2,138 @@
  * base class to do tasks
  */
 
-#include "StdAfx.h"
 #include "ZTaskBase.h"
 #include "ZAutoLock.h"
 
-CZTaskList::CZTaskList()
+ZTaskList::ZTaskList()
 {
-	InitializeCriticalSection(&m_cs);
+	InitializeCriticalSection(&cs);
 }
-CZTaskList::~CZTaskList()
+ZTaskList::~ZTaskList()
 {
-	DeleteCriticalSection(&m_cs);
+	DeleteCriticalSection(&cs);
 }
 
-bool CZTaskList::Add(const void *pTask)
+bool ZTaskList::Add(const void *task)
 {
-	CZAutoLock lock(&m_cs);
-	m_dTaskQue.push(pTask);
+	ZAutoLock lock(&cs);
+	taskQue.push(task);
 	return true;
 }
 
-bool CZTaskList::Get(const void **ppTask)
+bool ZTaskList::Get(const void **task)
 {
-	CZAutoLock lock(&m_cs);
-	if (m_dTaskQue.empty())
+	ZAutoLock lock(&cs);
+	if (taskQue.empty())
 		return false;
-	*ppTask = m_dTaskQue.front();
-	m_dTaskQue.pop();
+	*task = taskQue.front();
+	taskQue.pop();
 	return true;
 }
 
-bool CZTaskList::ClearAll()
+bool ZTaskList::ClearAll()
 {
-	CZAutoLock lock(&m_cs);
-	while (!m_dTaskQue.empty())
+	ZAutoLock lock(&cs);
+	while (!taskQue.empty())
 	{
-		const void *ppTask = m_dTaskQue.front();
-		if (ppTask != NULL) delete ppTask;
-		m_dTaskQue.pop();
+		const void *task = taskQue.front();
+		if (task != NULL) delete task;
+		taskQue.pop();
 	}
 	return true;
 }
 
-CZTaskBase::CZTaskBase(void)
+ZTaskBase::ZTaskBase(void)
 {
-	m_hThread = NULL;
-	m_hEventEndThread = CreateEvent(NULL, FALSE, FALSE, NULL);
-	m_hEventNewTask = CreateEvent(NULL, TRUE, FALSE, NULL);
+	hThread = NULL;
+	hEventEndThread = CreateEvent(NULL, FALSE, FALSE, NULL);
+	hEventNewTask = CreateEvent(NULL, TRUE, FALSE, NULL);
 }
 
-CZTaskBase::~CZTaskBase(void)
+ZTaskBase::~ZTaskBase(void)
 {
-	if (m_hEventEndThread)
+	if (hEventEndThread)
 	{
-		CloseHandle(m_hEventEndThread);
-		m_hEventEndThread = NULL;
+		CloseHandle(hEventEndThread);
+		hEventEndThread = NULL;
 	}
 
-	if (m_hEventNewTask)
+	if (hEventNewTask)
 	{
-		CloseHandle(m_hEventNewTask);
-		m_hEventNewTask = NULL;
+		CloseHandle(hEventNewTask);
+		hEventNewTask = NULL;
 	}
 }
 
-DWORD __stdcall _ztaskbase_Thread_Task(LPVOID lpParam)
+DWORD __stdcall _ztaskbase_Thread_Task(LPVOID param)
 {
-	CZTaskBase *pTaskBase = (CZTaskBase*)lpParam;
-	if (pTaskBase == NULL)
+	ZTaskBase *taskBase = (ZTaskBase*)param;
+	if (taskBase == NULL)
 		return 0;
 
-	return pTaskBase->taskThread();
+	return taskBase->taskThread();
 }
 
-int CZTaskBase::taskThread()
+int ZTaskBase::taskThread()
 {
-	HANDLE hEvents[2] = {m_hEventEndThread, m_hEventNewTask};
-	const void *pTask = NULL; 
+	HANDLE hEvents[2] = {hEventEndThread, hEventNewTask};
+	const void *task = NULL; 
 
 	while (1)
 	{
 		if (WaitForMultipleObjects(2, hEvents, FALSE, INFINITE) == WAIT_OBJECT_0)
 			break;				// exit the thread
 
-		while (m_TaskList.Get(&pTask) != false)
+		while (taskList.Get(&task) != false)
 		{
-			if (pTask == NULL)
+			if (task == NULL)
 				continue;
 
-			Task_Do(pTask);		// do task
+			Task_Do(task);		// do task
 		}
 
-		ResetEvent(m_hEventNewTask);
+		ResetEvent(hEventNewTask);
 	}
 
 	return 0;
 }
 
-bool CZTaskBase::Task_Start()
+bool ZTaskBase::Task_Start()
 {
-	m_hThread = CreateThread(NULL, 0, _ztaskbase_Thread_Task, this, 0, NULL);
-	if (m_hThread ==  NULL)
+	hThread = CreateThread(NULL, 0, _ztaskbase_Thread_Task, this, 0, NULL);
+	if (hThread ==  NULL)
 		return false;
 
 	Task_Clear();
 	return true;
 }
 
-bool CZTaskBase::Task_Stop()
+bool ZTaskBase::Task_Stop()
 {
 	Task_Clear();
-	if (m_hThread)
+	if (hThread)
 	{
-		SetEvent(m_hEventEndThread);
-		WaitForSingleObject(m_hThread, INFINITE);
-		CloseHandle(m_hThread);
-		m_hThread = NULL;
+		SetEvent(hEventEndThread);
+		WaitForSingleObject(hThread, INFINITE);
+		CloseHandle(hThread);
+		hThread = NULL;
 	}
 
 	return true;
 }
 
-bool CZTaskBase::Task_Add(const void *pTask)
+bool ZTaskBase::Task_Add(const void *task)
 {
 	bool bRet = false;
-	bRet = m_TaskList.Add(pTask);
+	bRet = taskList.Add(task);
 	if (bRet)
-		SetEvent(m_hEventNewTask);
+		SetEvent(hEventNewTask);
 
 	return bRet;
 }
 
-bool CZTaskBase::Task_Clear()
+bool ZTaskBase::Task_Clear()
 {
-	ResetEvent(m_hEventNewTask);
-	return m_TaskList.ClearAll();
+	ResetEvent(hEventNewTask);
+	return taskList.ClearAll();
 }

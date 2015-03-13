@@ -2,54 +2,78 @@
  * Thread Pool
  */
 
-#include "StdAfx.h"
 #include "ZThreadPool.h"
 #include <algorithm>
 
-class CZTPOneLock
+class ZTPOneLock
 {
 private:
-	const HANDLE *m_pMutexOne;
+	const HANDLE *mutexOne;
 
 public:
-	CZTPOneLock(const HANDLE *pMutext) : m_pMutexOne(pMutext)
+	ZTPOneLock(const HANDLE *mt) : mutexOne(mt)
 	{
-		WaitForSingleObject(*m_pMutexOne, INFINITE);
+		WaitForSingleObject(*mutexOne, INFINITE);
 	}
 
-	~CZTPOneLock()
+	~ZTPOneLock()
 	{
-		ReleaseMutex(*m_pMutexOne);
+		ReleaseMutex(*mutexOne);
 	}
 };
 
-CZThreadPool::CZThreadPool(void)
+class _zThreadTask_private : public ZThreadTaskInterface
 {
-	m_lThreadNum = 0;
-	m_lRunningNum = 0;
+private:
+	ZTP_TASKDO_FUN fun;
+	void *param;
 
-	m_iMaxThreadNum = 0;
-	m_iInitThreadNum = 0;
-	m_iIncreThreadNum = 0;
+public:
+	_zThreadTask_private(ZTP_TASKDO_FUN f, void *p) : fun(f), param(p) {}
+	virtual int Task_Do() 
+	{
+		if (fun) 
+			return fun(param);
+		return -1;
+	}
+
+};
+
+ZThreadPool::ZThreadPool(void)
+{
+	threadNum = 0;
+	runningNum = 0;
+
+	maxThreadNum = 0;
+	initThreadNum = 0;
+	increThreadNum = 0;
+
+	eventEndAll = NULL;
+	eventEndComplete = NULL;
+	semEnd = NULL;
+	semTask = NULL;
+	mutexThread = NULL;
+	mutexTask = NULL;
+	mutexAdjust = NULL;
 }
 
-CZThreadPool::~CZThreadPool(void)
+ZThreadPool::~ZThreadPool(void)
 {
 }
 
 DWORD __stdcall _zthreadpool_Thread_Task(LPVOID lpParam)
 {
 	ZTHREADINFO *pInfo = (ZTHREADINFO*)lpParam;
-	if (pInfo == NULL || pInfo->pPool== NULL)
+	if (pInfo == NULL || pInfo->pool== NULL)
 		return 0;
 
-	return pInfo->pPool->taskThread(pInfo);
+	return pInfo->pool->taskThread(pInfo);
 }
 
-int CZThreadPool::taskThread(ZTHREADINFO *pThreadInfo)
+int ZThreadPool::taskThread(ZTHREADINFO *threadInfo)
 {
-	HANDLE hEvents[3] = {m_hEventEndAll, m_hSemEnd, m_hSemTask};
-	CZThreadTaskInterface *pTask = NULL; 
+	HANDLE hEvents[3] = {eventEndAll, semEnd, semTask};
+	ZThreadTaskInterface *pTask = NULL; 
 
 	while (1)
 	{
@@ -58,51 +82,51 @@ int CZThreadPool::taskThread(ZTHREADINFO *pThreadInfo)
 			break;				// exit the thread
 
 		{
-			InterlockedIncrement(&m_lRunningNum);
-			if (m_lRunningNum >= m_lThreadNum)
+			InterlockedIncrement(&runningNum);
+			if (runningNum >= threadNum)
 				adjustThreadNum();
 
 			{
-				CZTPOneLock oneLock(&m_hMutexTask);
-				if (m_TaskList.empty())
+				ZTPOneLock oneLock(&mutexTask);
+				if (taskList.empty())
 					continue;
 
-				pTask = m_TaskList.front();
-				m_TaskList.pop_front();
+				pTask = taskList.front();
+				taskList.pop_front();
 			}
 
 			if (pTask != NULL)
 			{
 				pTask->Task_Do();	// do task
-				pThreadInfo->uiCount++;
+				threadInfo->count++;
 			}
 
-			InterlockedDecrement(&m_lRunningNum);
-			if (m_lRunningNum <= m_lThreadNum - m_iIncreThreadNum)
+			InterlockedDecrement(&runningNum);
+			if (runningNum <= threadNum - increThreadNum)
 				adjustThreadNum();
 		}
 
 	}
 
-	endThread(pThreadInfo);
+	endThread(threadInfo);
 	return 0;
 }
 
-int CZThreadPool::createThreads(int iNum)
+int ZThreadPool::createThreads(int iNum)
 {
 	static int iThreadIndex = 0;
 
-	if (m_lThreadNum >= m_iMaxThreadNum)
+	if (threadNum >= maxThreadNum)
 		return 0;
 
 	int iSuccessNum = 0;
 	while (iSuccessNum < iNum)
 	{
 		ZTHREADINFO *pThreadInfo = new ZTHREADINFO();
-		pThreadInfo->iIndex = iThreadIndex++;
-		pThreadInfo->pPool = this;
-		pThreadInfo->uiCount = 0;
-		pThreadInfo->hThread = CreateThread(NULL, 0, _zthreadpool_Thread_Task, pThreadInfo, 0, &pThreadInfo->dwThreadId);
+		pThreadInfo->index = iThreadIndex++;
+		pThreadInfo->pool = this;
+		pThreadInfo->count = 0;
+		pThreadInfo->hThread = CreateThread(NULL, 0, _zthreadpool_Thread_Task, pThreadInfo, 0, &pThreadInfo->threadId);
 
 		if (pThreadInfo->hThread == NULL)
 		{
@@ -110,89 +134,89 @@ int CZThreadPool::createThreads(int iNum)
 			break;
 		}
 
-		InterlockedIncrement(&m_lThreadNum);
-		CZTPOneLock oneLock(&m_hMutexThread);
-		m_ThreadList.push_back(pThreadInfo);
+		InterlockedIncrement(&threadNum);
+		ZTPOneLock oneLock(&mutexThread);
+		threadList.push_back(pThreadInfo);
 		iSuccessNum++;
 	}
 	return iSuccessNum;
 }
 
-int CZThreadPool::endThread(ZTHREADINFO *pThreadInfo)
+int ZThreadPool::endThread(ZTHREADINFO *threadInfo)
 {
-	InterlockedDecrement(&m_lThreadNum);
+	InterlockedDecrement(&threadNum);
 	{
-		CZTPOneLock oneLock(&m_hMutexThread);
-		m_ThreadList.erase(find(m_ThreadList.begin(), m_ThreadList.end(), pThreadInfo));
+		ZTPOneLock oneLock(&mutexThread);
+		threadList.erase(find(threadList.begin(), threadList.end(), threadInfo));
 	}
 
-	TRACE(_T("\nThread[%d:%d:0x%x] end. Run times: %d. "), \
-		pThreadInfo->iIndex, pThreadInfo->hThread, pThreadInfo->dwThreadId, pThreadInfo->uiCount);
+	//TRACE(_T("\nThread[%d:%d:0x%x] end. Run times: %d. "), \
+	//	threadInfo->index, threadInfo->hThread, threadInfo->threadId, threadInfo->count);
 
-	CloseHandle(pThreadInfo->hThread);
-	pThreadInfo->hThread = NULL;
-	delete pThreadInfo;
+	CloseHandle(threadInfo->hThread);
+	threadInfo->hThread = NULL;
+	delete threadInfo;
 
-	if (m_lThreadNum == 0)
-		SetEvent(m_hEventEndComplete);
+	if (threadNum == 0)
+		SetEvent(eventEndComplete);
 
 	return 0;
 }
 
-bool CZThreadPool::adjustThreadNum()
+bool ZThreadPool::adjustThreadNum()
 {
-	CZTPOneLock AdjustLock(&m_hMutexAdjust);
+	ZTPOneLock AdjustLock(&mutexAdjust);
 
-	long lThread = m_lThreadNum;
-	long lTaskNum = m_lRunningNum - 1;
+	long lThread = threadNum;
+	long lTaskNum = runningNum - 1;
 	{
-		CZTPOneLock oneLock(&m_hMutexTask);
-		lTaskNum += m_TaskList.size();
+		ZTPOneLock oneLock(&mutexTask);
+		lTaskNum += taskList.size();
 	}
 
-	if (lTaskNum < (m_iInitThreadNum + m_iIncreThreadNum)
-		&& lThread < (m_iInitThreadNum + m_iIncreThreadNum))		// perhaps most time this may be true
+	if (lTaskNum < (initThreadNum + increThreadNum)
+		&& lThread < (initThreadNum + increThreadNum))		// perhaps most time this may be true
 		return true;
 
-	if (lTaskNum >= (lThread + m_iIncreThreadNum))
+	if (lTaskNum >= (lThread + increThreadNum))
 	{
-		if (m_lThreadNum >= m_iMaxThreadNum)
+		if (threadNum >= maxThreadNum)
 			return false;
 
-		if (createThreads(m_iIncreThreadNum) < m_iIncreThreadNum)
+		if (createThreads(increThreadNum) < increThreadNum)
 			return false;
 	}
-	else if (lTaskNum <= (lThread - m_iIncreThreadNum))
+	else if (lTaskNum <= (lThread - increThreadNum))
 	{
-		int iEndNum = (lThread - m_iIncreThreadNum) >= m_iInitThreadNum ? m_iIncreThreadNum : (lThread - m_iInitThreadNum);
-		ReleaseSemaphore(m_hSemEnd, iEndNum, NULL);
+		int iEndNum = (lThread - increThreadNum) >= initThreadNum ? increThreadNum : (lThread - initThreadNum);
+		ReleaseSemaphore(semEnd, iEndNum, NULL);
 	}
 	
 	return true;
 }
 
-bool CZThreadPool::Start(int iMaxThreadNum, int iInitThreadNum, int iIncreThreadNum)
+bool ZThreadPool::Start(int maxThreadNum, int initThreadNum, int increThreadNum)
 {
-	m_iMaxThreadNum = iMaxThreadNum;
-	m_iInitThreadNum = iInitThreadNum;
-	m_iIncreThreadNum = iIncreThreadNum;
+	this->maxThreadNum = maxThreadNum;
+	this->initThreadNum = initThreadNum;
+	this->increThreadNum = increThreadNum;
 
-	if (m_iIncreThreadNum < 1)
+	if (increThreadNum < 1)
 		return false;
 
-	if (m_iInitThreadNum > m_iMaxThreadNum)
+	if (initThreadNum > maxThreadNum)
 		return false;
 
-	m_hEventEndAll = CreateEvent(NULL, TRUE, FALSE, NULL);
-	m_hEventEndComplete = CreateEvent(NULL, FALSE, FALSE, NULL);
-	m_hSemEnd = CreateSemaphore(NULL, 0, 0x7FFFFFFF, NULL);
-	m_hSemTask = CreateSemaphore(NULL, 0, 0x7FFFFFFF, NULL);
-	m_hMutexThread = CreateMutex(NULL, FALSE, NULL);
-	m_hMutexTask = CreateMutex(NULL, FALSE, NULL);
-	m_hMutexAdjust = CreateMutex(NULL, FALSE, NULL);
+	eventEndAll = CreateEvent(NULL, TRUE, FALSE, NULL);
+	eventEndComplete = CreateEvent(NULL, FALSE, FALSE, NULL);
+	semEnd = CreateSemaphore(NULL, 0, 0x7FFFFFFF, NULL);
+	semTask = CreateSemaphore(NULL, 0, 0x7FFFFFFF, NULL);
+	mutexThread = CreateMutex(NULL, FALSE, NULL);
+	mutexTask = CreateMutex(NULL, FALSE, NULL);
+	mutexAdjust = CreateMutex(NULL, FALSE, NULL);
 
 	ClearTasks();
-	if (createThreads(m_iInitThreadNum) < m_iInitThreadNum)
+	if (createThreads(initThreadNum) < initThreadNum)
 	{
 		Stop();
 		return false;
@@ -201,63 +225,72 @@ bool CZThreadPool::Start(int iMaxThreadNum, int iInitThreadNum, int iIncreThread
 	return true;
 }
 
-bool CZThreadPool::Stop()
+bool ZThreadPool::Stop()
 {
 	ClearTasks();
 
-	SetEvent(m_hEventEndAll);
-	WaitForSingleObject(m_hEventEndComplete, INFINITE);
+	SetEvent(eventEndAll);
+	WaitForSingleObject(eventEndComplete, INFINITE);
 
-	if (m_hEventEndAll)
+	if (eventEndAll)
 	{
-		CloseHandle(m_hEventEndAll);
-		m_hEventEndAll = NULL;
+		CloseHandle(eventEndAll);
+		eventEndAll = NULL;
 	}
-	if (m_hEventEndComplete)
+	if (eventEndComplete)
 	{
-		CloseHandle(m_hEventEndComplete);
-		m_hEventEndComplete = NULL;
+		CloseHandle(eventEndComplete);
+		eventEndComplete = NULL;
 	}
-	if (m_hSemEnd)
+	if (semEnd)
 	{
-		CloseHandle(m_hSemEnd);
-		m_hSemEnd = NULL;
+		CloseHandle(semEnd);
+		semEnd = NULL;
 	}
-	if (m_hSemTask)
+	if (semTask)
 	{
-		CloseHandle(m_hSemTask);
-		m_hSemTask = NULL;
+		CloseHandle(semTask);
+		semTask = NULL;
 	}
-	if (m_hMutexThread)
+	if (mutexThread)
 	{
-		CloseHandle(m_hMutexThread);
-		m_hMutexThread = NULL;
+		CloseHandle(mutexThread);
+		mutexThread = NULL;
 	}
-	if (m_hMutexTask)
+	if (mutexTask)
 	{
-		CloseHandle(m_hMutexTask);
-		m_hMutexTask = NULL;
+		CloseHandle(mutexTask);
+		mutexTask = NULL;
 	}
-	if (m_hMutexAdjust)
+	if (mutexAdjust)
 	{
-		CloseHandle(m_hMutexAdjust);
-		m_hMutexAdjust = NULL;
+		CloseHandle(mutexAdjust);
+		mutexAdjust = NULL;
 	}
 
 	return true;
 }
 
-bool CZThreadPool::AddTask(CZThreadTaskInterface *pTask)
+bool ZThreadPool::AddTask(ZThreadTaskInterface *task)
 {
-	CZTPOneLock oneLock(&m_hMutexTask);
-	m_TaskList.push_back(pTask);
-	ReleaseSemaphore(m_hSemTask, 1, NULL);
+	ZTPOneLock oneLock(&mutexTask);
+	taskList.push_back(task);
+	ReleaseSemaphore(semTask, 1, NULL);
 	return true;
 }
 
-bool CZThreadPool::ClearTasks()
+bool ZThreadPool::AddTask(ZTP_TASKDO_FUN fun, void *param)
 {
-	CZTPOneLock oneLock(&m_hMutexTask);
-	m_TaskList.clear();
+	_zThreadTask_private *task = new _zThreadTask_private(fun, param);
+	if (task == NULL)
+		return false;
+
+	return AddTask(task);
+}
+
+bool ZThreadPool::ClearTasks()
+{
+	ZTPOneLock oneLock(&mutexTask);
+	taskList.clear();
 	return true;
 }

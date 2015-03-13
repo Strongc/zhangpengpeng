@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="sys_layer">
+      <UniqueIdentifier>{eedcac15-0cd8-4124-8304-4f97ae032bc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zsp_server">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>
+      </Extensions>
+    </Filter>
+    <Filter Include="zsp_protocol">
+      <UniqueIdentifier>{8ece9034-7401-465e-b851-11a70fa2552a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>
+      </Extensions>
+    </Filter>
+    <Filter Include="zsp_transport">
+      <UniqueIdentifier>{eeb982f8-1d3d-4635-9b22-050e383a3e21}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\common\comfuns.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sss.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sys_layer\sys_net.c">
+      <Filter>sys_layer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sys_layer\sys_thread.c">
+      <Filter>sys_layer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zsp_protocol\zsp_handle.c">
+      <Filter>zsp_protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zsp_protocol\zsp_protocol.c">
+      <Filter>zsp_protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zsp_server\zsp_listener.c">
+      <Filter>zsp_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zsp_server\zsp_server.c">
+      <Filter>zsp_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zsp_server\zsp_session.c">
+      <Filter>zsp_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zsp_server\zsp_session_mgr.c">
+      <Filter>zsp_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zsp_transport\zsp_transport.c">
+      <Filter>zsp_transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\log.c">
+      <Filter>common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\common\comfuns.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\comtypes.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sss.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sys_layer\sys_net.h">
+      <Filter>sys_layer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sys_layer\sys_thread.h">
+      <Filter>sys_layer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\zsp_protocol\zsp_handle.h">
+      <Filter>zsp_protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\zsp_protocol\zsp_protocol.h">
+      <Filter>zsp_protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\zsp_server\zsp_listener.h">
+      <Filter>zsp_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\zsp_server\zsp_server.h">
+      <Filter>zsp_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\zsp_server\zsp_server_interface.h">
+      <Filter>zsp_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\zsp_server\zsp_session.h">
+      <Filter>zsp_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\zsp_server\zsp_session_mgr.h">
+      <Filter>zsp_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\zsp_transport\zsp_transport.h">
+      <Filter>zsp_transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\log.h">
+      <Filter>common</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
