@@ -1,0 +1,54 @@
+// WebPluginActiveX.idl : type library source for ActiveX Control project.
+
+// This file will be processed by the MIDL compiler tool to
+// produce the type library (WebPluginActiveX.tlb) that will become a resource in
+// WebPluginActiveX.ocx.
+
+#include <olectl.h>
+#include <idispids.h>
+
+[ uuid(7279F726-4F7F-4F25-A8B0-184B5C260591), version(1.0),
+  helpfile("WebPluginActiveX.hlp"),
+  helpstring("WebPluginActiveX ActiveX Control module"),
+  control ]
+library WebPluginActiveXLib
+{
+	importlib(STDOLE_TLB);
+
+	//  Primary dispatch interface for CWebPluginActiveXCtrl
+
+	[ uuid(699825D2-88F3-4159-8B1D-3F64E85F6129),
+	  helpstring("Dispatch interface for WebPluginActiveX Control")]
+	dispinterface _DWebPluginActiveX
+	{
+		properties:
+		methods:
+
+			[id(DISPID_ABOUTBOX)] void AboutBox();
+			[id(1), helpstring("method CallFun")] LONG CallFun(LONG intValue, BSTR strValue);
+	};
+
+	//  Event dispatch interface for CWebPluginActiveXCtrl
+
+	[ uuid(6CDB8D17-A795-4F69-AE2D-1C55991E71E0),
+	  helpstring("Event interface for WebPluginActiveX Control") ]
+	dispinterface _DWebPluginActiveXEvents
+	{
+		properties:
+			//  Event interface has no properties
+
+		methods:
+			[id(1)] void FireWebEvent(LONG intValue, BSTR strValue);
+	};
+
+	//  Class information for CWebPluginActiveXCtrl
+
+	[ uuid(769E0ED3-A72E-465A-B8CB-D4AE45D69F0D),
+	  helpstring("WebPluginActiveX Control"), control ]
+	coclass WebPluginActiveX
+	{
+		[default] dispinterface _DWebPluginActiveX;
+		[default, source] dispinterface _DWebPluginActiveXEvents;
+	};
+
+};

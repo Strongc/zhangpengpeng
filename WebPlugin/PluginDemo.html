@@ -1,0 +1,49 @@
+<html>
+<head>
+	<title>Plugin Demo</title>
+
+	<script>
+
+		var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome');
+
+		function CallFun()
+		{
+			if (isChrome > 0)
+				plugin = document.getElementById("PluginObj");
+			else
+				plugin = document.getElementById("OcxObj");
+
+			_intValue = Number(document.getElementById("intValue").value);
+			_strValue = document.getElementById("strValue").value;
+			plugin.CallFun(_intValue, _strValue);
+		}
+
+		function FireEvent(intValue, strValue)
+		{
+			document.getElementById("Output").value += "intValue: " + intValue + ", strValue: " + strValue + "\n";
+		}
+	</script>
+
+	<script language = "javascript" for = "OcxObj" event = "FireWebEvent(intValue, strValue)">
+		FireEvent(intValue, strValue);
+	</script>
+</head>
+
+<body>
+	<div style="position:absolute;left:220px;">
+		<input id="intValue" style="width:100px" type="text" />
+		<br/>
+		<textarea rows=2 cols=20 id="strValue" type="text"></textarea>
+		<br/>
+		<input type="button" value="CallFun" onclick="CallFun()" />
+		<br/>
+		<textarea wrap=hard rows=12 cols = 50 id="Output" type="text" value="0"></textarea>
+	</div>
+
+	<div style = "width: 620px; float:left; overflow: hidden">
+		<object classid="clsid:769E0ED3-A72E-465A-B8CB-D4AE45D69F0D" id="OcxObj" width="0" height="0" name="ocx"/>
+		<embed type="application/npwebplugin" id="PluginObj" width="0" height="0" name="PluginObj">
+	</div>
+</body>
+</html>
+

@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebPlugin", "WebPlugin\WebPlugin.vcproj", "{C358A0CD-1F65-4127-93F0-D2F41EE08C48}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "npWebPlugin", "npWebPlugin\npWebPlugin.vcproj", "{DCCD2B6E-2A03-4984-A903-F52D5E1CF5F4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebPluginActiveX", "WebPluginActiveX\WebPluginActiveX.vcproj", "{D2E9F5F3-8A82-44B9-9144-358A90B1FB27}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C358A0CD-1F65-4127-93F0-D2F41EE08C48}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C358A0CD-1F65-4127-93F0-D2F41EE08C48}.Debug|Win32.Build.0 = Debug|Win32
+		{C358A0CD-1F65-4127-93F0-D2F41EE08C48}.Release|Win32.ActiveCfg = Release|Win32
+		{C358A0CD-1F65-4127-93F0-D2F41EE08C48}.Release|Win32.Build.0 = Release|Win32
+		{DCCD2B6E-2A03-4984-A903-F52D5E1CF5F4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DCCD2B6E-2A03-4984-A903-F52D5E1CF5F4}.Debug|Win32.Build.0 = Debug|Win32
+		{DCCD2B6E-2A03-4984-A903-F52D5E1CF5F4}.Release|Win32.ActiveCfg = Release|Win32
+		{DCCD2B6E-2A03-4984-A903-F52D5E1CF5F4}.Release|Win32.Build.0 = Release|Win32
+		{D2E9F5F3-8A82-44B9-9144-358A90B1FB27}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D2E9F5F3-8A82-44B9-9144-358A90B1FB27}.Debug|Win32.Build.0 = Debug|Win32
+		{D2E9F5F3-8A82-44B9-9144-358A90B1FB27}.Release|Win32.ActiveCfg = Release|Win32
+		{D2E9F5F3-8A82-44B9-9144-358A90B1FB27}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

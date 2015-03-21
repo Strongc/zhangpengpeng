@@ -1,0 +1,9 @@
+; WebPluginActiveX.def : Declares the module parameters.
+
+LIBRARY      "WebPluginActiveX.OCX"
+
+EXPORTS
+	DllCanUnloadNow     PRIVATE
+	DllGetClassObject   PRIVATE
+	DllRegisterServer   PRIVATE
+	DllUnregisterServer PRIVATE

@@ -1,0 +1,6 @@
+LIBRARY "WebPlugin"
+
+EXPORTS
+	WebPlugin_SetCallBack
+	WebPlugin_CallFun
+
