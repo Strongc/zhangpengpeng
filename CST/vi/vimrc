@@ -13,19 +13,7 @@ set fileencoding=utf8
 set fileencodings=utf8,cp936,gb2312,utf-16,big5
 
 " no backup
-set nobackup
-
-
-" color scheme in GUI
-if has('gui_running')
-	syntax enable
-    set background=dark
-	colorscheme solarized
-else
-	" colorscheme torte
-    "set background=light
-endif
-
+"set nobackup
 
 " taglist  :Tlist
 let Tlist_Show_One_File=1     "不同时显示多个文件的tag，只显示当前文件的 
@@ -37,16 +25,31 @@ set nocp
 filetype plugin on
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
-"english language ui
-set langmenu=en_US
-let $LANG = 'en_US'
-source $VIMRUNTIME/delmenu.vim
-source $VIMRUNTIME/menu.vim
 
 "neocomplcache
 let g:neocomplcache_enable_at_startup=1
 let g:neocomplcache_enable_auto_select=1
 
-"font
-set guifont=Consolas:h10
+
+
+if has('gui_running')
+	" color scheme in GUI
+	syntax enable
+    set background=dark
+	colorscheme solarized
+
+	"english language ui
+	set langmenu=en_US
+	let $LANG = 'en_US'
+	source $VIMRUNTIME/delmenu.vim
+	source $VIMRUNTIME/menu.vim
+
+	"font
+	set guifont=Consolas:h10
+
+else
+	" colorscheme torte
+    "set background=light
+endif
+
 
