@@ -1,7 +1,7 @@
 map! vv <esc>
 set nu
 set showcmd
-set cin
+"set cin
 syntax on
 filetype on
 set smartindent
@@ -36,16 +36,17 @@ if has('gui_running')
 	" color scheme in GUI
 	syntax enable
     set background=dark
+    " set background=light
 	colorscheme solarized
 
 	"english language ui
-	set langmenu=en_US
-	let $LANG = 'en_US'
-	source $VIMRUNTIME/delmenu.vim
-	source $VIMRUNTIME/menu.vim
+	"set langmenu=en_US
+	"let $LANG = 'en_US'
+	set guioptions-=T
+	"set guioptions-=m
 
 	"font
-	set guifont=Consolas:h10
+	"set guifont=Consolas:h10
 
 else
 	" colorscheme torte
