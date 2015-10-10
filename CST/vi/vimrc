@@ -8,9 +8,11 @@ set smartindent
 set tabstop=4
 set softtabstop=4
 set cindent shiftwidth=4
+"set expandtab
 set ai
 set fileencoding=utf8
 set fileencodings=utf8,cp936,gb2312,utf-16,big5
+filetype plugin indent on
 
 " no backup
 "set nobackup
@@ -23,8 +25,9 @@ let Tlist_Ctags_Cmd="ctags"   "将taglist与ctags关联
 " omnicppcomplete
 set nocp
 filetype plugin on
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
+" ctags and cscope
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
 "neocomplcache
 let g:neocomplcache_enable_at_startup=1
